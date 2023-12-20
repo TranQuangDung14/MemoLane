@@ -22,19 +22,19 @@
 
                         <div class="col-8">
                             <label>Nhập tên danh mục để tìm kiếm</label>
-                            <form action="{{ route('categoryIndex') }}" method="get" enctype="multipart/form-data">
+                            {{-- <form action="{{ route('categoryIndex') }}" method="get" enctype="multipart/form-data">
                                 <div class="input-group">
 
                                     <input class="form-control" type="text" name="search" value=""
                                         placeholder="nhập tên danh mục">
                                     <button class="btn btn-primary" type="submit"><i class="ti ti-search"></i></button>
                                 </div>
-                            </form>
+                            </form> --}}
                         </div>
                         <div class="col-4">
-                            <a href="{{ route('categoryCreate') }}"> <button type="button"
+                            {{-- <a href="{{ route('categoryCreate') }}"> <button type="button"
                                     class="btn btn-primary m-1 float-end" title="Thêm mới danh mục"><i
-                                        class="ti ti-plus"></i></button></a>
+                                        class="ti ti-plus"></i></button></a> --}}
                         </div>
                     </div>
                     {{-- <p class="mb-0">This is a sample page </p> --}}
@@ -76,7 +76,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($category as $key => $value)
+                                {{-- @foreach ($category as $key => $value)
                                     <tr>
                                         <td class="border-bottom-0">
                                             {{ $key + 1 }}
@@ -117,11 +117,11 @@
                                             </div>
                                         </td>
                                     </tr>
-                                @endforeach
+                                @endforeach --}}
                             </tbody>
                         </table>
                     </div>
-                    {{ $category->links() }}
+                    {{-- {{ $category->links() }} --}}
                 </div>
             </div>
         </div>
