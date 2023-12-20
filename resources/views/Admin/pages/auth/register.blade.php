@@ -34,8 +34,8 @@
                                 </a>
                                 <p class="text-center">Your Social Campaigns</p>
 
-                                <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
+                                {{-- <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf --}}
                                     <div class="mb-3">
                                         <label for="exampleInputtext1" class="form-label">Tên người dùng</label>
                                         <input type="text" class="form-control" name="name" id="exampleInputtext1"
@@ -72,7 +72,7 @@
                                         <a class="text-primary fw-bold ms-2" href="{{ route('showlogin') }}">Đăng
                                             nhập</a>
                                     </div>
-                                </form>
+                                {{-- </form> --}}
                             </div>
                         </div>
                     </div>

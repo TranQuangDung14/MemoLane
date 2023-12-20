@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Modernize Free</title>
-    <link rel="shortcut icon" type="image/png" href="{{ asset('User/') }}/image/logo.jpg" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('Admin/') }}/images/logos/favicon.png" />
     <link rel="stylesheet" href="{{ asset('Admin/') }}/css/styles.min.css" />
 </head>
 
@@ -30,13 +30,13 @@
                         <div class="card mb-0">
                             <div class="card-body">
                                 <a href="" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                                    <img src="{{ asset('User/') }}/image/logo.jpg" width="180"
+                                    <img src="{{ asset('Admin/') }}/images/logos/dark-logo.svg" width="180"
                                         alt="">
                                 </a>
                                 <p class="text-center">Đăng nhập</p>
                                 {{-- <form> --}}
-                                <form action="{{ route('login') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
+                                {{-- <form action="{{ route('login') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf --}}
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1" class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control"
@@ -55,20 +55,16 @@
                                                 Ghi nhớ thiết bị này
                                             </label>
                                         </div>
-                                        {{-- <a class="text-primary fw-bold" href="./index.html">Quên mật khẩu ?</a> --}}
                                     </div>
 
-                                    {{-- <button> --}}
                                     <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">
                                         Đăng nhập
                                     </button>
-                                    {{-- </button> --}}
-                                    {{-- <div class="d-flex align-items-center justify-content-center">
+                                    <div class="d-flex align-items-center justify-content-center">
                                         <p class="fs-4 mb-0 fw-bold">Bạn chưa có tài khoản?</p>
-                                        <a class="text-primary fw-bold ms-2" href="{{ route('showregister') }}">Tạo một
-                                            tài khoản</a>
-                                    </div> --}}
-                                </form>
+                                        <a class="text-primary fw-bold ms-2" href="{{route('showregister')}}">Tạo tài khoản mới</a>
+                                      </div>
+                                {{-- </form> --}}
                             </div>
                         </div>
                     </div>

@@ -34,11 +34,11 @@
                 <i class="ti ti-list-check fs-6"></i>
                 <p class="mb-0 fs-3">My Task</p>
               </a>
-              <form action="{{route('logout')}}"  method="POST">
+              {{-- <form action="{{route('logout')}}"  method="POST">
                 @csrf
                 <button class="btn btn-outline-primary mx-3 mt-2 d-block center" type="submit">Logout</button>
-                {{-- <a type="submit" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a> --}}
-                </form>
+            </form> --}}
+            {{-- <a type="submit" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a> --}}
             </div>
           </div>
         </li>
