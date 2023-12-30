@@ -35,8 +35,8 @@
                                 </a>
                                 <p class="text-center">Đăng nhập</p>
                                 {{-- <form> --}}
-                                {{-- <form action="{{ route('login') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf --}}
+                                <form action="{{ route('login') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1" class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control"
@@ -63,8 +63,8 @@
                                     <div class="d-flex align-items-center justify-content-center">
                                         <p class="fs-4 mb-0 fw-bold">Bạn chưa có tài khoản?</p>
                                         <a class="text-primary fw-bold ms-2" href="{{route('showregister')}}">Tạo tài khoản mới</a>
-                                      </div>
-                                {{-- </form> --}}
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
