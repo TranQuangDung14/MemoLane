@@ -22,7 +22,7 @@ class UserSeeder extends Seeder
             'address'        => 'Hưng Yên',
             'number_phone'   => "0869638364",
             'sex'            => 1,
-            'status'         => 1,
+            'status'         => 0,
             'role'           => 1,
         ]);
     }
