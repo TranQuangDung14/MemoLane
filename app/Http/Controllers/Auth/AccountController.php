@@ -62,6 +62,7 @@ class AccountController extends Controller
     }
     public function register(Request $request)
     {
+        // dd($request->all()); 
         try {
             $input = $request->all();
             $rules = array(
