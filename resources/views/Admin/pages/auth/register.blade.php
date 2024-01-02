@@ -34,30 +34,33 @@
                                 </a>
                                 <p class="text-center">Your Social Campaigns</p>
 
-                                {{-- <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf --}}
+                                <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
+                                    @csrf
                                     <div class="mb-3">
                                         <label for="exampleInputtext1" class="form-label">Tên người dùng</label>
                                         <input type="text" class="form-control" name="name" id="exampleInputtext1"
                                             aria-describedby="textHelp" value="{{ old('name') }}">
-                                            @if ($errors->has('name'))
+                                        @if ($errors->has('name'))
                                             <span class="text-danger" role="alert">{{ $errors->first('name') }}</span>
                                         @endif
                                     </div>
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1" class="form-label">Email</label>
                                         <input type="email" name="email" class="form-control"
-                                            id="exampleInputEmail1" aria-describedby="emailHelp"  value="{{ old('email') }}">
-                                            @if ($errors->has('email'))
-                                            <span class="text-danger" role="alert">{{ $errors->first('email') }}</span>
+                                            id="exampleInputEmail1" aria-describedby="emailHelp"
+                                            value="{{ old('email') }}">
+                                        @if ($errors->has('email'))
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('email') }}</span>
                                         @endif
                                     </div>
                                     <div class="mb-4">
                                         <label for="exampleInputPassword1" class="form-label">Mật khẩu</label>
                                         <input type="password" name="password" class="form-control"
-                                            id="exampleInputPassword1" >
-                                            @if ($errors->has('password'))
-                                            <span class="text-danger" role="alert">{{ $errors->first('password') }}</span>
+                                            id="exampleInputPassword1">
+                                        @if ($errors->has('password'))
+                                            <span class="text-danger"
+                                                role="alert">{{ $errors->first('password') }}</span>
                                         @endif
                                     </div>
 
@@ -65,14 +68,13 @@
                                     {{-- <a type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2">
                     Đăng ký
                 </a> --}}
-                                    <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2"> Đăng
-                                        ký</button>
+                                    <button type="submit" class="btn btn-primary w-100 py-8 fs-4 mb-4 rounded-2"> Đăng ký</button>
                                     <div class="d-flex align-items-center justify-content-center">
                                         <p class="fs-4 mb-0 fw-bold">Bạn có sẵn sàng để tạo một tài khoản?</p>
                                         <a class="text-primary fw-bold ms-2" href="{{ route('showlogin') }}">Đăng
                                             nhập</a>
                                     </div>
-                                {{-- </form> --}}
+                                </form>
                             </div>
                         </div>
                     </div>
