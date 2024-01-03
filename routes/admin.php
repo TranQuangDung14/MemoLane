@@ -8,7 +8,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
     //Thông tin tài khoản
-    Route::get('My_account', [AccountController::class, 'index'])->name('showAccount');
+    Route::get('My_account', [AccountController::class, 'index'])->middleware('auth')->name('showAccount');
+    
+    // cập nhật thông tin tài khoản
+    Route::put('update_account', [AccountController::class, 'edit_info'])->middleware('auth')->name('accountUpdate');
+    
+    //Đổi mật khẩu
+    Route::put('update_pass_account', [AccountController::class, 'edit_pass'])->middleware('auth')->name('accountUpdatePass');
+    
     // đăng nhập
     Route::get('login', [AccountController::class, 'showlogin'])->name('showlogin');
     Route::post('login', [AccountController::class, 'login'])->name('login');
@@ -16,7 +23,7 @@ Route::prefix('admin')->group(function () {
     Route::get('register', [AccountController::class, 'showregister'])->name('showregister');
     Route::post('register', [AccountController::class, 'register'])->name('register');
     //đăng xuất
-    Route::post('logout', [AccountController::class, 'logout'])->name('logout');
+    Route::post('logout', [AccountController::class, 'logout'])->middleware('auth')->name('logout');
 
     Route::prefix('')->middleware('auth')->group(function () {
         Route::get('test',[Testcontroller::class,'index'])->name('index_test');

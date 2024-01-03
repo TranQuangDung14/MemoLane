@@ -7,6 +7,7 @@ use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -153,5 +154,88 @@ class AccountController extends Controller
             // Toastr::error('kích hoạt thất bại!', 'Failed');
             return redirect()->back();
         }
+    }
+
+    public function edit_info(Request $request){
+        // $input = $request->all();
+
+        // $rules = array(
+        //     'name' => 'required',
+        // );
+        // $messages = array(
+        //     'name.required'  => '- Tên danh mục không được để trống!',
+        // );
+        // $validator = Validator::make($input, $rules, $messages);
+
+        // if ($validator->fails()) {
+        //     session()->flash('error', 'Kiểm tra lại!');
+        //     return redirect()->back()
+        //         ->withErrors($validator)
+        //         ->withInput();
+        // }
+        // dd($request->all());
+        DB::beginTransaction();
+        try {
+            $table                      = User::find($request->id);
+            $table->name                = $request->name;
+            $table->number_phone        = $request->number_phone;
+            $table->sex                 = $request->sex;
+            $table->address             = $request->address;
+            $table->update();
+            DB::commit();
+            session()->flash('success', 'Cập nhật thành công!');
+            Toastr::success('Cập nhật thành công', 'success');
+            return redirect()->route('showAccount');
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            return redirect()->back();
+        }
+        
+    }
+        
+    public function edit_pass(Request $request){
+        // $input = $request->all();
+
+        // $rules = array(
+        //     'name' => 'required',
+        // );
+        // $messages = array(
+        //     'name.required'  => '- Tên danh mục không được để trống!',
+        // );
+        // $validator = Validator::make($input, $rules, $messages);
+
+        // if ($validator->fails()) {
+        //     session()->flash('error', 'Kiểm tra lại!');
+        //     return redirect()->back()
+        //         ->withErrors($validator)
+        //         ->withInput();
+        // }
+        // dd($request->all());
+        DB::beginTransaction();
+        try {
+            $table                          = User::find($request->id);
+            // dd($table);
+            $hashedPassword = $table->password;
+            if (password_verify($request->password_old, $hashedPassword)) {
+                $table->password                = Hash::make($request->password);
+                $table->update();
+             
+            } else {
+                // session()->flash('success', 'Đổi mật khẩu thành công!');
+                Toastr::error('Đổi mật khẩu thất bại', 'error');
+                return redirect()->route('showAccount');
+            }
+            DB::commit();
+            session()->flash('success', 'Đổi mật khẩu thành công!');
+            Toastr::success('Đổi mật khẩu thành công', 'success');
+            return redirect()->route('showAccount');
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            return redirect()->back();
+        }
+        
     }
 }
