@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +12,12 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
+    public function index()
+    {
+        Auth::user();
+        return view('Admin.pages.auth.account');
+    }
+
     public function showlogin()
     {
         if (auth()->check()) {
@@ -49,7 +56,7 @@ class AccountController extends Controller
 
         // Xử lý khi người dùng đăng nhập thành công
         // return response()->json(['message' => 'Đăng nhập thành công!']);
-
+        Toastr::success('Đăng nhập thành công', 'success');
         return redirect()->route('index_test');
     }
 
@@ -62,7 +69,7 @@ class AccountController extends Controller
     }
     public function register(Request $request)
     {
-        // dd($request->all()); 
+        // dd($request->all());
         try {
             $input = $request->all();
             $rules = array(
@@ -105,13 +112,19 @@ class AccountController extends Controller
         } catch (\Exception $e) {
             dd($e);
         }
+        Toastr::success('Tạo tài khoản thành công', 'success');
         return redirect()->route('showlogin');
     }
 
     public function logout(Request $request)
     {
-        Auth::logout();
-        return redirect()->route('showlogin');
+        try {
+            Auth::logout();
+            Toastr::success('Đăng xuất thành công', 'success');
+            return redirect()->route('showlogin');
+        } catch (\Exception $e) {
+            Toastr::error('Đăng xuất thất bại', 'error');
+        }
     }
 
     public function lock_account(Request $request)

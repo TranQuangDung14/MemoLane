@@ -22,17 +22,17 @@
           </a>
           <div class="dropdown-menu dropdown-menu-end dropdown-menu-animate-up" aria-labelledby="drop2">
             <div class="message-body">
-              <a href="#" class="d-flex align-items-center gap-2 dropdown-item">
+              <a href="{{route('showAccount')}}" class="d-flex align-items-center gap-2 dropdown-item">
                 <i class="ti ti-user fs-6"></i>
-                <p class="mb-0 fs-3">My Profile</p>
+                <p class="mb-0 fs-3">Thông tin của tôi</p>
               </a>
-              <a href="#" class="d-flex align-items-center gap-2 dropdown-item">
+              {{-- <a href="#" class="d-flex align-items-center gap-2 dropdown-item">
                 <i class="ti ti-mail fs-6"></i>
                 <p class="mb-0 fs-3">My Account</p>
-              </a>
+              </a> --}}
               <a href="#" class="d-flex align-items-center gap-2 dropdown-item">
                 <i class="ti ti-list-check fs-6"></i>
-                <p class="mb-0 fs-3">My Task</p>
+                <p class="mb-0 fs-3">Công việc của tôi</p>
               </a>
               <form action="{{route('logout')}}"  method="POST">
                 @csrf
