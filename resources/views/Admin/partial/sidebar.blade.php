@@ -28,16 +28,16 @@
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
           <span class="hide-menu">Sản phẩm</span>
         </li> --}}
-        
+
         <li class="sidebar-item">
-          <a class="sidebar-link" href="{{route('my_diary')}}" aria-expanded="false">
+          <a class="sidebar-link" href="{{route('my_diaryIndex')}}" aria-expanded="false">
             <span>
               <i class="ti ti-article"></i>
             </span>
             <span class="hide-menu">Trang cá nhân</span>
           </a>
         </li>
-         {{-- 
+         {{--
         <li class="sidebar-item">
           <a class="sidebar-link" href="{{route('productIndex')}}" aria-expanded="false">
             <span>

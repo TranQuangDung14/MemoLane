@@ -19,6 +19,7 @@ class CreateMlDiarysTable extends Migration
             $table->text('description')->nullable();
             $table->json('hashtags')->nullable();
             $table->integer('user_id')->unsigned()->nullable();
+            $table->tinyInteger('status')->default(1)->comment('1. công khai - 2. Chỉ mình tôi - 3. chỉ những người theo dõi tôi');
             $table->timestamps();
         });
     }

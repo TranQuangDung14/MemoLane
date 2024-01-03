@@ -10,13 +10,13 @@
             <div class="card border">
                 <div class="card-body">
                     {{-- <h5 class="card-title fw-semibold mb-4">Danh mục sản phẩm</h5> --}}
-                    <h5 class="mb-0 card-title fw-semibold ">Quản lý tài khoản</h5>
+                    <h5 class="mb-0 card-title fw-semibold ">Thông tin cá nhân</h5>
 
                 </div>
             </div>
         </div>
         {{-- lọc --}}
-        <div class="row">
+        {{-- <div class="row">
             <div class="card border">
                 <div class="card-body">
                     <div class="row">
@@ -32,17 +32,16 @@
                                 </div>
                             </form>
                         </div>
-                        {{-- <div class="col-4">
+                        <div class="col-4">
 
                             <a href="{{ route('categoryCreate') }}"> <button type="button"
                                     class="btn btn-primary m-1 float-end" title="Thêm mới danh mục"><i
                                         class="ti ti-plus"></i></button></a>
-                        </div> --}}
+                        </div>
                     </div>
-                    {{-- <p class="mb-0">This is a sample page </p> --}}
                 </div>
             </div>
-        </div>
+        </div> --}}
         @if (session('success'))
             <div class="alert alert-success" id="success-alert">
                 {{ session('success') }}
@@ -58,11 +57,12 @@
                 </span>
             </div>
         @endif
-        <div class="row d-flex align-items-stretch">
-            <div class="card w-100 border">
-                <div class="card-body p-4">
+        <div class="row d-flex align-items-stretch  ">
+            <div class="card border">
+                <div class="card-body">
                     {{-- <h5 class="card-title fw-semibold mb-4">Recent Transactions</h5> --}}
-                    <div class="table-responsive container">
+                    {{-- <div class="table-responsive container">
+
                         <table class="table text-nowrap mb-0 align-middle">
                             <thead class="text-dark fs-4">
                                 <tr>
@@ -153,7 +153,6 @@
                                                                     @csrf
                                                                     <input type="hidden" class="id" name="id"
                                                                         id="" value="{{ $value->id }}">
-                                                                    {{-- <input type="hidden"  name="lock" id="" value="{{ $value->lock=='on' }}"> --}}
 
                                                                     <input type="hidden" name="lock" id=""
                                                                         value="on" {{ $value->lock == 'on' }}>
@@ -186,8 +185,20 @@
 
                             </tbody>
                         </table>
+
+                    </div> --}}
+
+
+                    <div class="col-md-4">
+                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="100" height="100" class="rounded-circle">
                     </div>
-                    {{ $user->links() }}
+                    <div class="col-md-8">
+                        <h2>User Information</h2>
+                        <p><strong>Name:</strong> John Doe</p>
+                        <p><strong>Email:</strong> johndoe@example.com</p>
+                        <p><strong>Address:</strong> 123 Street, City, Country</p>
+                    </div>
+
                 </div>
             </div>
         </div>
