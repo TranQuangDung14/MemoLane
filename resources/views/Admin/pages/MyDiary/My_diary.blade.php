@@ -1,6 +1,6 @@
 @extends('Admin.layouts.master')
 
-@section('title', 'Test')
+@section('title', 'Trang cá nhân')
 
 @section('content')
 

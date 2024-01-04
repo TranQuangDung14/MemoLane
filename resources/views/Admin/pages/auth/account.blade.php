@@ -3,45 +3,39 @@
 @section('title', 'Quản lý tài khoản')
 
 @section('content')
+    <style>
+        .btn-change-img {
+            display: none;
+            /* Thay đổi từ opacity thành display: none */
+            transition: display 0.3s ease-in-out;
+            /* Thay đổi transition từ opacity sang display */
+        }
 
+        .col-md-3:hover .btn-change-img {
+            display: block;
+            /* Hiển thị nút khi hover vào col-md-3 */
+        }
+    </style>
     <div class="container-fluid ">
         {{-- tiêu đề trang --}}
         <div class="row ">
             <div class="card border">
-                <div class="card-body">
+                <div class="card-body row">
                     {{-- <h5 class="card-title fw-semibold mb-4">Danh mục sản phẩm</h5> --}}
-                    <h5 class="mb-0 card-title fw-semibold ">Thông tin cá nhân</h5>
-
-                </div>
-            </div>
-        </div>
-        {{-- lọc --}}
-        {{-- <div class="row">
-            <div class="card border">
-                <div class="card-body">
-                    <div class="row">
-
-                        <div class="col-8">
-                            <label>Nhập tên tài khoản</label>
-                            <form action="{{ route('accountIndex') }}" method="get" enctype="multipart/form-data">
-                                <div class="input-group">
-
-                                    <input class="form-control" type="text" name="search" value=""
-                                        placeholder="nhập tên tài khoản">
-                                    <button class="btn btn-primary" type="submit"><i class="ti ti-search"></i></button>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-4">
-
-                            <a href="{{ route('categoryCreate') }}"> <button type="button"
-                                    class="btn btn-primary m-1 float-end" title="Thêm mới danh mục"><i
-                                        class="ti ti-plus"></i></button></a>
-                        </div>
+                    <div class="col-md-8">
+                        <h5 class="mb-0 card-title fw-semibold">Thông tin cá nhân</h5>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal_edit"> <button type="button"
+                                class="btn btn-primary float-start" title="Tạo bài viết mới">Cập nhật thông tin cơ
+                                bản</button></a>
+                        <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal_edit_pass"> <button type="button" class="btn btn-success float-end"
+                                title="Tạo bài viết mới">Đổi mật khẩu</button></a>
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
+
         @if (session('success'))
             <div class="alert alert-success" id="success-alert">
                 {{ session('success') }}
@@ -57,155 +51,113 @@
                 </span>
             </div>
         @endif
-        <div class="row d-flex align-items-stretch  ">
+        <div class="row d-flex align-items-stretch">
             <div class="card border">
-                <div class="card-body">
-                    {{-- <h5 class="card-title fw-semibold mb-4">Recent Transactions</h5> --}}
-                    {{-- <div class="table-responsive container">
-
-                        <table class="table text-nowrap mb-0 align-middle">
-                            <thead class="text-dark fs-4">
-                                <tr>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">STT</h6>
-                                    </th>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Tên tài khoản</h6>
-                                    </th>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Tên đăng nhập(email)</h6>
-                                    </th>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Quyền</h6>
-                                    </th>
-                                    <th class="border-bottom-0">
-                                        <h6 class="fw-semibold mb-0">Khóa tài khoản</h6>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($user as $key => $value)
-                                    <tr>
-                                        <td class="border-bottom-0">
-                                            {{ $key + 1 }}
-                                        </td>
-                                        <td class="border-bottom-0">
-                                            <span class="fw-normal">
-                                                @if ($value->lock == 0)
-                                                    {{ $value->name }}
-                                                @else
-                                                    <span style="color: red">{{ $value->name }} (đang khóa)</span>
-                                                @endif
-                                            </span>
-                                        </td>
-                                        <td class="border-bottom-0">
-                                            <span class="fw-normal">{{ $value->email }}</span>
-                                        </td>
-                                        <td class="border-bottom-0">
-                                            @if ($value->role == 1)
-                                                <span class="fw-normal">Admin</span>
-                                            @elseif ($value->role == 2)
-                                                <span class="fw-normal">User</span>
-                                            @endif
-                                        </td>
-                                        <td class="border-bottom-0">
-                                            @if ($value->lock == 0)
-                                                <a href="" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModal_{{ $value->id }}"
-                                                    title="Khóa tài khoản">
-                                                    <i class="ti ti-key fs-8"></i>
-                                                </a>
-                                            @else
-                                                <a href="" data-bs-toggle="modal" style="color: red"
-                                                    data-bs-target="#exampleModal_{{ $value->id }}" title="mở tài khoản">
-                                                    <i class="ti ti-key fs-8"></i>
-                                                </a>
-                                            @endif
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"
-                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            @if ($value->lock == 0)
-                                                                <h5 class="modal-title" id="exampleModalLabel">Khóa tài khoản </h5>
-                                                            @else
-                                                                <h5 class="modal-title" id="exampleModalLabel">Mở khóa tài
-                                                                    khoản </h5>
-                                                            @endif
-
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            @if ($value->lock == 0)
-                                                                Bạn có chắc muốn khóa tài khoản này?
-                                                            @else
-                                                                Bạn có chắc chắn mở khóa tài khoản này chứ?
-                                                            @endif
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Hủy</button>
-                                                            @if ($value->lock == 0)
-                                                                <form action="{{ route('lock_account') }}" method="POST"
-                                                                    enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    <input type="hidden" class="id" name="id"
-                                                                        id="" value="{{ $value->id }}">
-
-                                                                    <input type="hidden" name="lock" id=""
-                                                                        value="on" {{ $value->lock == 'on' }}>
-                                                                    <button type="submit"
-                                                                        class="btn btn-primary">Khóa</button>
-                                                                </form>
-                                                            @else
-                                                                <form action="{{ route('lock_account') }}" method="POST"
-                                                                    enctype="multipart/form-data">
-                                                                    @csrf
-                                                                    <input type="hidden" class="id" name="id"
-                                                                        id="" value="{{ $value->id }}">
-
-                                                                    <input type="hidden" name="lock" id=""
-                                                                        value="off" {{ $value->lock == 'off' }}>
-
-                                                                    <button type="submit" class="btn btn-primary">Mở
-                                                                        khóa</button>
-                                                                </form>
-                                                            @endif
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-                                @endforeach
-
-
-                            </tbody>
-                        </table>
-
-                    </div> --}}
-
-
-                    <div class="col-md-4">
-                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="100" height="100" class="rounded-circle">
+                <div class="row card-body">
+                    <div class="col-md-3 d-flex justify-content-center align-items-center position-relative">
+                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="160"
+                            height="160" class="rounded-circle">
+                        <button
+                            class="btn btn-primary btn-change-img position-absolute top-50 start-50 translate-middle">Thay
+                            đổi ảnh</button>
                     </div>
-                    <div class="col-md-8">
-                        <h2>User Information</h2>
-                        <p><strong>Name:</strong> John Doe</p>
-                        <p><strong>Email:</strong> johndoe@example.com</p>
-                        <p><strong>Address:</strong> 123 Street, City, Country</p>
+                    <div class="col-md-9">
+                        <h2>Thông tin người dùng</h2>
+                        <p><strong>Tên: </strong>{{ Auth::user()->name }}</p>
+                        <p><strong>Email: </strong>{{ Auth::user()->email }}</p>
+                        <p><strong>số điện thoại: </strong>{{ Auth::user()->number_phone }}</p>
+                        <p><strong>Giới tính:
+                            </strong>{{ Auth::user()->sex === 1 ? 'Nam' : (Auth::user()->sex === 2 ? 'Nữ' : 'Giới tính không xác định') }}
+                        </p>
+                        <p><strong>Địa chỉ: </strong>{{ Auth::user()->address }}</p>
                     </div>
-
                 </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Modal edit account-->
+    <div class="modal fade" id="exampleModal_edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cập nhật thông tin người dùng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('accountUpdate') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT') 
+                    <input type="hidden" name="id" value="{{Auth::id()}}">
+                    <div class="modal-body ">
+                        <div class="row m-1">
+                            <label for="recipient-name" class="col-form-label">Tên người dùng</label>
+                            <input type="text" class="form-control" id="recipient-name" name="name" value="{{ Auth::user()->name }}">
+                        </div>
+
+                        <div class="row m-1">
+                            <label for="recipient-phone" class="col-form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="recipient-phone" name="number_phone"
+                                value="{{ Auth::user()->number_phone }}">
+                        </div>
+
+                        <div class="row m-1">
+                            <label for="recipient-sex" class="col-form-label">Chọn giới tính</label>
+                            <select name="sex" id="recipient-sex" class="form-select">
+                                <option value="1" {{ Auth::user()->sex === 1 ? 'selected' : '' }}>Nam</option>
+                                <option value="2" {{ Auth::user()->sex === 2 ? 'selected' : '' }}>Nữ</option>
+                                <option value="3" {{ Auth::user()->sex !== 1 && Auth::user()->sex !== 2 ? 'selected' : '' }}>Giới tính không xác định</option>
+                            </select>
+                        </div>                        
+                        <div class="row m-1">
+                            <label for="recipient-address" class="col-form-label">Địa chỉ</label>
+                            <input type="text" class="form-control" id="recipient-address" name="address"
+                                value="{{ Auth::user()->address }}">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
+    <!-- Modal edit pass-->
+    <div class="modal fade" id="exampleModal_edit_pass" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Đổi mật khẩu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('accountUpdatePass') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PUT') 
+                    <input type="hidden" name="id" value="{{Auth::id()}}">
+                    <div class="modal-body ">
+                        <div class="row m-1">
+                            <label for="recipient-name" class="col-form-label">Mật khẩu cũ</label>
+                            <input type="password" class="form-control" id="recipient-name" name="password_old" >
+                        </div>
 
+                        <div class="row m-1">
+                            <label for="recipient-phone" class="col-form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="recipient-phone" name="password">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
 
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 
 @endsection
