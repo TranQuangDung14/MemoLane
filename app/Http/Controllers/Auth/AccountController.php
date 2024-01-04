@@ -156,23 +156,28 @@ class AccountController extends Controller
         }
     }
 
-    public function edit_info(Request $request){
-        // $input = $request->all();
+    public function edit_info(Request $request)
+    {
+        $input = $request->all();
 
-        // $rules = array(
-        //     'name' => 'required',
-        // );
-        // $messages = array(
-        //     'name.required'  => '- Tên danh mục không được để trống!',
-        // );
-        // $validator = Validator::make($input, $rules, $messages);
+        $rules = array(
+            'name'                      => 'required',
+            'number_phone'              => 'required|digits:10',
+            'sex'                       => 'required',
+        );
+        $messages = array(
+            'name.required'             => '- Tên người dùng không được để trống!',
+            'sex.required'              => '- Giới tính không được để trống!',
+            'number_phone.digits'       => '- Số điện thoại phải là 10 số! -'
+        );
+        $validator = Validator::make($input, $rules, $messages);
 
-        // if ($validator->fails()) {
-        //     session()->flash('error', 'Kiểm tra lại!');
-        //     return redirect()->back()
-        //         ->withErrors($validator)
-        //         ->withInput();
-        // }
+        if ($validator->fails()) {
+            session()->flash('error', 'Kiểm tra lại!');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         // dd($request->all());
         DB::beginTransaction();
         try {
@@ -191,36 +196,54 @@ class AccountController extends Controller
             dd($e);
             return redirect()->back();
         }
-        
     }
-        
-    public function edit_pass(Request $request){
-        // $input = $request->all();
 
-        // $rules = array(
-        //     'name' => 'required',
-        // );
-        // $messages = array(
-        //     'name.required'  => '- Tên danh mục không được để trống!',
-        // );
-        // $validator = Validator::make($input, $rules, $messages);
+    public function edit_pass(Request $request)
+    {
 
-        // if ($validator->fails()) {
-        //     session()->flash('error', 'Kiểm tra lại!');
-        //     return redirect()->back()
-        //         ->withErrors($validator)
-        //         ->withInput();
-        // }
+
+        $input = $request->all();
+
+        $rules = array(
+            'password' => 'required',
+            'password_old' => [
+                'required',
+                function ($attribute, $value, $fail) use ($request) {
+                    $table = User::find($request->id);
+                    $hashedPassword = $table->password;
+
+                    if (!password_verify($value, $hashedPassword)) {
+                        return $fail('Mật khẩu cũ không chính xác!');
+                    }
+                },
+            ],
+            'password_confirmation' =>'confirmed'
+
+        );
+        $messages = array(
+            'password.required'         => '-- Mật khẩu mới không được để trống!--',
+            'password_old.required'     => '-- Mật khẩu cũ không được để trống!--',
+            // 'password.confirmed'        => '-- Mật khẩu mới không khớp nhau!--',
+            // 'password_confirmation.required'        => '-- Mật khẩu mới không được để trống!--',
+            'password_confirmation.confirmed'        => '-- Mật khẩu mới không khớp nhau!--',
+        );
+        $validator = Validator::make($input, $rules, $messages);
+
+        if ($validator->fails()) {
+            Toastr::error('Đổi mật khẩu thất bại', 'error');
+            session()->flash('error', 'Kiểm tra lại!');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         // dd($request->all());
         DB::beginTransaction();
         try {
             $table                          = User::find($request->id);
-            // dd($table);
             $hashedPassword = $table->password;
             if (password_verify($request->password_old, $hashedPassword)) {
                 $table->password                = Hash::make($request->password);
                 $table->update();
-             
             } else {
                 // session()->flash('success', 'Đổi mật khẩu thành công!');
                 Toastr::error('Đổi mật khẩu thất bại', 'error');
@@ -230,12 +253,10 @@ class AccountController extends Controller
             session()->flash('success', 'Đổi mật khẩu thành công!');
             Toastr::success('Đổi mật khẩu thành công', 'success');
             return redirect()->route('showAccount');
-            
         } catch (\Exception $e) {
             DB::rollback();
             dd($e);
             return redirect()->back();
         }
-        
     }
 }

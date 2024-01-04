@@ -29,10 +29,12 @@
                         <div class="card mb-0">
                             <div class="card-body">
                                 <a href="#" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                                    <img src="{{ asset('Admin/') }}/images/logos/dark-logo.svg" width="180"
+                                    {{-- <img src="{{ asset('Admin/') }}/images/logos/dark-logo.svg" width="180"
+                                        alt=""> --}}
+                                        <img src="{{ asset('Admin/') }}/images/logos/logo_main.png" width="180"
                                         alt="">
                                 </a>
-                                <p class="text-center">Your Social Campaigns</p>
+                                <p class="text-center">Đăng ký</p>
 
                                 <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
