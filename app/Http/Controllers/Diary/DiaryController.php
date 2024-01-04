@@ -11,16 +11,22 @@ use Illuminate\Support\Facades\Auth;
 class DiaryController extends Controller
 {
     //
-    public function index(Request $request)
+    public function MyDiary(Request $request,$id)
     {
+        // dd('vào');
         // dd(Auth::user()->name);
-        $diary = Diarys::where('title','LIKE', '%' . $request->search . '%')->orderBy('id','desc')->paginate(2);
+        $diary = Diarys::with(['User' => function($query) {
+            $query->select('id', 'name','avatar','address','number_phone','sex');
+        }])
+        ->where('title','LIKE', '%' . $request->search . '%')->where('user_id',$id)->orderBy('id','desc')->get();
+        // dd($diary);
         return view('Admin.pages.MyDiary.My_diary',compact('diary'));
     }
 
     public function create()
     {
         try {
+            // dd('vào');
             return view('Admin.pages.MyDiary.Create');
         } catch (\Exception $e) {
             dd($e);
@@ -37,7 +43,7 @@ class DiaryController extends Controller
             $table->user_id = Auth::id();
             $table->save();
             Toastr::success('Tạo bài viết thành công', 'success');
-            return redirect()->route('my_diaryIndex');
+            return redirect()->route('my_diaryIndex',Auth::id());
         } catch (\Exception $e) {
             dd($e);
         }

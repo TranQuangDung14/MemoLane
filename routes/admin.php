@@ -36,9 +36,11 @@ Route::prefix('admin')->group(function () {
         // Route::delete('delete/{id}', [CategoriesController::class, 'delete'])->name('categoryDelete');
     });
     Route::prefix('my_diary')->middleware('auth')->group(function () {
-        Route::get('', [DiaryController::class, 'index'])->name('my_diaryIndex');
+        
         Route::get('create', [DiaryController::class, 'create'])->name('my_diaryCreate');
+        
+        Route::get('{id}', [DiaryController::class, 'MyDiary'])->name('my_diaryIndex');
+        
         Route::post('store', [DiaryController::class, 'store'])->name('my_diaryStore');
-
     });
 });

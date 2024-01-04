@@ -174,7 +174,7 @@
                         <div class="row m-1">
                             <label for="recipient-phone" class="col-form-label">Mật khẩu mới<span
                                     style="color: red">*</span></label>
-                            <input type="password" class="form-control" id="recipient-phone" name="password"
+                            <input type="text" class="form-control" id="recipient-phone" name="password"
                                 value="{{ old('password') }}">
                             @if ($errors->has('password'))
                                 <span class="text-danger" role="alert">{{ $errors->first('password') }}</span>
@@ -183,7 +183,7 @@
                         <div class="row m-1">
                             <label for="recipient-phone" class="col-form-label">Nhập lại mật khẩu mới<span
                                     style="color: red">*</span></label>
-                            <input type="password" class="form-control" id="recipient-phone"
+                            <input type="text" class="form-control" id="recipient-phone"
                                 name="password_confirmation" value="{{ old('password_confirmation') }}">
                             @if ($errors->has('password_confirmation'))
                                 <span class="text-danger"

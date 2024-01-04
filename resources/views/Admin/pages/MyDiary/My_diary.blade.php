@@ -3,6 +3,13 @@
 @section('title', 'Trang cá nhân')
 
 @section('content')
+<style>
+    /* Áp dụng kiểu cho hình ảnh trong trường mô tả */
+    p img {
+        max-width: 100%; /* Đặt chiều rộng tối đa cho ảnh */
+        height: auto; /* Tự động tính chiều cao dựa trên chiều rộng */
+    }
+</style>
 
     <div class="container-fluid ">
         {{-- tiêu đề trang --}}
@@ -22,7 +29,7 @@
 
                         <div class="col-8">
                             <label>Tìm kiếm theo hastag</label>
-                            <form action="{{ route('my_diaryIndex') }}" method="get" enctype="multipart/form-data">
+                            <form action="{{ route('my_diaryIndex',Auth::id()) }}" method="get" enctype="multipart/form-data">
                                 <div class="input-group">
 
                                     <input class="form-control" type="text" name="search" value=""
@@ -67,28 +74,60 @@
                                 <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="50"
                                     height="50" class="rounded-circle">
                                     <div class="mt-3 ms-2">
-                                        <p><strong>{{ Auth::user()->name }}</strong>
+                                        <p><strong>{{ $value->User->name }}</strong>
                                             <br>
-                                            <span class="text-muted fs-2">{{$value->created_at}}
-                                        </span></p>
+                                            <span class="text-muted fs-2">
+                                                {{-- {{ date('h:m d/m/Y', strtotime($value->created_at)) }} --}}
+                                                {{-- {{ \Carbon\Carbon::parse($value->created_at)->timezone('Asia/Ho_Chi_Minh')->format('H:i  d/m/Y') }} --}}
+                                                {{ \Carbon\Carbon::parse($value->created_at)->timezone('Asia/Ho_Chi_Minh')->format('H:i') }}&nbsp;&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($value->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y') }}
+
+                                            </span>
+                                    </p>
                                     </div>
                         </div>
                         <div class="col-md-9">
                           {{-- phần này thêm các chức năng sau  --}}
+
                         </div>
                     </div>
                     <div class="row mt-2">
                         <h3>{{$value->title}}</h3>
-                        <p>{!!$value->description!!}</p>
+                        <p class="description">{!!$value->description!!}</p>
                     </div>
-
+                    {{-- <div class="row">
+                            <i class="ti ti-thumb-up"></i>
+           
+                            <i class="ti ti-message"></i>
+                    </div> --}}
+                    <div class="row align-items-center">
+                        <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
+                           
+                            {{-- <button class="btn">  --}}
+                                <i class="ti ti-thumb-up fs-8"></i><Span class="fs-6">Thích</Span>
+                            {{-- </button> --}}
+                            
+                        </div>
+                        <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
+                       
+                            {{-- <button class="btn btn-secondary"> --}}
+                                <i class="ti ti-message fs-8"></i>
+                            {{-- </button> --}}
+                        </div>
+                        <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
+                       
+                            {{-- <button class="btn btn-secondary"> --}}
+                                <i class="ti ti-share fs-8"></i>
+                            {{-- </button> --}}
+                        </div>
+                    </div>
+                    
 
 
                 </div>
             </div>
         </div>
         @endforeach
-        {{ $diary->links() }}
+        {{-- {{ $diary->links() }} --}}
         {{-- <div class="row d-flex align-items-stretch">
         <div class="card w-100 border">
             <div class="card-body p-4">

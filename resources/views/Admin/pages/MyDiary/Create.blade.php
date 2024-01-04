@@ -55,7 +55,7 @@
                         </div>
                     </div>
                     <div class="text-center mt-5">
-                        <a class="btn btn-outline-primary mr-20 btn-back" href="{{ route('my_diaryIndex') }}">Quay lại</a>
+                        <a class="btn btn-outline-primary mr-20 btn-back" href="{{ route('my_diaryIndex',Auth::id()) }}">Quay lại</a>
                         @if (isset($editData))
                             <button type="submit" class="btn btn-primary">Cập nhật</button>
                         @else
