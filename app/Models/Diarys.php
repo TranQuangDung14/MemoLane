@@ -9,4 +9,9 @@ class Diarys extends Model
 {
     use HasFactory;
     protected $table='ml_diarys';
+
+    public function User()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

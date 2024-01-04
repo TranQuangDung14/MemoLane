@@ -30,7 +30,9 @@
         </li> --}}
 
         <li class="sidebar-item">
-          <a class="sidebar-link" href="{{route('my_diaryIndex')}}" aria-expanded="false">
+          <a class="sidebar-link" href="{{route('my_diaryIndex', Auth::id() )}}" aria-expanded="false">
+          {{-- <a class="sidebar-link" href="{{ route('my_diaryIndex', ['id' => Auth::id()]) }}" aria-expanded="false"> --}}
+
             <span>
               <i class="ti ti-article"></i>
             </span>

@@ -201,11 +201,12 @@ class AccountController extends Controller
     public function edit_pass(Request $request)
     {
 
-
+        // dd($request->all());
         $input = $request->all();
 
         $rules = array(
-            'password' => 'required',
+            'password' => 'required|confirmed',
+            // 'password_confirmation' =>'confirmed',
             'password_old' => [
                 'required',
                 function ($attribute, $value, $fail) use ($request) {
@@ -217,15 +218,14 @@ class AccountController extends Controller
                     }
                 },
             ],
-            'password_confirmation' =>'confirmed'
 
         );
         $messages = array(
             'password.required'         => '-- Mật khẩu mới không được để trống!--',
             'password_old.required'     => '-- Mật khẩu cũ không được để trống!--',
-            // 'password.confirmed'        => '-- Mật khẩu mới không khớp nhau!--',
+            'password.confirmed'        => '-- Mật khẩu mới không khớp nhau!--',
             // 'password_confirmation.required'        => '-- Mật khẩu mới không được để trống!--',
-            'password_confirmation.confirmed'        => '-- Mật khẩu mới không khớp nhau!--',
+            // 'password_confirmation.confirmed'        => '-- Mật khẩu mới không khớp nhau!--',
         );
         $validator = Validator::make($input, $rules, $messages);
 
