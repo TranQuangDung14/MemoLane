@@ -1,5 +1,5 @@
 @extends('Admin.layouts.master')
-
+{{-- chưa dùng --}}
 @section('title', 'Test')
 
 @section('content')

@@ -14,7 +14,7 @@
     </ul>
     <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
       <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end">
-        <a href="#" target="_blank" class="btn btn-primary">Tài khoản</a>
+        <a href="{{route('showAccount')}}" target="_blank" class="btn btn-primary">Tài khoản</a>
         <li class="nav-item dropdown">
           <a class="nav-link nav-icon-hover" href="#" id="drop2" data-bs-toggle="dropdown"
             aria-expanded="false">
