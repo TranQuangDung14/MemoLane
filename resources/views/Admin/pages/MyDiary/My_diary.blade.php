@@ -129,7 +129,8 @@
         @endforeach
         {{-- {{ $diary->links() }} --}}
         {{-- <div class="row d-flex align-items-stretch">
-        <div class="card w-100 border">
+        <div class="card w-100 border"> 
+            Xoas
             <div class="card-body p-4">
                 <div class="table-responsive container">
                     <table class="table text-nowrap mb-0 align-middle">
