@@ -94,42 +94,38 @@
                         <h3>{{$value->title}}</h3>
                         <p class="description">{!!$value->description!!}</p>
                     </div>
-                    {{-- <div class="row">
-                            <i class="ti ti-thumb-up"></i>
-           
-                            <i class="ti ti-message"></i>
-                    </div> --}}
+                    @php
+                        dd($value);
+                    @endphp
                     <div class="row align-items-center">
-                        <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
-                           
-                            {{-- <button class="btn">  --}}
-                                <i class="ti ti-thumb-up fs-8"></i><Span class="fs-6">Thích</Span>
-                            {{-- </button> --}}
-                            
+                        <hr>
+                        <div class="col-4 btn btn-outline-primary like-btn" style="border: 1px solid white" data-post-id="{{ $value->id }}">
+                                {{-- <i class="ti ti-thumb-up fs-8"></i><Span class="fs-6">Thích</Span> --}}
+                                {{-- <button class="like-btn" data-post-id="{{ $value->id }}"> --}}
+                                    @if(auth()->check() && auth()->user()->hasLiked($value))
+                                    <i class="ti ti-thumb-up fs-8 icon-liked"></i> <span class="text-liked">Bỏ thích</span>
+                                    @else
+                                    <i class="ti ti-thumb-up fs-8"></i> Thích
+                                    @endif
+                                {{-- </button> --}}
                         </div>
+                        {{-- <div class="col-4 btn btn-outline-primary like-btn" style="border: 1px solid white">
+                            <i class="ti ti-thumb-up fs-8"></i><span class="fs-6">Thích</span>
+                        </div> --}}
                         <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
-                       
-                            {{-- <button class="btn btn-secondary"> --}}
                                 <i class="ti ti-message fs-8"></i>
-                            {{-- </button> --}}
                         </div>
                         <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
-                       
-                            {{-- <button class="btn btn-secondary"> --}}
                                 <i class="ti ti-share fs-8"></i>
-                            {{-- </button> --}}
                         </div>
                     </div>
-                    
-
-
                 </div>
             </div>
         </div>
         @endforeach
-        {{-- {{ $diary->links() }} --}}
+        {{ $diary->links() }}
         {{-- <div class="row d-flex align-items-stretch">
-        <div class="card w-100 border"> 
+        <div class="card w-100 border">
             Xoas
             <div class="card-body p-4">
                 <div class="table-responsive container">
@@ -190,6 +186,35 @@
             </div>
         </div>
     </div> --}}
-
     </div>
+    <script>
+        $(document).ready(function() {
+            $('.like-btn').on('click', function(e) {
+                e.preventDefault();
+                var postId = $(this).data('post-id');
+                var token = "{{ csrf_token() }}";
+                var isLiked = $(this).text().trim() === 'Bỏ thích';
+                console.log('data',isLiked);
+                $.ajax({
+                    type:'POST',
+                    url: isLiked ? '{{ route('diaryUnlike', '') }}/'+ postId : '{{ route('diaryLike', '') }}/'+ postId,
+                    data: {
+                        '_token': token,
+                    },
+                    success: function(data) {
+                        // console.log('được',data);
+                        // Cập nhật giao diện ngay sau khi hoàn thành
+                        if (isLiked) {
+                            $('.like-btn[data-post-id=' + postId + ']').text('Thích');
+                        } else {
+                            $('.like-btn[data-post-id=' + postId + ']').text('Bỏ thích');
+                        }
+                    },
+                    error: function(err) {
+                        console.error('lỗi',err);
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
