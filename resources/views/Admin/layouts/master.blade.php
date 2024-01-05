@@ -16,7 +16,9 @@
     {{-- <script src="https://cdn.ckeditor.com/ckeditor5/39.0.2/classic/ckeditor.js"></script> --}}
     <style>
         .pagination a {
+            /* color: #007BFF; */
             color: #007BFF;
+
             /* Màu sắc liên kết */
             font-size: 16px;
             /* Kích thước font */

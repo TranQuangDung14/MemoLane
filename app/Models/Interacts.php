@@ -10,4 +10,11 @@ class Interacts extends Model
     use HasFactory;
     protected $table='ml_interacts';
 
+    public function user() {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function diary() {
+        return $this->belongsTo(Diarys::class,'diary_id');
+    }
 }
