@@ -10,4 +10,7 @@ class Comments extends Model
     use HasFactory;
     protected $table='ml_comments';
 
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

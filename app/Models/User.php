@@ -50,12 +50,15 @@ class User extends Authenticatable
 
     // tương tác 1*
     public function hasLiked(Diarys $diary) {
-        // dd($diary->id);
-        // dd( $this->likes()->where('diary_id', $diary->id)->exists());
         return $this->likes()->where('diary_id', $diary->id)->exists();
     }
     // 2*
     public function likes() {
         return $this->hasMany(Interacts::class);
+    }
+
+
+    public function Comments() {
+        return $this->hasMany(Comments::class);
     }
 }
