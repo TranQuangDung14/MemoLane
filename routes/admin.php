@@ -40,6 +40,9 @@ Route::prefix('admin')->group(function () {
         Route::get('create', [DiaryController::class, 'create'])->name('my_diaryCreate');
         // Route::get('/diary', [DiaryController::class, 'like'])->name('diaryLike');
         Route::post('store', [DiaryController::class, 'store'])->name('my_diaryStore');
+
+        Route::post('comment', [DiaryController::class, 'comment'])->name('commentStore');
+
         Route::post('/diary/like/{id}', [DiaryController::class, 'like'])->name('diaryLike');
         Route::post('/diary/unlike/{id}', [DiaryController::class, 'unlike'])->name('diaryUnlike');
 

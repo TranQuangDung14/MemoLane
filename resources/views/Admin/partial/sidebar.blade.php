@@ -8,8 +8,19 @@
         <i class="ti ti-x fs-8"></i>
       </div>
     </div>
+
     <!-- Sidebar navigation-->
-    <nav class="sidebar-nav scroll-sidebar" data-simplebar="">
+    <nav class="sidebar-nav scroll-sidebar mt-4" data-simplebar="">
+        {{-- <label>Tìm kiếm theo hastag</label> --}}
+        <form action="{{ route('my_diaryIndex', Auth::id()) }}" method="get"
+            enctype="multipart/form-data">
+            <div class="input-group">
+
+                <input class="form-control" type="text" name="search" value=""
+                    placeholder="Tìm kiếm người dùng">
+                <button class="btn btn-primary" type="submit"><i class="ti ti-search"></i></button>
+            </div>
+        </form>
       <ul id="sidebarnav">
         <li class="nav-small-cap">
           <i class="ti ti-dots nav-small-cap-icon fs-4"></i>
