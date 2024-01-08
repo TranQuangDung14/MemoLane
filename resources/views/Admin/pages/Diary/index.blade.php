@@ -1,6 +1,6 @@
 @extends('Admin.layouts.master')
 
-@section('title', 'Trang cá nhân')
+@section('title', 'Trang chủ')
 
 @section('content')
     <style>
@@ -221,7 +221,7 @@
                                             <div class="input-group">
                                                 <input type="hidden" name="diary_id" value="{{ $value->id }}">
                                                 <input class="form-control" id="focus{{ $value->id }}" type="text"
-                                                    name="content" value=""
+                                                    naƯme="content" value=""
                                                     placeholder="Hãy nói gì đó về đoạn nhật ký này">
 
                                                 <button class="btn btn-primary" type="submit"><i

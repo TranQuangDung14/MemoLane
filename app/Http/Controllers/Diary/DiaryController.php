@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Validator;
 
 class DiaryController extends Controller
 {
+    public function index(){
+        // dd('ngừng');
+        
+        return view('Admin.pages.Diary.index');
+    }
     //
     public function MyDiary(Request $request,$id)
     {
@@ -112,7 +117,7 @@ class DiaryController extends Controller
             'content'                      => 'required',
         );
         $messages = array(
-            'content.required'             => '-Bình luận không được để trống!',
+            'content.required'             => '--Bình luận không được để trống!--',
         );
         $validator = Validator::make($input, $rules, $messages);
 

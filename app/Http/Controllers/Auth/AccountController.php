@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
+    public function show_account(){
+        dd('vào');
+        return view('Admin.pages.auth.index');
+    }
     public function index()
     {
         Auth::user();
@@ -58,7 +62,7 @@ class AccountController extends Controller
         // Xử lý khi người dùng đăng nhập thành công
         // return response()->json(['message' => 'Đăng nhập thành công!']);
         Toastr::success('Đăng nhập thành công', 'success');
-        return redirect()->route('index_test');
+        return redirect()->route('diaryIndex');
     }
 
     public function showregister()

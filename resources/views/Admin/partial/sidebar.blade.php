@@ -28,7 +28,7 @@
         </li>
 
         <li class="sidebar-item mt-3">
-          <a class="sidebar-link" href="{{route('index_test')}}" aria-expanded="false">
+          <a class="sidebar-link" href="{{route('diaryIndex')}}" aria-expanded="false">
             <span>
               <i class="ti ti-layout-dashboard"></i>
             </span>
@@ -57,7 +57,7 @@
 
           {{-- Chưa có --}}
           <li class="sidebar-item mt-3">
-            <a class="sidebar-link" href="{{route('index_test')}}" aria-expanded="false">
+            <a class="sidebar-link" href="{{route('Account')}}" aria-expanded="false">
               <span>
                 <i class="ti ti-layout-dashboard"></i>
               </span>

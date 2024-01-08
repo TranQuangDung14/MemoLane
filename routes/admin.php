@@ -6,9 +6,11 @@ use App\Http\Controllers\Diary\Testcontroller;
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('admin')->group(function () {
+Route::prefix('')->group(function () {
     //Thông tin tài khoản
     Route::get('My_account', [AccountController::class, 'index'])->middleware('auth')->name('showAccount');
+
+    Route::get('account', [AccountController::class, 'show_account'])->middleware('auth')->name('Account');
 
     // cập nhật thông tin tài khoản
     Route::put('update_account', [AccountController::class, 'edit_info'])->middleware('auth')->name('accountUpdate');
@@ -26,7 +28,11 @@ Route::prefix('admin')->group(function () {
     Route::post('logout', [AccountController::class, 'logout'])->middleware('auth')->name('logout');
 
     Route::prefix('')->middleware('auth')->group(function () {
+        
+        Route::get('', [DiaryController::class, 'index'])->name('diaryIndex');
+        
         Route::get('test', [Testcontroller::class, 'index'])->name('index_test');
+
 
 
         // Route::get('add', [CategoriesController::class, 'create'])->name('categoryCreate');
