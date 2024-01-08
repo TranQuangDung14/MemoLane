@@ -154,12 +154,13 @@ class DiaryController extends Controller
     {
         // dd('vào');
         try {
-            // dd($request->status);
+            dd($request->all());
             $status = Diarys::find($request->id);
             $status->status = $request->status;
-            $status->save();
+            $status->update();
             Toastr::success('Cập nhật trạng thái thành công', 'success');
-            return response()->json($status);
+            // return response()->json($status);
+            return redirect()->back();
         } catch (\Exception $e) {
             dd($e);
             // Toastr::error('kích hoạt thất bại!', 'Failed');

@@ -17,19 +17,56 @@
             top: -2px;
         }
 
-        /* Ẩn dropdown ban đầu */
-        /* .dropdown-menu {
-                    display: none;
-                    position: absolute;
-                    background-color: #fff;
-                    min-width: 100px;
-                    z-index: 1;
-                } */
+        /* status */
+        /* Ẩn input radio mặc định */
+        .custom-list input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
 
-        /* Hiển thị dropdown khi hover */
-        /* .dropdown:hover .dropdown-menu {
-                    display: block;
-                } */
+        /* Hiển thị hiệu ứng hover */
+        .custom-list li:hover {
+            background-color: #e9e9e9;
+            /* Màu nền khi hover qua */
+            cursor: pointer;
+            /* Biến con trỏ khi hover */
+        }
+
+        /* Đánh dấu khi radio button được chọn */
+        .custom-list input[type="radio"]:checked+label {
+            background-color: #4285f4;
+            /* Màu nền khi được chọn */
+            color: white;
+            /* Màu chữ khi được chọn */
+        }
+
+        /* Hiển thị label như một phần tử block để tăng diện tích nhận click */
+        .custom-list label {
+            display: block;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            transition: background-color 0.3s;
+            /* Hiệu ứng khi hover */
+        }
+
+        /* Thay đổi màu nền của toàn bộ li khi radio được chọn */
+        .custom-list input[type="radio"]:checked+label {
+            background-color: #4285f4;
+            /* Màu nền khi được chọn */
+            color: white;
+            /* Màu chữ khi được chọn */
+        }
+
+        /* Áp dụng màu cho toàn bộ li */
+        .custom-list input[type="radio"]:checked+label {
+            display: block;
+            background-color: #4285f4;
+            /* Màu nền khi được chọn */
+            color: white;
+            /* Màu chữ khi được chọn */
+        }
     </style>
 
     <div class="container-fluid ">
@@ -271,19 +308,27 @@
                         <div class="modal-content">
                             <form action="{{ route('diaryStatus') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
+                                <input type="hidden" name="id" value="{{ $value->id }}">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Xóa</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Chỉnh trạng thái nhật ký</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    {{-- Bạn có chắc muốn xóa danh mục này không ? --}}
-                                    <input type="radio" name="status" id="" value="1">
-                                    <label for="html">Công khai</label><br>
-                                    <input type="radio" name="status" id="" value="2">
-                                    <label for="html">Chỉ mình tôi</label><br>
-                                    <input type="radio" name="status" id="" value="3">
-                                    <label for="html">Chỉ người theo dõi</label><br>
+                                    <ul class="list-unstyled custom-list">
+                                        <li>
+                                            <input type="radio" id="public" name="status" value="1" {{$value->status === 1 ? 'checked' : '' }}>
+                                            <label for="public">Công khai</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="private" name="status" value="2" {{$value->status === 2 ? 'checked' : '' }}>
+                                            <label for="private">Chỉ mình tôi</label>
+                                        </li>
+                                        <li>
+                                            <input type="radio" id="followers" name="status" value="3" {{$value->status === 3 ? 'checked' : '' }}>
+                                            <label for="followers">Chỉ người theo dõi</label>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
