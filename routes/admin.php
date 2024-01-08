@@ -28,9 +28,9 @@ Route::prefix('')->group(function () {
     Route::post('logout', [AccountController::class, 'logout'])->middleware('auth')->name('logout');
 
     Route::prefix('')->middleware('auth')->group(function () {
-        
+
         Route::get('', [DiaryController::class, 'index'])->name('diaryIndex');
-        
+
         Route::get('test', [Testcontroller::class, 'index'])->name('index_test');
 
 
@@ -52,8 +52,12 @@ Route::prefix('')->group(function () {
         Route::post('/diary/like/{id}', [DiaryController::class, 'like'])->name('diaryLike');
         Route::post('/diary/unlike/{id}', [DiaryController::class, 'unlike'])->name('diaryUnlike');
 
+
+        Route::post('status', [DiaryController::class, 'status_diary'])->name('diaryStatus');
+
         // Route::post('/diary/{id}/like', 'LikeController@likePost')->name('post.like');
 
         // Route::delete('/diary/{id}/unlike', 'LikeController@unlikePost')->name('post.unlike');
+
     });
 });

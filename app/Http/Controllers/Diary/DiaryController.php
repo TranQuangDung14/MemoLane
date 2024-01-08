@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Validator;
 class DiaryController extends Controller
 {
     public function index(){
-        // dd('ngừng');
-        
+        dd('ngừng');
+
         return view('Admin.pages.Diary.index');
     }
     //
@@ -38,8 +38,10 @@ class DiaryController extends Controller
                     $query->orderBy('id', 'desc');
                 },
                 ])
-                ->where('title','LIKE', '%' . $request->search . '%')->where('user_id',$id)->orderBy('id','desc')->paginate(3);
-            // dd($diary);
+                ->where('title','LIKE', '%' . $request->search . '%')->where('user_id',$id)->orderBy('id','desc')->paginate(10);
+            $user =user::where('id',$id)->select('id','name')->first();
+            // dd($user);
+                // dd($userExists);
             }
             else{
                 dd('ko tồn tại');
@@ -49,7 +51,7 @@ class DiaryController extends Controller
             // $count_like=ml_interacts::where()
 
             // dd($diary);
-            return view('Admin.pages.MyDiary.My_diary',compact('diary'));
+            return view('Admin.pages.MyDiary.My_diary',compact('diary','user'));
         } catch (\Exception $e) {
             dd($e);
         }
@@ -146,5 +148,22 @@ class DiaryController extends Controller
             return redirect()->back();
         }
 
+    }
+
+    public function status_diary(Request $request)
+    {
+        // dd('vào');
+        try {
+            // dd($request->status);
+            $status = Diarys::find($request->id);
+            $status->status = $request->status;
+            $status->save();
+            Toastr::success('Cập nhật trạng thái thành công', 'success');
+            return response()->json($status);
+        } catch (\Exception $e) {
+            dd($e);
+            // Toastr::error('kích hoạt thất bại!', 'Failed');
+            return redirect()->back();
+        }
     }
 }
