@@ -147,14 +147,13 @@ class DiaryController extends Controller
             dd($e);
             return redirect()->back();
         }
-
     }
 
     public function status_diary(Request $request)
     {
         // dd('vào');
         try {
-            dd($request->all());
+            // dd($request->all());
             $status = Diarys::find($request->id);
             $status->status = $request->status;
             $status->update();
@@ -165,6 +164,27 @@ class DiaryController extends Controller
             dd($e);
             // Toastr::error('kích hoạt thất bại!', 'Failed');
             return redirect()->back();
+        }
+    }
+    public function delete(Request $request)
+    {
+        try {
+            $delete_diary     = Diarys::find($request->id);
+            $delete_like       = Interacts::where('diary_id',$request->id)->get();
+            $delete_comment    = Comments::where('diary_id',$request->id)->get();
+            // dd($delete_comment);
+            foreach ($delete_like as $like) {
+                $like->delete();
+            }
+            foreach ($delete_comment as $cmt) {
+                $cmt->delete();
+            }
+            $delete_diary->delete();
+            Toastr::success('Xóa nhật ký thành công thành công', 'success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            dd($e);
+            //throw $th;
         }
     }
 }

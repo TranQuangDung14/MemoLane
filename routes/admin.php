@@ -57,7 +57,7 @@ Route::prefix('')->group(function () {
 
         // Route::post('/diary/{id}/like', 'LikeController@likePost')->name('post.like');
 
-        // Route::delete('/diary/{id}/unlike', 'LikeController@unlikePost')->name('post.unlike');
+        Route::delete('delete', [DiaryController::class, 'delete'])->name('My_diaryDelete');
 
     });
 });

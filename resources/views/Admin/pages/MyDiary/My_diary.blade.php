@@ -17,56 +17,6 @@
             top: -2px;
         }
 
-        /* status */
-        /* Ẩn input radio mặc định */
-        .custom-list input[type="radio"] {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Hiển thị hiệu ứng hover */
-        .custom-list li:hover {
-            background-color: #e9e9e9;
-            /* Màu nền khi hover qua */
-            cursor: pointer;
-            /* Biến con trỏ khi hover */
-        }
-
-        /* Đánh dấu khi radio button được chọn */
-        .custom-list input[type="radio"]:checked+label {
-            background-color: #4285f4;
-            /* Màu nền khi được chọn */
-            color: white;
-            /* Màu chữ khi được chọn */
-        }
-
-        /* Hiển thị label như một phần tử block để tăng diện tích nhận click */
-        .custom-list label {
-            display: block;
-            padding: 12px;
-            border-radius: 5px;
-            margin-bottom: 5px;
-            transition: background-color 0.3s;
-            /* Hiệu ứng khi hover */
-        }
-
-        /* Thay đổi màu nền của toàn bộ li khi radio được chọn */
-        .custom-list input[type="radio"]:checked+label {
-            background-color: #4285f4;
-            /* Màu nền khi được chọn */
-            color: white;
-            /* Màu chữ khi được chọn */
-        }
-
-        /* Áp dụng màu cho toàn bộ li */
-        .custom-list input[type="radio"]:checked+label {
-            display: block;
-            background-color: #4285f4;
-            /* Màu nền khi được chọn */
-            color: white;
-            /* Màu chữ khi được chọn */
-        }
     </style>
 
     <div class="container-fluid ">
@@ -127,22 +77,33 @@
                 <div class="row d-flex align-items-stretch">
                     <div class="card border">
                         <div class="card-body">
-
-
                             <div class="row">
-                                <div class="col-md-3 d-flex align-items-center">
+                                <div class="col-md-4 d-flex align-items-center">
                                     <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="50"
                                         height="50" class="rounded-circle">
-                                    <div class="mt-3 ms-2">
+                                    <div class="ms-2">
                                         <p><strong>{{ $value->User->name }}</strong>
                                             <br>
+
                                             <span class="text-muted fs-2">
                                                 {{ \Carbon\Carbon::parse($value->created_at)->timezone('Asia/Ho_Chi_Minh')->format('H:i') }}&nbsp;&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($value->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y') }}
+                                            </span> &nbsp;
+                                            @if ($value->User->id === Auth::id())
+                                            <span style="color: #FF9966">
+                                                @if ($value->status == 1 )
+                                               <i class="ti ti-world"></i> Công khai
+                                                    @elseif ($value->status == 2)
+                                                    <i class="ti ti-user"></i> mình tôi
+                                                    @elseif ($value->status == 3)
+                                                    <i class="ti ti-user-plus"></i> chỉ người theo dõi
+                                                @endif
                                             </span>
+                                            @endif
+
                                         </p>
                                     </div>
                                 </div>
-                                <div class="col-md-9">
+                                <div class="col-md-8">
                                     {{-- phần này thêm các chức năng sau  --}}
 
                                     <div class="dropdown">
@@ -151,11 +112,9 @@
                                             class="ti ti-dots float-end fs-6" style="cursor: pointer;"></i>
 
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#ModalStatus_{{ $value->id }}">Chỉnh trạng thái nhật
-                                                    ký</a></li>
-                                            {{-- <li><a class="dropdown-item" href="#">Another action</a></li>
-                                            <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
+                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalStatus_{{ $value->id }}">Chỉnh trạng thái nhật ký</a></li>
+                                           <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalDelete_{{ $value->id }}">Xóa bài nhật ký</a></li>
+                                            {{-- <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
                                         </ul>
                                     </div>
 
@@ -315,20 +274,12 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <ul class="list-unstyled custom-list">
-                                        <li>
-                                            <input type="radio" id="public" name="status" value="1" {{$value->status === 1 ? 'checked' : '' }}>
-                                            <label for="public">Công khai</label>
-                                        </li>
-                                        <li>
-                                            <input type="radio" id="private" name="status" value="2" {{$value->status === 2 ? 'checked' : '' }}>
-                                            <label for="private">Chỉ mình tôi</label>
-                                        </li>
-                                        <li>
-                                            <input type="radio" id="followers" name="status" value="3" {{$value->status === 3 ? 'checked' : '' }}>
-                                            <label for="followers">Chỉ người theo dõi</label>
-                                        </li>
-                                    </ul>
+                                    <select name="status" id=""  class="form-select" >
+                                        <option value="1" {{$value->status === 1 ? 'selected' : '' }}> <span>Công khai</option>
+                                        <option value="2" {{$value->status === 2 ? 'selected' : '' }}>Chỉ mình tôi</option>
+                                        <option value="3" {{$value->status === 3 ? 'selected' : '' }}>Chỉ người theo dõi</option>
+                                    </select>
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -339,6 +290,33 @@
                                 </div>
                             </form>
 
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal delete -->
+                <div class="modal fade" id="ModalDelete_{{ $value->id }}" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Xóa</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                Bạn có chắc muốn xóa sản phẩm này không ?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary"
+                                    data-bs-dismiss="modal">Hủy</button>
+                                <form action="{{ route('My_diaryDelete') }}"
+                                    method="POST" enctype="multipart/form-data">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="id" value="{{$value->id}}">
+                                    <button type="submit" class="btn btn-primary">Xóa</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>

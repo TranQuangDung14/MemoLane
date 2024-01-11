@@ -39,7 +39,6 @@
                 </div>
             </div>
         </div>
-
         @if (session('success'))
             <div class="alert alert-success" id="success-alert">
                 {{ session('success') }}
@@ -79,7 +78,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
 
@@ -121,8 +119,7 @@
                                 <option value="1" {{ Auth::user()->sex === 1 ? 'selected' : '' }}>Nam</option>
                                 <option value="2" {{ Auth::user()->sex === 2 ? 'selected' : '' }}>Nữ</option>
                                 <option value="3"
-                                    {{ Auth::user()->sex !== 1 && Auth::user()->sex !== 2 ? 'selected' : '' }}>Giới tính
-                                    không xác định</option>
+                                    {{ Auth::user()->sex !== 1 && Auth::user()->sex !== 2 ? 'selected' : '' }}>Giới tính không xác định</option>
                             </select>
                             @if ($errors->has('sex'))
                                 <span class="text-danger" role="alert">{{ $errors->first('sex') }}</span>
