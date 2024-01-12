@@ -164,7 +164,7 @@
                 </div>
             </div>
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"
+            {{-- <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"
                 aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content">
@@ -178,7 +178,6 @@
                         <div class="modal-body">
                             @if (isset($value->Comments) && count($value->Comments) > 0)
                                 @foreach ($value->Comments as $cmt)
-                                    {{-- <p></p> --}}
                                     <div class="row">
                                         <div class="col-md-1 d-flex align-items-center">
                                             <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
@@ -186,7 +185,6 @@
 
                                         </div>
                                         <div class="col-md-11">
-                                            {{-- phần này thêm các chức năng sau  --}}
                                             <div class="mt-3 ms-2">
                                                 <p><span style="color:blue ">{{ $cmt->User->name }} </span>
                                                     &ensp;{{ \Carbon\Carbon::parse($cmt->created_at)->timezone('Asia/Ho_Chi_Minh')->format('H:i') }}&ensp;&nbsp;{{ \Carbon\Carbon::parse($cmt->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y') }}
@@ -239,12 +237,9 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                        </div> --}}
                     </div>
                 </div>
-            </div>
+            </div> --}}
         @endforeach
         {{ $diary->links() }}
 

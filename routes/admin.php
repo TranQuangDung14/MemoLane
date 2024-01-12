@@ -47,7 +47,6 @@ Route::prefix('')->group(function () {
         // Route::get('/diary', [DiaryController::class, 'like'])->name('diaryLike');
         Route::post('store', [DiaryController::class, 'store'])->name('my_diaryStore');
 
-        Route::post('comment', [DiaryController::class, 'comment'])->name('commentStore');
 
         Route::post('/diary/like/{id}', [DiaryController::class, 'like'])->name('diaryLike');
         Route::post('/diary/unlike/{id}', [DiaryController::class, 'unlike'])->name('diaryUnlike');
@@ -58,6 +57,10 @@ Route::prefix('')->group(function () {
         // Route::post('/diary/{id}/like', 'LikeController@likePost')->name('post.like');
 
         Route::delete('delete', [DiaryController::class, 'delete'])->name('My_diaryDelete');
+
+
+        Route::post('comment', [DiaryController::class, 'comment'])->name('commentStore');
+        Route::get('load_Comments', [DiaryController::class, 'Load_Comments'])->name('commentLoad');
 
     });
 });

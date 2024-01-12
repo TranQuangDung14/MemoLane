@@ -126,4 +126,24 @@
         </div>
     </div>
 </div>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
+
+<script>
+
+    $(document).ready(function () {
+    $.ajax({
+        url: '{{ route('commentLoad') }}', // Đường dẫn của route đã tạo
+        type: 'GET',
+
+        success: function (data) {
+            console.log('data nè',data);
+            // $('#result').html(data);
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    });
+});
+
+</script>
 @endsection

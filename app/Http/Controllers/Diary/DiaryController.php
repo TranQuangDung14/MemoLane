@@ -58,6 +58,17 @@ class DiaryController extends Controller
 
     }
 
+    public function Load_Comments(Request $request)
+    {
+        try {
+            $comment= Comments::where('diary_id',$request->diary_id)->get();
+            // dd($comment);
+            return response()->json($comment);
+        } catch (\Exception $e) {
+            dd($e);
+        }
+    }
+
     public function create()
     {
         try {
