@@ -109,17 +109,22 @@
                                             @endif
                                         </td>
                                         <td class="border-bottom-0">
-                                            @if ($value->lock == 0)
-                                                <a href="" data-bs-toggle="modal"
-                                                    data-bs-target="#exampleModal_{{ $value->id }}"
-                                                    title="Khóa tài khoản">
-                                                    <i class="ti ti-key fs-8"></i>
-                                                </a>
+                                            @if ($value->role == 2)
+                                                @if ($value->lock == 0)
+                                                    <a href="" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModal_{{ $value->id }}"
+                                                        title="Khóa tài khoản">
+                                                        <i class="ti ti-key fs-8"></i>
+                                                    </a>
+                                                @else
+                                                    <a href="" data-bs-toggle="modal" style="color: red"
+                                                        data-bs-target="#exampleModal_{{ $value->id }}"
+                                                        title="mở tài khoản">
+                                                        <i class="ti ti-key fs-8"></i>
+                                                    </a>
+                                                @endif
                                             @else
-                                                <a href="" data-bs-toggle="modal" style="color: red"
-                                                    data-bs-target="#exampleModal_{{ $value->id }}" title="mở tài khoản">
-                                                    <i class="ti ti-key fs-8"></i>
-                                                </a>
+
                                             @endif
                                             <!-- Modal -->
                                             <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"

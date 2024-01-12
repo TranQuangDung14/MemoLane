@@ -16,7 +16,6 @@
             position: relative;
             top: -2px;
         }
-
     </style>
 
     <div class="container-fluid ">
@@ -89,15 +88,15 @@
                                                 {{ \Carbon\Carbon::parse($value->created_at)->timezone('Asia/Ho_Chi_Minh')->format('H:i') }}&nbsp;&nbsp;&nbsp;&nbsp;{{ \Carbon\Carbon::parse($value->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y') }}
                                             </span> &nbsp;
                                             @if ($value->User->id === Auth::id())
-                                            <span style="color: #FF9966">
-                                                @if ($value->status == 1 )
-                                               <i class="ti ti-world"></i> Công khai
+                                                <span style="color: #FF9966">
+                                                    @if ($value->status == 1)
+                                                        <i class="ti ti-world"></i> Công khai
                                                     @elseif ($value->status == 2)
-                                                    <i class="ti ti-user"></i> mình tôi
+                                                        <i class="ti ti-user"></i> mình tôi
                                                     @elseif ($value->status == 3)
-                                                    <i class="ti ti-user-plus"></i> chỉ người theo dõi
-                                                @endif
-                                            </span>
+                                                        <i class="ti ti-user-plus"></i> chỉ người theo dõi
+                                                    @endif
+                                                </span>
                                             @endif
 
                                         </p>
@@ -112,8 +111,12 @@
                                             class="ti ti-dots float-end fs-6" style="cursor: pointer;"></i>
 
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalStatus_{{ $value->id }}">Chỉnh trạng thái nhật ký</a></li>
-                                           <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#ModalDelete_{{ $value->id }}">Xóa bài nhật ký</a></li>
+                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#ModalStatus_{{ $value->id }}">Chỉnh trạng thái nhật
+                                                    ký</a></li>
+                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                    data-bs-target="#ModalDelete_{{ $value->id }}">Xóa bài nhật ký</a>
+                                            </li>
                                             {{-- <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
                                         </ul>
                                     </div>
@@ -149,9 +152,10 @@
                                 </div>
                             @endif
 
-
-                            <div class="col-4 btn btn-outline-primary" style="border: 1px solid white" {{-- onclick="focusInput({{ $value->id }})"> --}}
-                                data-bs-toggle="modal" data-bs-target="#exampleModal_{{ $value->id }}">
+                            {{-- btn comment --}}
+                            <div class="col-4 btn btn-outline-primary openComment" style="border: 1px solid white"
+                                {{-- onclick="focusInput({{ $value->id }})"> --}} data-bs-toggle="modal"
+                                data-bs-target="#exampleModal_{{ $value->id }}" data-diary-id="{{ $value->id }}">
                                 <i class="ti ti-message fs-8"></i>
                             </div>
                             <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
@@ -183,9 +187,8 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
-                                @if (isset($value->Comments) && count($value->Comments) > 0)
+                                {{-- @if (isset($value->Comments) && count($value->Comments) > 0)
                                     @foreach ($value->Comments as $cmt)
-                                        {{-- <p></p> --}}
                                         <div class="row">
                                             <div class="col-md-1 d-flex align-items-center">
                                                 <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
@@ -193,7 +196,6 @@
 
                                             </div>
                                             <div class="col-md-11">
-                                                {{-- phần này thêm các chức năng sau  --}}
                                                 <div class="mt-3 ms-2">
                                                     <p>
                                                         @if ($cmt->User->id === $value->User->id)
@@ -217,7 +219,7 @@
                                     @endforeach
                                 @else
                                     <p>Chưa có bình luận nào</p>
-                                @endif
+                                @endif --}}
                             </div>
                             <div class="modal-footer">
                                 {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button> --}}
@@ -274,10 +276,13 @@
                                         aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <select name="status" id=""  class="form-select" >
-                                        <option value="1" {{$value->status === 1 ? 'selected' : '' }}> <span>Công khai</option>
-                                        <option value="2" {{$value->status === 2 ? 'selected' : '' }}>Chỉ mình tôi</option>
-                                        <option value="3" {{$value->status === 3 ? 'selected' : '' }}>Chỉ người theo dõi</option>
+                                    <select name="status" id="" class="form-select">
+                                        <option value="1" {{ $value->status === 1 ? 'selected' : '' }}> <span>Công
+                                                khai</option>
+                                        <option value="2" {{ $value->status === 2 ? 'selected' : '' }}>Chỉ mình tôi
+                                        </option>
+                                        <option value="3" {{ $value->status === 3 ? 'selected' : '' }}>Chỉ người theo
+                                            dõi</option>
                                     </select>
 
                                 </div>
@@ -307,13 +312,12 @@
                                 Bạn có chắc muốn xóa sản phẩm này không ?
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary"
-                                    data-bs-dismiss="modal">Hủy</button>
-                                <form action="{{ route('My_diaryDelete') }}"
-                                    method="POST" enctype="multipart/form-data">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <form action="{{ route('My_diaryDelete') }}" method="POST"
+                                    enctype="multipart/form-data">
                                     @csrf
                                     @method('DELETE')
-                                    <input type="hidden" name="id" value="{{$value->id}}">
+                                    <input type="hidden" name="id" value="{{ $value->id }}">
                                     <button type="submit" class="btn btn-primary">Xóa</button>
                                 </form>
                             </div>
@@ -369,9 +373,30 @@
                     }
                 });
             });
+
         });
 
 
+        $(document).ready(function() {
+            $('.openComment').click(function() {
+                // var diary_id = $diary_id;
+                var diary_id = $(this).data('diary-id');
+                console.log('ádad', diary_id);
+                $.ajax({
+                    url: '{{ route('commentLoad') }}',
+                    type: 'GET',
+                    data: {diary_id: diary_id},
+                    success: function(data) {
+                        console.log('data nè', data);
+                        // $('#result').html(data);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            });
+
+        });
 
         // focus
         //    function focusInput($id) {

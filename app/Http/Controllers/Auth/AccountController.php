@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
+    // Quản lý tài khoản
     public function show_account(Request $request){
         try {
             $user = User::where('name','LIKE', '%' . $request->search . '%')->orderBy('id','desc')->paginate(10);
@@ -25,12 +26,13 @@ class AccountController extends Controller
         }
         // return view('Admin.pages.auth.index');
     }
+    //  Trang chủ
     public function index()
     {
         Auth::user();
         return view('Admin.pages.auth.account');
     }
-
+    // Trang đăng nhập
     public function showlogin()
     {
         if (auth()->check()) {
@@ -41,6 +43,7 @@ class AccountController extends Controller
         return view('Admin.pages.auth.login');
     }
 
+    //Xử lý đăng nhập
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -73,6 +76,8 @@ class AccountController extends Controller
         return redirect()->route('diaryIndex');
     }
 
+
+    // Trang tạo tài khoản admin
     public function showregister()
     {
         if (auth()->check()) {
@@ -80,6 +85,8 @@ class AccountController extends Controller
         }
         return view('Admin.pages.auth.register');
     }
+
+    // Xử lý tạo tài khoản admin
     public function register(Request $request)
     {
         // dd($request->all());
@@ -129,6 +136,7 @@ class AccountController extends Controller
         return redirect()->route('showlogin');
     }
 
+    // Xử lý đăng xuất
     public function logout(Request $request)
     {
         try {
@@ -140,6 +148,7 @@ class AccountController extends Controller
         }
     }
 
+    //  Xử lý khóa tài khoản
     public function lock_account(Request $request)
     {
         // dd($request->all());
@@ -168,6 +177,7 @@ class AccountController extends Controller
         }
     }
 
+    // Xử lý cập nhật thông tin tài khoản
     public function edit_info(Request $request)
     {
         $input = $request->all();
@@ -210,6 +220,7 @@ class AccountController extends Controller
         }
     }
 
+    // Xử lý đổi mật khẩu
     public function edit_pass(Request $request)
     {
 
