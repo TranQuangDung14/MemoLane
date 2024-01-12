@@ -13,9 +13,17 @@ use Illuminate\Support\Facades\Validator;
 
 class AccountController extends Controller
 {
-    public function show_account(){
-        dd('vào');
-        return view('Admin.pages.auth.index');
+    public function show_account(Request $request){
+        try {
+            $user = User::where('name','LIKE', '%' . $request->search . '%')->orderBy('id','desc')->paginate(10);
+
+            return view('Admin.pages.auth.index',compact('user'));
+        } catch (\Exception $e) {
+            //throw $th;
+            dd($e);
+            return redirect()->back();
+        }
+        // return view('Admin.pages.auth.index');
     }
     public function index()
     {
