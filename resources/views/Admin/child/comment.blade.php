@@ -9,14 +9,15 @@
                  <div class="col-md-11">
                      <div class="mt-3 ms-2">
                          <p>
-                             {{-- @if ($cmt->User->id === $value->User->id) --}}
+                             @if ($cmt->User->id === $cmt->diary->user_id)
                                  <a href="{{ route('my_diaryIndex', $cmt->User->id) }}"><span
                                          style="color:red ">{{ $cmt->User->name }} &ensp;<span
                                              style="color: #009900">tác giả</span> </span></a>
-                             {{-- @else
+                             @else
+
                                  <a href="{{ route('my_diaryIndex', $cmt->User->id) }}"><span
                                          style="color:blue ">{{ $cmt->User->name }} </span></a>
-                             @endif --}}
+                             @endif
 
                              &ensp;{{ \Carbon\Carbon::parse($cmt->created_at)->timezone('Asia/Ho_Chi_Minh')->format('H:i') }}&ensp;&nbsp;{{ \Carbon\Carbon::parse($cmt->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y') }}
                          </p>

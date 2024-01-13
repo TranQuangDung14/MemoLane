@@ -187,9 +187,10 @@
                                     aria-label="Close"></button>
                             </div>
                             {{-- <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
-                              
+
                             </div> --}}
                             <div class="modal-body commentsContainer" style="max-height: 60vh; overflow-y: auto;">
+                                {{-- content comment --}}
                             </div>
 
                             <div class="modal-footer">
@@ -205,17 +206,18 @@
                                     </div>
                                     <div class="row mb-3 mt-2">
                                         <div class="col-sm-12">
-                                            <form action="{{ route('commentStore') }}" method="POST"
-                                                enctype="multipart/form-data">
-                                                @csrf
+                                            {{-- <form action="{{ route('commentStore') }}" method="POST"  enctype="multipart/form-data">
+                                                @csrf --}}
+                                            <form id="addCommentForm" enctype="multipart/form-data">
+                                                {{ csrf_field() }}
                                                 <div class="input-group">
                                                     <input type="hidden" name="diary_id" value="{{ $value->id }}">
                                                     <input class="form-control" id="focus{{ $value->id }}"
                                                         type="text" name="content" value=""
                                                         placeholder="Hãy nói gì đó về đoạn nhật ký này">
 
-                                                    <button class="btn btn-primary" type="submit"><i
-                                                            class="ti ti-send"></i></button>
+                                                    <button class="btn btn-primary" type="button"
+                                                        id="submitCommentBtn"><i class="ti ti-send"></i></button>
                                                     <br />
                                                 </div>
                                             </form>
@@ -310,6 +312,13 @@
     <script>
         $(document).ready(function() {
             loadComments();
+            // ReloadComments();
+            // addComment();
+            $('#submitCommentBtn').on('click', function() {
+
+                var diaryId = {{ $value->id }};
+                addComment(diaryId);
+            });
             $('.like-btn').on('click', function(e) {
                 e.preventDefault();
                 var postId = $(this).data('post-id');
@@ -346,11 +355,33 @@
                 });
             });
 
-            function loadComments(diary_id) {
+            function addComment(diary_id) {
+                // $('.openComment').click(function() {
+                console.log('ssss', diary_id);
+                $.ajax({
+                    url: '{{ route('commentStore') }}',
+                    type: 'POST',
+                    data: $('#addCommentForm').serialize(),
+                    success: function(response) {
+                        // $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data
+                        //     .html);
+                        // Gọi lại danh sách comment
+                        console.log('id nhật ký',diary_id);
+                        // console.log('Gọi hàm xử lý load nhật ký', ReloadComments(diary_id));
+                        ReloadComments(diary_id)
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+                // });
+            }
+
+            function loadComments() {
                 // Đặt sự kiện click cho nút mở comment
                 $('.openComment').click(function() {
                     var clickedDiaryId = $(this).data('diary-id');
-                    console.log('ádad', clickedDiaryId);
+                    // console.log('ádad', clickedDiaryId);
                     $.ajax({
                         url: '{{ route('commentLoad') }}',
                         type: 'GET',
@@ -360,7 +391,7 @@
                         success: function(data) {
                             $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data
                                 .html);
-                            console.log('data nè', data.html);
+                            // console.log('data nè', data.html);
                         },
                         error: function(error) {
                             console.log(error);
@@ -369,8 +400,28 @@
                 });
             }
 
-        });
+            function ReloadComments(diary_id) {
+                console.log('Id hàm nhật ký nhận',diary_id);
+                var clickedDiaryId =diary_id;
+                $.ajax({
+                    url: '{{ route('commentLoad') }}',
+                    type: 'GET',
+                    data: {
+                        diary_id: diary_id
+                    },
+                    success: function(data) {
+                        // Hiển thị danh sách comment
+                        // $('#commentList').html(data.html);
+                        $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data.html);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
 
+
+        });
 
         // $(document).ready(function() {
         //     $('.openComment').click(function() {
