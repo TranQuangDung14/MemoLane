@@ -58,16 +58,7 @@ class DiaryController extends Controller
 
     }
 
-    public function Load_Comments(Request $request)
-    {
-        try {
-            $comment= Comments::where('diary_id',$request->diary_id)->get();
-            // dd($comment);
-            return response()->json($comment);
-        } catch (\Exception $e) {
-            dd($e);
-        }
-    }
+
 
     public function create()
     {
@@ -122,6 +113,23 @@ class DiaryController extends Controller
         }
     }
 
+    public function Load_Comments(Request $request)
+    {
+        try {
+            $comment= Comments::where('diary_id',$request->diary_id)->get();
+            // dd($comment);
+            // return response()->json($comment);
+            $html = view('Admin.child.comment', ['comments' => $comment])->render();
+            // dd($html);
+            return response()->json([
+                'html' => $html,
+                'comment' =>$comment
+            ]);
+        } catch (\Exception $e) {
+            dd('lỗi',$e);
+        }
+    }
+    
     public function comment(Request $request)
     {
         $input = $request->all();
