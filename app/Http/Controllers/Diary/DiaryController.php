@@ -129,7 +129,7 @@ class DiaryController extends Controller
             dd('lỗi',$e);
         }
     }
-    
+
     public function comment(Request $request)
     {
         $input = $request->all();
@@ -159,8 +159,12 @@ class DiaryController extends Controller
             $comment->save();
             DB::commit();
             // session()->flash('success', 'Cập nhật thành công!');
-            Toastr::success('Gửi bình luận thành công', 'success');
-            return redirect()->back();
+            // Toastr::success('Gửi bình luận thành công', 'success');
+            // return redirect()->back();
+            return response()->json([
+                'message' =>  Toastr::success('Gửi bình luận thành công', 'success'),
+                // 'comment' =>$comment
+            ]);
         } catch (\Exception $e) {
             DB::rollback();
             dd($e);
