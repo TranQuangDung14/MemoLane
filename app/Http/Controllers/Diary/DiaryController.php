@@ -116,6 +116,7 @@ class DiaryController extends Controller
     public function Load_Comments(Request $request)
     {
         try {
+            // dd($request->diary_id);
             $comment= Comments::where('diary_id',$request->diary_id)->get();
             // dd($comment);
             // return response()->json($comment);
@@ -132,6 +133,7 @@ class DiaryController extends Controller
 
     public function comment(Request $request)
     {
+        // dd($request->all());
         $input = $request->all();
 
         $rules = array(
@@ -162,7 +164,7 @@ class DiaryController extends Controller
             // Toastr::success('Gửi bình luận thành công', 'success');
             // return redirect()->back();
             return response()->json([
-                'message' =>  Toastr::success('Gửi bình luận thành công', 'success'),
+                'message' =>  'Gửi bình luận thành công',
                 // 'comment' =>$comment
             ]);
         } catch (\Exception $e) {

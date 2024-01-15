@@ -187,14 +187,12 @@
                                     aria-label="Close"></button>
                             </div>
                             {{-- <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
-
                             </div> --}}
                             <div class="modal-body commentsContainer" style="max-height: 60vh; overflow-y: auto;">
                                 {{-- content comment --}}
                             </div>
 
                             <div class="modal-footer">
-                                {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button> --}}
                                 <div class="container">
                                     <hr>
                                     <div class="row">
@@ -206,18 +204,19 @@
                                     </div>
                                     <div class="row mb-3 mt-2">
                                         <div class="col-sm-12">
-                                            {{-- <form action="{{ route('commentStore') }}" method="POST"  enctype="multipart/form-data">
-                                                @csrf --}}
-                                            <form id="addCommentForm" enctype="multipart/form-data">
+                                            <form class="addCommentForm" enctype="multipart/form-data">
                                                 {{ csrf_field() }}
+                                                {{-- <input class="form-control diary-id-input" id="focus{{ $value->id }}" type="text" name="content" value="" placeholder="Hãy nói gì đó về đoạn nhật ký này"> --}}
+
                                                 <div class="input-group">
-                                                    <input type="hidden" name="diary_id" value="{{ $value->id }}">
+                                                    <input type="hidden" class="diary-id-input" name="diary_id"
+                                                        value="{{ $value->id }}">
                                                     <input class="form-control" id="focus{{ $value->id }}"
                                                         type="text" name="content" value=""
                                                         placeholder="Hãy nói gì đó về đoạn nhật ký này">
 
-                                                    <button class="btn btn-primary" type="button"
-                                                        id="submitCommentBtn"><i class="ti ti-send"></i></button>
+                                                    <button class="btn btn-primary submitCommentBtn" type="button"><i
+                                                            class="ti ti-send"></i></button>
                                                     <br />
                                                 </div>
                                             </form>
@@ -314,11 +313,62 @@
             loadComments();
             // ReloadComments();
             // addComment();
-            $('#submitCommentBtn').on('click', function() {
+            $('.addCommentForm').on('submit', function(e) {
+                e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+                var form = $(this);
+                var diaryId = form.find(".diary-id-input").val();
+                addComment(diaryId, form);
 
-                var diaryId = {{ $value->id }};
-                addComment(diaryId);
+                // Xóa nội dung trong input sau khi gửi
+                form.find('.form-control').val('');
             });
+
+            $('.submitCommentBtn').on('click', function() {
+                // $(document).on('click', '.submitCommentBtn', function() {
+                // var diaryId = $(".diary-id-input").val();
+                // var form = $(this).closest('form');
+
+                var form = $(this).closest('form');
+                console.log('vào rồi', form);
+                var diaryId = form.find(".diary-id-input").val();
+                console.log('vào rồi id', diaryId);
+                // addComment(diaryId);
+                addComment(diaryId, form);
+
+                // Xóa nội dung trong input sau khi gửi
+                form.find('.form-control').val('');
+            });
+
+            function addComment(diary_id, form) {
+                // console.log('ssss', diary_id);
+                $.ajax({
+                    url: '{{ route('commentStore') }}',
+                    type: 'POST',
+                    // data: form.serialize(),
+                    data: form.serialize(),
+                    // data: $('#addCommentForm').serialize(),
+                    success: function(response) {
+
+                        console.log('id nhật ký',response );
+                        ReloadComments(diary_id)
+                        setTimeout(function() {
+                            toastr.success(
+                                response.message,
+                                // "Success Alert", {
+                                //     iconClass: "customer-info",
+                                // }, {
+                                //     timeOut: 2000,
+                                // }
+                            );
+                        }, 500);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+                // });
+
+            }
             $('.like-btn').on('click', function(e) {
                 e.preventDefault();
                 var postId = $(this).data('post-id');
@@ -355,33 +405,14 @@
                 });
             });
 
-            function addComment(diary_id) {
-                // $('.openComment').click(function() {
-                console.log('ssss', diary_id);
-                $.ajax({
-                    url: '{{ route('commentStore') }}',
-                    type: 'POST',
-                    data: $('#addCommentForm').serialize(),
-                    success: function(response) {
-                        // $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data
-                        //     .html);
-                        // Gọi lại danh sách comment
-                        console.log('id nhật ký',diary_id);
-                        // console.log('Gọi hàm xử lý load nhật ký', ReloadComments(diary_id));
-                        ReloadComments(diary_id)
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-                // });
-            }
+
+
 
             function loadComments() {
                 // Đặt sự kiện click cho nút mở comment
                 $('.openComment').click(function() {
                     var clickedDiaryId = $(this).data('diary-id');
-                    // console.log('ádad', clickedDiaryId);
+                    console.log('ádad', clickedDiaryId);
                     $.ajax({
                         url: '{{ route('commentLoad') }}',
                         type: 'GET',
@@ -401,17 +432,18 @@
             }
 
             function ReloadComments(diary_id) {
-                console.log('Id hàm nhật ký nhận',diary_id);
-                var clickedDiaryId =diary_id;
+                console.log('Id hàm nhật ký nhận', diary_id);
+                var clickedDiaryId = diary_id;
                 $.ajax({
                     url: '{{ route('commentLoad') }}',
                     type: 'GET',
                     data: {
-                        diary_id: diary_id
+                        diary_id: clickedDiaryId
                     },
                     success: function(data) {
                         // Hiển thị danh sách comment
-                        // $('#commentList').html(data.html);
+                        console.log('hehe', data);
+                        // $('#commentList').html(data.comment);
                         $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data.html);
                     },
                     error: function(error) {
