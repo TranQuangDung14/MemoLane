@@ -39,29 +39,19 @@
                 </div>
             </div>
         </div>
-        @if (session('success'))
-            <div class="alert alert-success" id="success-alert">
-                {{ session('success') }}
-                <span type="button" class="X-close float-end" data-dismiss="alert" aria-label="Close">
-                    {{-- <span aria-hidden="true">&times;</span> --}}<i class="ti ti-x"></i>
-                </span>
-            </div>
-        @elseif (session('error'))
-            <div class="alert alert-danger" id="error-alert">
-                {{ session('error') }}
-                <span type="button" class="X-close float-end" data-dismiss="alert" aria-label="Close">
-                    <i class="ti ti-x"></i>
-                </span>
-            </div>
-        @endif
         <div class="row d-flex align-items-stretch">
             <div class="card border">
                 <div class="row card-body">
                     <div class="col-md-3 d-flex justify-content-center align-items-center position-relative">
-                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="160"
-                            height="160" class="rounded-circle">
-                        <button
-                            class="btn btn-primary btn-change-img position-absolute top-50 start-50 translate-middle">Thay
+                        @if (Auth::user()->avatar != '')
+                            <img src="{{ asset('storage/') }}/image/avatar/{{ Auth::user()->avatar }}" alt=""
+                                width="160" height="160" class="rounded-circle">
+                        @else
+                            <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="160"
+                                height="160" class="rounded-circle">
+                        @endif
+                        <button class="btn btn-primary btn-change-img position-absolute top-50 start-50 translate-middle"
+                            data-bs-toggle="modal" data-bs-target="#exampleModal_edit_avatar">Thay
                             đổi ảnh</button>
                     </div>
                     <div class="col-md-9">
@@ -119,7 +109,8 @@
                                 <option value="1" {{ Auth::user()->sex === 1 ? 'selected' : '' }}>Nam</option>
                                 <option value="2" {{ Auth::user()->sex === 2 ? 'selected' : '' }}>Nữ</option>
                                 <option value="3"
-                                    {{ Auth::user()->sex !== 1 && Auth::user()->sex !== 2 ? 'selected' : '' }}>Giới tính không xác định</option>
+                                    {{ Auth::user()->sex !== 1 && Auth::user()->sex !== 2 ? 'selected' : '' }}>Giới tính
+                                    không xác định</option>
                             </select>
                             @if ($errors->has('sex'))
                                 <span class="text-danger" role="alert">{{ $errors->first('sex') }}</span>
@@ -180,8 +171,8 @@
                         <div class="row m-1">
                             <label for="recipient-phone" class="col-form-label">Nhập lại mật khẩu mới<span
                                     style="color: red">*</span></label>
-                            <input type="text" class="form-control" id="recipient-phone"
-                                name="password_confirmation" value="{{ old('password_confirmation') }}">
+                            <input type="text" class="form-control" id="recipient-phone" name="password_confirmation"
+                                value="{{ old('password_confirmation') }}">
                             @if ($errors->has('password_confirmation'))
                                 <span class="text-danger"
                                     role="alert">{{ $errors->first('password_confirmation') }}</span>
@@ -197,6 +188,48 @@
             </div>
         </div>
     </div>
+    <!-- Modal edit avatar-->
+    <div class="modal fade" id="exampleModal_edit_avatar" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thay đổi ảnh</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('avatarUpdate') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ Auth::id() }}">
+                    <div class="modal-body ">
+                        {{-- <img  src="{{ asset('storage/') }}/image/avatar/{{Auth::user()->avatar}}"  width="160"  height="160" class="rounded-circle"> --}}
+                        <img id="currentAvatar" src="{{ asset('storage/') }}/image/avatar/{{ Auth::user()->avatar }}"
+                            width="160" height="160" class="rounded-circle">
+                        <input id="avatarInput" type="file" name="avatar">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
 
+                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        $(document).ready(function() {
+            $('#avatarInput').change(function() {
+                var input = this;
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        $('#currentAvatar').attr('src', e.target.result).show();
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+        });
+    </script>
 @endsection
