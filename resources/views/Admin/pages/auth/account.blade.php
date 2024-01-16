@@ -27,9 +27,7 @@
                     </div>
                     <div class="col-md-3 col-sm-12 mb-1">
                         <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal_edit"> <button type="button"
-                                class="btn btn-primary float-end" title="Tạo bài viết mới">Cập nhật
-                                thông tin cơ
-                                bản</button></a>
+                                class="btn btn-primary float-end" title="Tạo bài viết mới">Cập nhật thông tin cơ bản</button></a>
                     </div>
                     <div class="col-md-2 col-sm-12">
                         <a href="" data-bs-toggle="modal" data-bs-target="#exampleModal_edit_pass"> <button
@@ -162,7 +160,7 @@
                         <div class="row m-1">
                             <label for="recipient-phone" class="col-form-label">Mật khẩu mới<span
                                     style="color: red">*</span></label>
-                            <input type="text" class="form-control" id="recipient-phone" name="password"
+                            <input type="password" class="form-control" id="recipient-phone" name="password"
                                 value="{{ old('password') }}">
                             @if ($errors->has('password'))
                                 <span class="text-danger" role="alert">{{ $errors->first('password') }}</span>
@@ -171,8 +169,8 @@
                         <div class="row m-1">
                             <label for="recipient-phone" class="col-form-label">Nhập lại mật khẩu mới<span
                                     style="color: red">*</span></label>
-                            <input type="text" class="form-control" id="recipient-phone" name="password_confirmation"
-                                value="{{ old('password_confirmation') }}">
+                            <input type="password" class="form-control" id="recipient-phone"
+                                name="password_confirmation" value="{{ old('password_confirmation') }}">
                             @if ($errors->has('password_confirmation'))
                                 <span class="text-danger"
                                     role="alert">{{ $errors->first('password_confirmation') }}</span>
@@ -191,7 +189,7 @@
     <!-- Modal edit avatar-->
     <div class="modal fade" id="exampleModal_edit_avatar" tabindex="-1" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered ">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Thay đổi ảnh</h5>
@@ -201,10 +199,16 @@
                     @csrf
                     <input type="hidden" name="id" value="{{ Auth::id() }}">
                     <div class="modal-body ">
-                        {{-- <img  src="{{ asset('storage/') }}/image/avatar/{{Auth::user()->avatar}}"  width="160"  height="160" class="rounded-circle"> --}}
-                        <img id="currentAvatar" src="{{ asset('storage/') }}/image/avatar/{{ Auth::user()->avatar }}"
-                            width="160" height="160" class="rounded-circle">
-                        <input id="avatarInput" type="file" name="avatar">
+                        @if (Auth::user()->avatar != '')
+                            <img id="currentAvatar"
+                                src="{{ asset('storage/') }}/image/avatar/{{ Auth::user()->avatar }}" width="160"
+                                height="160" class="rounded-circle">
+                        @else
+                            <img id="currentAvatar" src="{{ asset('Admin/') }}/images/profile/user-1.jpg" width="160"
+                                height="160" class="rounded-circle">
+                        @endif
+
+                        <input id="avatarInput" class="m-3" type="file" name="avatar">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -226,7 +230,6 @@
                     reader.onload = function(e) {
                         $('#currentAvatar').attr('src', e.target.result).show();
                     };
-
                     reader.readAsDataURL(input.files[0]);
                 }
             });
