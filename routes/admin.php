@@ -26,7 +26,10 @@ Route::prefix('')->group(function () {
     Route::post('register', [AccountController::class, 'register'])->name('register');
     //đăng xuất
     Route::post('logout', [AccountController::class, 'logout'])->middleware('auth')->name('logout');
-
+    
+    // cập nhật ảnh
+    Route::post('avatar', [AccountController::class, 'image_avatar'])->middleware('auth')->name('avatarUpdate');
+    
     Route::prefix('')->middleware('auth')->group(function () {
 
         Route::get('', [DiaryController::class, 'index'])->name('diaryIndex');

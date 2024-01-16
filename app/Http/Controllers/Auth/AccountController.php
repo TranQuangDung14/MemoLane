@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Str;
 class AccountController extends Controller
 {
     // Quản lý tài khoản
@@ -280,6 +281,45 @@ class AccountController extends Controller
             DB::rollback();
             dd($e);
             return redirect()->back();
+        }
+    }
+
+    // public function show_avatar($id){
+    //     try {
+    //         $avatar = User::select('avatar')->find($id);
+    //         return
+    //     } catch (\Exception $e) {
+    //         //throw $th;
+    //     }
+    // }
+    public function image_avatar(Request $request){
+        // dd($request->all());
+        try {
+            $avatar = User::findOrFail($request->id);
+            // dd($avatar);
+            if ($request->hasFile('avatar')) {
+                $image_old = $avatar->avatar;
+                // dd($image_old);
+                Storage::delete('public/image/avatar/' . $image_old);
+                // dd($request->hasFile('avatar'));
+                $image = $request->file('avatar');
+                $filename = time() . '-' . Str::slug($image->getClientOriginalName(), '-') . '.' . $image->getClientOriginalExtension();
+                $image->storeAs('public/image/avatar', $filename);
+                // $imagePath = $image->store('public/image/avatar');
+                // Storage::delete($avatar->avatar);
+             
+                $avatar->avatar = $filename;
+                // dd($imagePath);
+                // dd('dừng');
+            }
+            $avatar->save();
+            Toastr::success('cập nhật avatar thành công', 'success');
+            return redirect()->back();
+            // return response()->json([
+            //     'messege' => 'Cập nhật thành công!',
+            // ], 200);
+        } catch (\Exception $e) {
+            //throw $th;
         }
     }
 }

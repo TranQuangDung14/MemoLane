@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 class DiaryController extends Controller
 {
     public function index(){
-        dd('ngừng');
+        // dd('ngừng');
 
         return view('Admin.pages.Diary.index');
     }
