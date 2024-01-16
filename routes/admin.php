@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AccountController;
 use App\Http\Controllers\Diary\DiaryController;
 use App\Http\Controllers\Diary\Testcontroller;
+use App\Http\Controllers\Search_User\SearchUserController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -26,10 +27,10 @@ Route::prefix('')->group(function () {
     Route::post('register', [AccountController::class, 'register'])->name('register');
     //đăng xuất
     Route::post('logout', [AccountController::class, 'logout'])->middleware('auth')->name('logout');
-    
+
     // cập nhật ảnh
     Route::post('avatar', [AccountController::class, 'image_avatar'])->middleware('auth')->name('avatarUpdate');
-    
+
     Route::prefix('')->middleware('auth')->group(function () {
 
         Route::get('', [DiaryController::class, 'index'])->name('diaryIndex');
@@ -66,4 +67,9 @@ Route::prefix('')->group(function () {
         Route::get('load_Comments', [DiaryController::class, 'Load_Comments'])->name('commentLoad');
 
     });
+
+    Route::prefix('search')->middleware('auth')->group(function () {
+        Route::get('key', [SearchUserController::class, 'index'])->name('SearchIndex');
+    });
+
 });

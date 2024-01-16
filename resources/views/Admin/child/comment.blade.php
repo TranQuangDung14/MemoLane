@@ -2,8 +2,12 @@
          @foreach ($comments as $cmt)
              <div class="row">
                  <div class="col-md-1 d-flex align-items-center">
-                     <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="40" height="40"
-                         class="rounded-circle">
+                    @if ($cmt->User->avatar != '')
+                    <img src="{{ asset('storage/') }}/image/avatar/{{  $cmt->User->avatar }}" alt="" width="40" height="40" class="rounded-circle">
+                    @else
+                    <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="40" height="40" class="rounded-circle">
+                    @endif
+
 
                  </div>
                  <div class="col-md-11">

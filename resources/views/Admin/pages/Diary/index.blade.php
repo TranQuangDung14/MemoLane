@@ -1,6 +1,6 @@
 @extends('Admin.layouts.master')
 
-@section('title', 'Trang chủ')
+@section('title', 'Trang cá nhân')
 
 @section('content')
     <style>
@@ -23,7 +23,14 @@
         <div class="row ">
             <div class="card border">
                 <div class="card-body">
-                    <h5 class="mb-0 card-title fw-semibold ">Trang chủ</h5>
+                    {{-- <h5 class="card-title fw-semibold mb-4">Danh mục sản phẩm</h5> --}}
+                    {{-- @if ($user->avatar != '')
+                    <img src="{{ asset('storage/') }}/image/avatar/{{  $user->avatar  }}" alt="" width="50" height="50" class="rounded-circle">
+                    @else --}}
+                    {{-- <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="40" height="40" class="rounded-circle"> --}}
+                    <img src="{{ asset('Admin/') }}/images/logos/logo_main.png" width="300" alt="" />
+                    {{-- @endif --}}
+                    {{-- <h5 class="mb-0 card-title fw-semibold ">Trang chủ</h5> --}}
                 </div>
             </div>
         </div>
@@ -45,27 +52,37 @@
                                 </div>
                             </form>
                         </div>
-                        {{-- <div class="col-4">
+                        <div class="col-4">
                             <a href="{{ route('my_diaryCreate') }}"> <button type="button"
                                     class="btn btn-primary mt-4 float-end" title="Tạo bài viết mới"><i
                                         class="ti ti-plus"></i></button></a>
-                        </div> --}}
+                        </div>
                     </div>
+                    {{-- <p class="mb-0">This is a sample page </p> --}}
                 </div>
             </div>
         </div>
-    
-        {{-- @if ($diary->count() > 0) --}}
-            {{-- @foreach ($diary as $key => $value) --}}
+        @if ($diary->count() > 0)
+            @foreach ($diary as $key => $value)
                 <div class="row d-flex align-items-stretch">
                     <div class="card border">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4 d-flex align-items-center">
-                                    <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="50"
-                                        height="50" class="rounded-circle">
+                                    <a href="{{ route('my_diaryIndex', $value->User->id) }}">
+                                        @if ($value->User->avatar != '')
+                                            <img src="{{ asset('storage/') }}/image/avatar/{{ $value->User->avatar }}"
+                                                alt="" width="50" height="50" class="rounded-circle">
+                                        @else
+                                            <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
+                                                width="40" height="40" class="rounded-circle">
+                                        @endif
+                                    </a>
                                     <div class="ms-2">
-                                        {{-- <p><strong>{{ $value->User->name }}</strong>
+                                        <p>
+                                            <a href="{{ route('my_diaryIndex', $value->User->id) }}">
+                                                 <strong>{{ $value->User->name }}</strong>
+                                                </a>
                                             <br>
 
                                             <span class="text-muted fs-2">
@@ -83,36 +100,38 @@
                                                 </span>
                                             @endif
 
-                                        </p> --}}
+                                        </p>
                                     </div>
                                 </div>
+
                                 <div class="col-md-8">
                                     {{-- phần này thêm các chức năng sau  --}}
+                                    @if (Auth::user()->id === $value->user->id)
+                                        <div class="dropdown">
 
-                                    <div class="dropdown">
+                                            <i id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                class="ti ti-dots float-end fs-6" style="cursor: pointer;"></i>
 
-                                        <i id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                            class="ti ti-dots float-end fs-6" style="cursor: pointer;"></i>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#ModalStatus_{{ $value->id }}">Chỉnh trạng thái nhật ký</a></li>
+                                                <li><a class="dropdown-item" href="#" >Chỉnh sửa nội dung bài viết</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#ModalDelete_{{ $value->id }}">Xóa bài nhật ký</a>
+                                                </li>
+                                                {{-- <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
+                                            </ul>
+                                        </div>
+                                    @else
+                                    @endif
 
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    {{-- data-bs-target="#ModalStatus_{{ $value->id }}" --}}
-                                                    >
-                                                    Chỉnh trạng thái nhật
-                                                    ký</a></li>
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    {{-- data-bs-target="#ModalDelete_{{ $value->id }}" --}}
-                                                    >Xóa bài nhật ký</a>
-                                            </li>
-                                            {{-- <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
-                                        </ul>
-                                    </div>
 
                                 </div>
                             </div>
                             <div class="row mt-2">
-                                {{-- <h3>{{ $value->title }}</h3>
-                                <p class="description">{!! $value->description !!}</p> --}}
+                                <h3>{{ $value->title }}</h3>
+                                <p class="description">{!! $value->description !!}</p>
                             </div>
                             {{-- @php
                     dd($value);
@@ -123,26 +142,26 @@
                         {{-- tương tác --}}
                         <div class="row align-items-center" style="background-color: #EEEEEE">
 
-                            {{-- @if (auth()->check() && auth()->user()->hasLiked($value))
+                            @if (auth()->check() &&
+                                    auth()->user()->hasLiked($value))
                                 <div class="col-4 btn btn-primary like-btn" style="border: 1px solid white"
                                     data-post-id="{{ $value->id }}">
+                                    {{-- <i class="ti ti-thumb-up fs-8 icon-liked"></i> --}}
                                     <i class="ti ti-thumb-up fs-8 icon-liked"></i>
 
                                     <span class="text-liked">Bỏ thích</span>
                                 </div>
-                            @else --}}
+                            @else
                                 <div class="col-4 btn btn-outline-primary like-btn" style="border: 1px solid white"
-                                    {{-- data-post-id="{{ $value->id }}" --}}
-                                    >
+                                    data-post-id="{{ $value->id }}">
                                     <i class="ti ti-thumb-up fs-8"></i><span class="text-liked"> Thích</span>
                                 </div>
-                            {{-- @endif --}}
+                            @endif
 
                             {{-- btn comment --}}
                             <div class="col-4 btn btn-outline-primary openComment" style="border: 1px solid white"
-                                 data-bs-toggle="modal"
-                                {{-- data-bs-target="#exampleModal_{{ $value->id }}" data-diary-id="{{ $value->id }}" --}}
-                                >
+                                {{-- onclick="focusInput({{ $value->id }})"> --}} data-bs-toggle="modal"
+                                data-bs-target="#exampleModal_{{ $value->id }}" data-diary-id="{{ $value->id }}">
                                 <i class="ti ti-message fs-8"></i>
                             </div>
                             <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
@@ -150,27 +169,25 @@
                             </div>
                         </div>
                         <div class="row mt-1" id="interact-section">
-                            {{-- @if (isset($value->Interacts_count) &&
+                            @if (isset($value->Interacts_count) &&
                                     count($value->Interacts_count) > 0 &&
                                     isset($value->Interacts_count[0]->interact_count) &&
                                     $value->Interacts_count[0]->interact_count > 0)
                                 <p>có {{ $value->Interacts_count[0]->interact_count }} người thích đoạn nhật ký này</p>
                             @else
-                            @endif --}}
+                            @endif
 
                         </div>
                     </div>
                 </div>
                 <!-- Modal comment-->
-                <div class="modal fade" 
-                {{--    id="exampleModal_{{ $value->id }}" --}}
-                 tabindex="-1"
+                <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của 
-                                    {{-- <a href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }}</a> --}}
+                                <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của <a
+                                        href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }}</a>
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
@@ -186,8 +203,14 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-12 d-flex align-items-center">
-                                            <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
-                                                width="40" height="40" class="rounded-circle">
+
+                                            @if (Auth::user()->avatar != '')
+                                                <img src="{{ asset('storage/') }}/image/avatar/{{ Auth::user()->avatar }}"
+                                                    alt="" width="40" height="40" class="rounded-circle">
+                                            @else
+                                                <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
+                                                    width="40" height="40" class="rounded-circle">
+                                            @endif
                                             <p class="m-2"><strong>{{ Auth::user()->name }}</strong>
                                         </div>
                                     </div>
@@ -199,10 +222,8 @@
 
                                                 <div class="input-group">
                                                     <input type="hidden" class="diary-id-input" name="diary_id"
-                                                        {{-- value="{{ $value->id }}" --}}
-                                                        >
-                                                    <input class="form-control" 
-                                                    {{-- id="focus{{ $value->id }}" --}}
+                                                        value="{{ $value->id }}">
+                                                    <input class="form-control" id="focus{{ $value->id }}"
                                                         type="text" name="content" value=""
                                                         placeholder="Hãy nói gì đó về đoạn nhật ký này">
 
@@ -226,7 +247,7 @@
                     </div>
                 </div>
                 <!-- Modal status -->
-                {{-- <div class="modal fade" id="ModalStatus_{{ $value->id }}" tabindex="-1"
+                <div class="modal fade" id="ModalStatus_{{ $value->id }}" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -252,6 +273,7 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
 
+                                    {{-- @method('DELETE') --}}
 
                                     <button type="submit" class="btn btn-primary">Xác nhận</button>
                                 </div>
@@ -259,9 +281,9 @@
 
                         </div>
                     </div>
-                </div> --}}
+                </div>
                 <!-- Modal delete -->
-                {{-- <div class="modal fade" id="ModalDelete_{{ $value->id }}" tabindex="-1"
+                <div class="modal fade" id="ModalDelete_{{ $value->id }}" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -285,16 +307,16 @@
                             </div>
                         </div>
                     </div>
-                </div> --}}
-            {{-- @endforeach --}}
+                </div>
+            @endforeach
             {{-- {{ $diary->links() }} --}}
-        {{-- @else
-            @if (Auth::user()->id == $user->id)
+            {{-- @else --}}
+            {{-- @if (Auth::user()->id == $user->id)
                 <center>Bạn chưa có chia sẻ nhật kí! hãy chia sẻ đi</center>
             @else
                 <center> {{ $user->name }} chưa có bài viết nào cả!</center>
-            @endif
-        @endif --}}
+            @endif --}}
+        @endif
 
 
     </div>
@@ -339,7 +361,7 @@
                     // data: $('#addCommentForm').serialize(),
                     success: function(response) {
 
-                        console.log('id nhật ký',response );
+                        console.log('id nhật ký', response);
                         ReloadComments(diary_id)
                         setTimeout(function() {
                             toastr.success(
@@ -445,5 +467,33 @@
 
         });
 
+        // $(document).ready(function() {
+        //     $('.openComment').click(function() {
+        //         // var diary_id = $diary_id;
+        //         var diary_id = $(this).data('diary-id');
+        //         console.log('ádad', diary_id);
+        //         $.ajax({
+        //             url: '{{ route('commentLoad') }}',
+        //             type: 'GET',
+        //             data: {diary_id: diary_id},
+        //             success: function(data) {
+        //                 // console.log($('#exampleModal_' + diary_id + ' .modal-body').html(data.html));
+        //                 $('#exampleModal_' + diary_id + ' .modal-body').html(data.html);
+        //                 console.log('data nè',data.html);
+        //                 // $('#result').html(data);
+        //             },
+        //             error: function(error) {
+        //                 console.log(error);
+        //             }
+        //         });
+        //     });
+
+        // });
+
+        // focus
+        //    function focusInput($id) {
+        //         console.log('sss',$id);
+        //        document.getElementById("focus" + $id).focus();
+        //     }
     </script>
 @endsection

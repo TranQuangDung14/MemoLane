@@ -24,7 +24,15 @@
             <div class="card border">
                 <div class="card-body">
                     {{-- <h5 class="card-title fw-semibold mb-4">Danh mục sản phẩm</h5> --}}
-                    <h5 class="mb-0 card-title fw-semibold ">{{ Auth::user()->name }}</h5>
+                    <center>
+
+                        @if ($user->avatar != '')
+                        <img src="{{ asset('storage/') }}/image/avatar/{{  $user->avatar  }}" alt="" width="100" height="100" class="rounded-circle">
+                        @else
+                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="100" height="100" class="rounded-circle">
+                        @endif
+                        <h5 class="mb-0 card-title fw-semibold mt-2">{{ $user->name }}</h5>
+                    </center>
                 </div>
             </div>
         </div>
@@ -78,8 +86,16 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4 d-flex align-items-center">
-                                    <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="50"
-                                        height="50" class="rounded-circle">
+
+                                        @if ($value->User->avatar != '')
+                                        <img src="{{ asset('storage/') }}/image/avatar/{{  $value->User->avatar }}" alt="" width="50" height="50" class="rounded-circle">
+                                        @else
+                                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="40" height="40" class="rounded-circle">
+                                        @endif
+
+
+
+                                    {{-- @endif --}}
                                     <div class="ms-2">
                                         <p><strong>{{ $value->User->name }}</strong>
                                             <br>
@@ -197,8 +213,14 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-12 d-flex align-items-center">
-                                            <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
-                                                width="40" height="40" class="rounded-circle">
+
+                                            @if (Auth::user()->avatar != '')
+                                                <img src="{{ asset('storage/') }}/image/avatar/{{ Auth::user()->avatar }}"
+                                                    alt="" width="40" height="40" class="rounded-circle">
+                                            @else
+                                                <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
+                                                    width="40" height="40" class="rounded-circle">
+                                            @endif
                                             <p class="m-2"><strong>{{ Auth::user()->name }}</strong>
                                         </div>
                                     </div>
@@ -349,7 +371,7 @@
                     // data: $('#addCommentForm').serialize(),
                     success: function(response) {
 
-                        console.log('id nhật ký',response );
+                        console.log('id nhật ký', response);
                         ReloadComments(diary_id)
                         setTimeout(function() {
                             toastr.success(

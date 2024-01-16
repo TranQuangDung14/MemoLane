@@ -307,7 +307,7 @@ class AccountController extends Controller
                 $image->storeAs('public/image/avatar', $filename);
                 // $imagePath = $image->store('public/image/avatar');
                 // Storage::delete($avatar->avatar);
-             
+
                 $avatar->avatar = $filename;
                 // dd($imagePath);
                 // dd('dừng');

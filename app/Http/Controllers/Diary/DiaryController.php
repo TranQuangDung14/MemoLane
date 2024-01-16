@@ -17,16 +17,16 @@ class DiaryController extends Controller
 {
     public function index(){
         // dd('ngừng');
-
-        return view('Admin.pages.Diary.index');
+        $status=[2]; // trạng thái chỉ mình tôi
+        $diary = Diarys::WhereNotIn('status', $status)->get();
+        // dd($diary);
+        return view('Admin.pages.Diary.index',compact('diary'));
     }
     //
     public function MyDiary(Request $request,$id)
     {
-        // dd(auth()->user()->id);
-        // dd(Auth::user()->name);
         try {
-            // dd(Search_Info_User());
+            $status=[2]; // trạng thái chỉ mình tôi
             $userExists = User::where('id',$id)->exists();
             if($userExists){
                 $diary = Diarys::with(['User' => function($query) {
@@ -38,10 +38,15 @@ class DiaryController extends Controller
                     $query->orderBy('id', 'desc');
                 },
                 ])
-                ->where('title','LIKE', '%' . $request->search . '%')->where('user_id',$id)->orderBy('id','desc')->paginate(10);
-            $user =user::where('id',$id)->select('id','name')->first();
-            // dd($user);
-                // dd($userExists);
+                ->where('title','LIKE', '%' . $request->search . '%')
+                ->where('user_id',$id)->orderBy('id','desc');
+                if(Auth::user()->id != $id){
+                    $diary->WhereNotIn('status', $status);
+                }
+                $diary = $diary->paginate(5);
+
+            $user =user::where('id',$id)->select('id','name','avatar')->first();
+
             }
             else{
                 dd('ko tồn tại');
