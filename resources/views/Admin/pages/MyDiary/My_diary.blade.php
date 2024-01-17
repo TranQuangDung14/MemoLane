@@ -64,21 +64,7 @@
                 </div>
             </div>
         </div>
-        @if (session('success'))
-            <div class="alert alert-success" id="success-alert">
-                {{ session('success') }}
-                <span type="button" class="X-close float-end" data-dismiss="alert" aria-label="Close">
-                    <i class="ti ti-x"></i>
-                </span>
-            </div>
-        @elseif (session('error'))
-            <div class="alert alert-danger" id="error-alert">
-                {{ session('error') }}
-                <span type="button" class="X-close float-end" data-dismiss="alert" aria-label="Close">
-                    <i class="ti ti-x"></i>
-                </span>
-            </div>
-        @endif
+
         @if ($diary->count() > 0)
             @foreach ($diary as $key => $value)
                 <div class="row d-flex align-items-stretch">
@@ -120,7 +106,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     {{-- phần này thêm các chức năng sau  --}}
-
+                                    @if (Auth::user()->id === $value->user->id)
                                     <div class="dropdown">
 
                                         <i id="dropdownMenuButton" data-bs-toggle="dropdown"
@@ -133,10 +119,10 @@
                                             <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
                                                     data-bs-target="#ModalDelete_{{ $value->id }}">Xóa bài nhật ký</a>
                                             </li>
-                                            {{-- <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
                                         </ul>
                                     </div>
-
+                                    @else
+                                    @endif
                                 </div>
                             </div>
                             <div class="row mt-2">
