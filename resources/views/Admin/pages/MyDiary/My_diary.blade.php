@@ -76,14 +76,14 @@
                                         @if ($value->User->avatar != '')
                                         <img src="{{ asset('storage/') }}/image/avatar/{{  $value->User->avatar }}" alt="" width="50" height="50" class="rounded-circle">
                                         @else
-                                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="40" height="40" class="rounded-circle">
+                                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="50" height="50" class="rounded-circle">
                                         @endif
 
 
 
                                     {{-- @endif --}}
-                                    <div class="ms-2">
-                                        <p><strong>{{ $value->User->name }}</strong>
+                                    <div class="ms-2 mt-3">
+                                        <p ><strong>{{ $value->User->name }}</strong>
                                             <br>
 
                                             <span class="text-muted fs-2">
