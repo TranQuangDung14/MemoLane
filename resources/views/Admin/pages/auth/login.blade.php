@@ -11,8 +11,7 @@
 
 <body>
     <!--  Body Wrapper -->
-    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
-        data-sidebar-position="fixed" data-header-position="fixed">
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"  data-sidebar-position="fixed" data-header-position="fixed">
         <div
             class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
             <div class="d-flex align-items-center justify-content-center w-100">
@@ -30,17 +29,15 @@
                         <div class="card mb-0">
                             <div class="card-body">
                                 <a href="" class="text-nowrap logo-img text-center d-block py-3 w-100">
-                                    <img src="{{ asset('Admin/') }}/images/logos/logo_main.png" width="180"
-                                        alt="">
+                                    <img src="{{ asset('Admin/') }}/images/logos/logo_main.png" width="180" alt="">
                                 </a>
-                                <p class="text-center">Đăng nhập</p>
+                                <p class="text-center">Đăng nhập(Admin)</p>
                                 {{-- <form> --}}
                                 <form action="{{ route('login') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="mb-3">
                                         <label for="exampleInputEmail1" class="form-label">Email</label>
-                                        <input type="email" name="email" class="form-control"
-                                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                                        <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
                                     </div>
                                     <div class="mb-4">
                                         <label for="exampleInputPassword1" class="form-label">Mật khẩu</label>
@@ -62,7 +59,7 @@
                                     </button>
                                     <div class="d-flex align-items-center justify-content-center">
                                         <p class="fs-4 mb-0 fw-bold">Bạn chưa có tài khoản?</p>
-                                        <a class="text-primary fw-bold ms-2" href="{{route('showregister')}}">Tạo tài khoản mới</a>
+                                        <a class="text-primary fw-bold ms-2" href="{{route('showregister_user')}}">Tạo tài khoản mới</a>
                                     </div>
                                 </form>
                             </div>

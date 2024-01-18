@@ -11,7 +11,7 @@
 
 <body>
     <!--  Body Wrapper -->
-    <div class="page-wrapper" style="background-color: #4F4F4F" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
+    <div class="page-wrapper" id="main-wrapper" data-layout="vertical" data-navbarbg="skin6" data-sidebartype="full"
         data-sidebar-position="fixed" data-header-position="fixed">
         <div
             class="position-relative overflow-hidden radial-gradient min-vh-100 d-flex align-items-center justify-content-center">
@@ -36,7 +36,7 @@
                                 </a>
                                 <p class="text-center">Đăng ký</p>
 
-                                <form action="{{ route('register') }}" method="POST" enctype="multipart/form-data">
+                                <form action="{{ route('register_user') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="mb-3">
                                         <label for="exampleInputtext1" class="form-label">Tên người dùng</label>

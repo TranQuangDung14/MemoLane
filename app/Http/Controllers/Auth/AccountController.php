@@ -17,6 +17,12 @@ class AccountController extends Controller
     // Quản lý tài khoản
     public function show_account(Request $request){
         try {
+            if (auth()->check()) {
+                    if (auth()->user()->role != 1) {
+                        // return redirect()->back();
+                        dd('trang không tồn tại');
+                    }
+                }
             $user = User::where('name','LIKE', '%' . $request->search . '%')->orderBy('id','desc')->paginate(10);
 
             return view('Admin.pages.auth.index',compact('user'));
@@ -37,9 +43,9 @@ class AccountController extends Controller
     public function showlogin()
     {
         if (auth()->check()) {
-            if (auth()->user()->role === 1) {
+        //     if (auth()->user()->role === 1) {
                 return redirect()->back();
-            }
+        //     }
         }
         return view('Admin.pages.auth.login');
     }
@@ -56,10 +62,12 @@ class AccountController extends Controller
             // dd($credentials);
             session()->flash('error', 'Thông tin tài khoản mật khẩu không chính xác!');
             return redirect()->route('showlogin');
-        } elseif ($user->role !== 1) {
-            session()->flash('error', 'Tài khoản này không có quyền đăng nhập vào admin!');
-            return redirect()->route('showlogin');
-        } elseif ($user->status != 0) {
+        }
+        // elseif ($user->role !== 1) {
+        //     session()->flash('error', 'Tài khoản này không có quyền đăng nhập vào admin!');
+        //     return redirect()->route('showlogin');
+        // }
+        elseif ($user->status != 0) {
             if ($user->status == 1) {
                 session()->flash('error', 'Tài khoản này đã bị khóa tạm thời!');
                 return redirect()->route('showlogin');
@@ -82,6 +90,9 @@ class AccountController extends Controller
     public function showregister()
     {
         if (auth()->check()) {
+            if (auth()->user()->role === 1) {
+                return view('Admin.pages.auth.register');
+            }
             return redirect()->back();
         }
         return view('Admin.pages.auth.register');
@@ -137,6 +148,66 @@ class AccountController extends Controller
         return redirect()->route('showlogin');
     }
 
+    // Trang tạo tài khoản user
+    public function showregister_user()
+    {
+        if (auth()->check()) {
+            return redirect()->back();
+        }
+        return view('Admin.pages.account_user.register');
+    }
+
+    // Xử lý tạo tài khoản user
+    public function register_user(Request $request)
+    {
+        // dd($request->all());
+        try {
+            $input = $request->all();
+            $rules = array(
+                // 'name' => 'required',
+                'name' => 'required|string',
+                'email' => 'required|string|email|max:255|unique:users',
+                'password' => 'required',
+            );
+            $messages = array(
+                'name.required'     => '--Tên người dùng không được để trống!--',
+                'email.required'    => '--Email không được để trống!--',
+                'email.string'      => '--Email phải là chuỗi!--',
+                'email.email'       => '--Email không hợp lệ!--',
+                'email.max'         => '--Email không được vượt quá 255 ký tự!--',
+                'email.unique'      => '--Email đã tồn tại trong hệ thống!--',
+                'password.required' => '--Mật khẩu không được để trống!--',
+            );
+            $validator = Validator::make($input, $rules, $messages);
+
+            if ($validator->fails()) {
+                // $errorMessage = implode(' ', $validator->errors()->all());
+                session()->flash('error', 'Kiểm tra lại!');
+                // session()->flash('error', $errorMessage);
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+            $user = User::create([
+                'name'          => $request->name,
+                'email'         => $request->email,
+                'password'      => Hash::make($request->password),
+                'sex'           => $request->sex ?? null,
+                'role'          => 2,
+                'status'        => 0,
+                'address'       => $request->address ?? '',
+                'number_phone'  => $request->number_phone ?? '',
+            ]);
+
+            // Auth::login($user);
+        } catch (\Exception $e) {
+            dd($e);
+        }
+        Toastr::success('Tạo tài khoản thành công', 'success');
+        return redirect()->route('showlogin');
+    }
+
+
     // Xử lý đăng xuất
     public function logout(Request $request)
     {
@@ -148,6 +219,7 @@ class AccountController extends Controller
             Toastr::error('Đăng xuất thất bại', 'error');
         }
     }
+
 
     //  Xử lý khóa tài khoản
     public function lock_account(Request $request)
@@ -220,6 +292,7 @@ class AccountController extends Controller
             return redirect()->back();
         }
     }
+
 
     // Xử lý đổi mật khẩu
     public function edit_pass(Request $request)

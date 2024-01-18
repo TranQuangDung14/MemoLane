@@ -110,7 +110,7 @@
                                         </td>
                                         <td class="border-bottom-0">
                                             @if ($value->role == 2)
-                                                @if ($value->lock == 0)
+                                                @if ($value->status == 0)
                                                     <a href="" data-bs-toggle="modal"
                                                         data-bs-target="#exampleModal_{{ $value->id }}"
                                                         title="Khóa tài khoản">
@@ -132,7 +132,7 @@
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            @if ($value->lock == 0)
+                                                            @if ($value->status == 0)
                                                                 <h5 class="modal-title" id="exampleModalLabel">Khóa tài
                                                                     khoản </h5>
                                                             @else
@@ -144,24 +144,24 @@
                                                                 aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
-                                                            @if ($value->lock == 0)
+                                                            @if ($value->status == 0)
                                                                 Bạn có chắc muốn khóa tài khoản này?
                                                             @else
                                                                 Bạn có chắc chắn mở khóa tài khoản này chứ?
                                                             @endif
                                                         </div>
-                                                        {{-- <div class="modal-footer">
+                                                        <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-bs-dismiss="modal">Hủy</button>
-                                                            @if ($value->lock == 0)
+                                                            @if ($value->status == 0)
                                                                 <form action="{{ route('lock_account') }}" method="POST"
                                                                     enctype="multipart/form-data">
                                                                     @csrf
                                                                     <input type="hidden" class="id" name="id"
                                                                         id="" value="{{ $value->id }}">
 
-                                                                    <input type="hidden" name="lock" id=""
-                                                                        value="on" {{ $value->lock == 'on' }}>
+                                                                    <input type="hidden" name="status" id=""
+                                                                        value="2" {{ $value->status == '2' }}>
                                                                     <button type="submit"
                                                                         class="btn btn-primary">Khóa</button>
                                                                 </form>
@@ -172,14 +172,14 @@
                                                                     <input type="hidden" class="id" name="id"
                                                                         id="" value="{{ $value->id }}">
 
-                                                                    <input type="hidden" name="lock" id=""
-                                                                        value="off" {{ $value->lock == 'off' }}>
+                                                                    <input type="hidden" name="status" id=""
+                                                                        value="1" {{ $value->status == '1' }}>
 
                                                                     <button type="submit" class="btn btn-primary">Mở
                                                                         khóa</button>
                                                                 </form>
                                                             @endif
-                                                        </div> --}}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
