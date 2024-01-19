@@ -36,13 +36,26 @@
                         <h5 class=" card-title mb-0 fw-semibold mt-2">{{ $user->name }}</h5>
                         {{-- fix lại --}}
                         @if ($user->id != Auth::user()->id)
-                            @if ($follow && is_object($follow))
-                                @if (Empty(Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id))
-                                    {{-- @if (Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id) --}}
-                                    <button type="button" class="btn btn-primary mt-4" title="Theo dõi"><i
-                                            class="ti ti-plus"></i>Theo dõi</button>
+
+                            @if (isset($follow) && Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id)
                                 {{-- @else --}}
-                                @endif
+                                <form action="{{ route('unfollow') }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    @method('DELETE')
+                                    <input type="hidden" name="id" value="{{$follow->id}}">
+                                    <input type="hidden" name="user2_id" value="{{$user->id}}">
+                                    <button type="submit" class="btn btn-success mt-4" title="Theo dõi"><i
+                                            class="ti ti-check"></i>Đang theo dõi</button>
+                                </form>
+                            @else
+                                <form action="{{ route('follow') }}" method="post"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    {{-- <input type="hidden" name="user1_id" value="{{Auth::id()}}"> --}}
+                                    <input type="hidden" name="user2_id" value="{{$user->id}}">
+                                    <button type="submit" class="btn btn-primary mt-4" title="Theo dõi"><i class="ti ti-plus"></i>Theo dõi</button>
+                                </form>
                             @endif
                         @endif
                     </center>
@@ -93,7 +106,6 @@
                                         <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
                                             width="50" height="50" class="rounded-circle">
                                     @endif
-
 
 
                                     {{-- @endif --}}
