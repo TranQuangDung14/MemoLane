@@ -27,11 +27,24 @@
                     <center>
 
                         @if ($user->avatar != '')
-                        <img src="{{ asset('storage/') }}/image/avatar/{{  $user->avatar  }}" alt="" width="100" height="100" class="rounded-circle">
+                            <img src="{{ asset('storage/') }}/image/avatar/{{ $user->avatar }}" alt="" width="100"
+                                height="100" class="rounded-circle">
                         @else
-                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="100" height="100" class="rounded-circle">
+                            <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="100"
+                                height="100" class="rounded-circle">
                         @endif
-                        <h5 class="mb-0 card-title fw-semibold mt-2">{{ $user->name }}</h5>
+                        <h5 class=" card-title mb-0 fw-semibold mt-2">{{ $user->name }}</h5>
+                        {{-- fix lại --}}
+                        @if ($user->id != Auth::user()->id)
+                            @if ($follow && is_object($follow))
+                                @if (Empty(Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id))
+                                    {{-- @if (Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id) --}}
+                                    <button type="button" class="btn btn-primary mt-4" title="Theo dõi"><i
+                                            class="ti ti-plus"></i>Theo dõi</button>
+                                {{-- @else --}}
+                                @endif
+                            @endif
+                        @endif
                     </center>
                 </div>
             </div>
@@ -73,17 +86,19 @@
                             <div class="row">
                                 <div class="col-md-4 d-flex align-items-center">
 
-                                        @if ($value->User->avatar != '')
-                                        <img src="{{ asset('storage/') }}/image/avatar/{{  $value->User->avatar }}" alt="" width="50" height="50" class="rounded-circle">
-                                        @else
-                                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="50" height="50" class="rounded-circle">
-                                        @endif
+                                    @if ($value->User->avatar != '')
+                                        <img src="{{ asset('storage/') }}/image/avatar/{{ $value->User->avatar }}"
+                                            alt="" width="50" height="50" class="rounded-circle">
+                                    @else
+                                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
+                                            width="50" height="50" class="rounded-circle">
+                                    @endif
 
 
 
                                     {{-- @endif --}}
                                     <div class="ms-2 mt-3">
-                                        <p ><strong>{{ $value->User->name }}</strong>
+                                        <p><strong>{{ $value->User->name }}</strong>
                                             <br>
 
                                             <span class="text-muted fs-2">
@@ -107,20 +122,22 @@
                                 <div class="col-md-8">
                                     {{-- phần này thêm các chức năng sau  --}}
                                     @if (Auth::user()->id === $value->user->id)
-                                    <div class="dropdown">
+                                        <div class="dropdown">
 
-                                        <i id="dropdownMenuButton" data-bs-toggle="dropdown"
-                                            class="ti ti-dots float-end fs-6" style="cursor: pointer;"></i>
+                                            <i id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                class="ti ti-dots float-end fs-6" style="cursor: pointer;"></i>
 
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#ModalStatus_{{ $value->id }}">Chỉnh trạng thái nhật
-                                                    ký</a></li>
-                                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                    data-bs-target="#ModalDelete_{{ $value->id }}">Xóa bài nhật ký</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#ModalStatus_{{ $value->id }}">Chỉnh trạng thái
+                                                        nhật
+                                                        ký</a></li>
+                                                <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                        data-bs-target="#ModalDelete_{{ $value->id }}">Xóa bài nhật
+                                                        ký</a>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     @else
                                     @endif
                                 </div>

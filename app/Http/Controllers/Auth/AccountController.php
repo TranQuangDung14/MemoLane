@@ -23,9 +23,16 @@ class AccountController extends Controller
                         dd('trang không tồn tại');
                     }
                 }
-            $user = User::where('name','LIKE', '%' . $request->search . '%')->orderBy('id','desc')->paginate(10);
+            $user = User::where('name','LIKE', '%' . $request->search . '%');
+            $role = $request->input('role');
+            if($role){
+                // dd($role);
+                $user->where('role',$role);
+            }
 
-            return view('Admin.pages.auth.index',compact('user'));
+            $user = $user->orderBy('id','desc')->paginate(5);
+
+            return view('Admin.pages.auth.index',compact('user','role'));
         } catch (\Exception $e) {
             //throw $th;
             dd($e);
@@ -233,7 +240,7 @@ class AccountController extends Controller
                 session()->flash('success', 'Đã khóa tạm thời tài khoản ' . $user->name . ' thành công.');
             } elseif ($request->status == 2) {
                 $status = 2;
-                session()->flash('success', 'Đã khóa tài khoản ' . $user->name . ' vĩnh viễn thành công.');
+                session()->flash('success', 'Đã khóa tài khoản ' . $user->name . 'thành công.'); // cập nhật lại khóa vĩnh viễn sau khi có ý tưởng
             } else {
                 $status = 0;
                 session()->flash('success', 'Đã mở khóa ' . $user->name . ' thành công.');
