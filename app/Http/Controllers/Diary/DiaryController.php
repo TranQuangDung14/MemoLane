@@ -203,7 +203,7 @@ class DiaryController extends Controller
     public function delete(Request $request)
     {
         try {
-            $delete_diary     = Diarys::find($request->id);
+            $delete_diary      = Diarys::find($request->id);
             $delete_like       = Interacts::where('diary_id',$request->id)->get();
             $delete_comment    = Comments::where('diary_id',$request->id)->get();
             // dd($delete_comment);
@@ -224,13 +224,14 @@ class DiaryController extends Controller
 
     public function follow(Request $request)
     {
+        // dd($request->all());
         try {
             $follow = new Follow();
             $follow->user1_id = Auth()->user()->id; // tài khoản người đăng nhập
-            $follow->user2_id = $request->user_id; // tài khoản chọn để theo dõi
+            $follow->user2_id = $request->user2_id; // tài khoản chọn để theo dõi
             $follow->save();
-            $user = User::select('id','name')->where('id',$request->id)->first();
-            Toastr::success('Bạn đang theo dõi'.$user->name, 'success');
+            $user = User::select('id','name')->where('id',$request->user2_id)->first();
+            Toastr::success('Bạn đang theo dõi '.$user->name, 'success');
             return redirect()->back();
         } catch (\Exception $e) {
             //throw $th;
@@ -242,8 +243,8 @@ class DiaryController extends Controller
         try {
             $unfollow = Follow::find($request->id);
             $unfollow->delete();
-            $user = User::select('id','name')->where('id',$request->id)->first();
-            Toastr::success('Bạn đã hủy theo dõi'.$user->name, 'success');
+            $user = User::select('id','name')->where('id',$request->user2_id)->first();
+            Toastr::success('Bạn đã hủy theo dõi '.$user->name, 'success');
             return redirect()->back();
         } catch (\Exception $e) {
             //throw $th;

@@ -59,6 +59,13 @@ Route::prefix('')->group(function () {
         Route::delete('delete', [DiaryController::class, 'delete'])->name('My_diaryDelete');
         Route::post('comment', [DiaryController::class, 'comment'])->name('commentStore');
         Route::get('load_Comments', [DiaryController::class, 'Load_Comments'])->name('commentLoad');
+
+        // theo dõi
+        Route::post('follow', [DiaryController::class, 'follow'])->name('follow');
+        
+        // bỏ theo dõi
+        Route::delete('unfollow', [DiaryController::class, 'unfollow'])->name('unfollow');
+        
     });
 
     Route::prefix('search')->middleware('auth')->group(function () {
