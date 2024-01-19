@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Diary;
 use App\Http\Controllers\Controller;
 use App\Models\Comments;
 use App\Models\Diarys;
+use App\Models\Follow;
 use App\Models\Interacts;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
@@ -46,6 +47,11 @@ class DiaryController extends Controller
                 $diary = $diary->paginate(5);
 
             $user =user::where('id',$id)->select('id','name','avatar')->first();
+            $follow =Follow::where('user1_id',Auth::user()->id)->where('user2_id',$id)->first();
+            // $my_user =
+            // dd($follow);
+            // $user =user::with('follow')->where('id',$id)->select('id','name','avatar')->first();
+                // dd(Auth()->user()->id);
 
             }
             else{
@@ -56,14 +62,12 @@ class DiaryController extends Controller
             // $count_like=ml_interacts::where()
 
             // dd($diary);
-            return view('Admin.pages.MyDiary.My_diary',compact('diary','user'));
+            return view('Admin.pages.MyDiary.My_diary',compact('diary','user','follow'));
         } catch (\Exception $e) {
             dd($e);
         }
 
     }
-
-
 
     public function create()
     {
@@ -214,6 +218,34 @@ class DiaryController extends Controller
             return redirect()->back();
         } catch (\Exception $e) {
             dd($e);
+            //throw $th;
+        }
+    }
+
+    public function follow(Request $request)
+    {
+        try {
+            $follow = new Follow();
+            $follow->user1_id = Auth()->user()->id; // tài khoản người đăng nhập
+            $follow->user2_id = $request->user_id; // tài khoản chọn để theo dõi
+            $follow->save();
+            $user = User::select('id','name')->where('id',$request->id)->first();
+            Toastr::success('Bạn đang theo dõi'.$user->name, 'success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            //throw $th;
+        }
+    }
+
+    public function unfollow(Request $request)
+    {
+        try {
+            $unfollow = Follow::find($request->id);
+            $unfollow->delete();
+            $user = User::select('id','name')->where('id',$request->id)->first();
+            Toastr::success('Bạn đã hủy theo dõi'.$user->name, 'success');
+            return redirect()->back();
+        } catch (\Exception $e) {
             //throw $th;
         }
     }

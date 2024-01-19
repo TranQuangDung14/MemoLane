@@ -39,6 +39,26 @@
                                         class="ti ti-plus"></i></button></a>
                         </div> --}}
                     </div>
+                    <div class="row mt-2">
+                        <div class="col-5">
+                            <label for="role" class="col-form-label">Lọc quyền </label>
+                            <form action="{{ route('Account') }}" method="get" enctype="multipart/form-data"
+                                class="d-flex">
+
+                                <select name="role" id="role" class="form-select">
+                                    <option value="">--Tất cả--</option>
+                                    <option value="1" {{ $role === '1' ? 'selected' : '' }}>Admin</option>
+                                    <option value="2" {{ $role === '2' ? 'selected' : '' }}>User</option>
+
+                                </select>
+
+                                <button type="submit" class="btn btn-primary ms-1">lọc</button>
+                            </form>
+                        </div>
+                        {{-- <div class="col-4">
+
+                        </div> --}}
+                    </div>
                     {{-- <p class="mb-0">This is a sample page </p> --}}
                 </div>
             </div>
@@ -91,7 +111,7 @@
                                         </td>
                                         <td class="border-bottom-0">
                                             <span class="fw-normal">
-                                                @if ($value->lock == 0)
+                                                @if ($value->status == 0)
                                                     {{ $value->name }}
                                                 @else
                                                     <span style="color: red">{{ $value->name }} (đang khóa)</span>
@@ -124,7 +144,6 @@
                                                     </a>
                                                 @endif
                                             @else
-
                                             @endif
                                             <!-- Modal -->
                                             <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"
@@ -140,8 +159,8 @@
                                                                     khoản </h5>
                                                             @endif
 
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                                aria-label="Close"></button>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
                                                             @if ($value->status == 0)
@@ -161,7 +180,7 @@
                                                                         id="" value="{{ $value->id }}">
 
                                                                     <input type="hidden" name="status" id=""
-                                                                        value="2" {{ $value->status == '2' }}>
+                                                                        value="1">
                                                                     <button type="submit"
                                                                         class="btn btn-primary">Khóa</button>
                                                                 </form>
@@ -173,7 +192,7 @@
                                                                         id="" value="{{ $value->id }}">
 
                                                                     <input type="hidden" name="status" id=""
-                                                                        value="1" {{ $value->status == '1' }}>
+                                                                        value="0">
 
                                                                     <button type="submit" class="btn btn-primary">Mở
                                                                         khóa</button>
