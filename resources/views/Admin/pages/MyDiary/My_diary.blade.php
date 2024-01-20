@@ -34,27 +34,25 @@
                                 height="100" class="rounded-circle">
                         @endif
                         <h5 class=" card-title mb-0 fw-semibold mt-2">{{ $user->name }}</h5>
-                        {{-- fix lại --}}
                         @if ($user->id != Auth::user()->id)
 
                             @if (isset($follow) && Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id)
                                 {{-- @else --}}
-                                <form action="{{ route('unfollow') }}" method="POST"
-                                    enctype="multipart/form-data">
+                                <form action="{{ route('unfollow') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('DELETE')
-                                    <input type="hidden" name="id" value="{{$follow->id}}">
-                                    <input type="hidden" name="user2_id" value="{{$user->id}}">
-                                    <button type="submit" class="btn btn-success mt-4" title="Theo dõi"><i
+                                    <input type="hidden" name="id" value="{{ $follow->id }}">
+                                    <input type="hidden" name="user2_id" value="{{ $user->id }}">
+                                    <button type="submit" class="btn btn-success mt-4" title="Đang theo dõi"><i
                                             class="ti ti-check"></i>Đang theo dõi</button>
                                 </form>
                             @else
-                                <form action="{{ route('follow') }}" method="post"
-                                    enctype="multipart/form-data">
+                                <form action="{{ route('follow') }}" method="post" enctype="multipart/form-data">
                                     @csrf
                                     {{-- <input type="hidden" name="user1_id" value="{{Auth::id()}}"> --}}
-                                    <input type="hidden" name="user2_id" value="{{$user->id}}">
-                                    <button type="submit" class="btn btn-primary mt-4" title="Theo dõi"><i class="ti ti-plus"></i>Theo dõi</button>
+                                    <input type="hidden" name="user2_id" value="{{ $user->id }}">
+                                    <button type="submit" class="btn btn-primary mt-4" title="Theo dõi"><i
+                                            class="ti ti-plus"></i>Theo dõi</button>
                                 </form>
                             @endif
                         @endif
@@ -111,6 +109,12 @@
                                     {{-- @endif --}}
                                     <div class="ms-2 mt-3">
                                         <p><strong>{{ $value->User->name }}</strong>
+                                            @if ($user->id != Auth::user()->id)
+                                                @if (isset($follow) && Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id)
+                                                    <span style="color: #FF9966">&nbsp;&nbsp;&nbsp;<i
+                                                            class="ti ti-check"></i>Đang theo dõi</span>
+                                                @endif
+                                            @endif
                                             <br>
 
                                             <span class="text-muted fs-2">
@@ -212,7 +216,7 @@
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của <a
-                                        href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }}</a>
+                                        href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }} {{$value->id}}</a>
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
@@ -244,7 +248,6 @@
                                             <form class="addCommentForm" enctype="multipart/form-data">
                                                 {{ csrf_field() }}
                                                 {{-- <input class="form-control diary-id-input" id="focus{{ $value->id }}" type="text" name="content" value="" placeholder="Hãy nói gì đó về đoạn nhật ký này"> --}}
-
                                                 <div class="input-group">
                                                     <input type="hidden" class="diary-id-input" name="diary_id"
                                                         value="{{ $value->id }}">
