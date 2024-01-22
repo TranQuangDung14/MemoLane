@@ -16,45 +16,48 @@ use Illuminate\Support\Facades\Validator;
 
 class DiaryController extends Controller
 {
-    public function index(){
+    public function index()
+    {
+
         // dd('ngừng');
-        $status=[2]; // trạng thái chỉ mình tôi
+        $status = [2]; // trạng thái chỉ mình tôi
         $diary = Diarys::WhereNotIn('status', $status)->get();
         // dd($diary);
-        return view('Admin.pages.Diary.index',compact('diary'));
+        return view('Admin.pages.Diary.index', compact('diary'));
     }
     //
-    public function MyDiary(Request $request,$id)
+    public function MyDiary(Request $request, $id)
     {
+
         try {
-            $status=[2]; // trạng thái chỉ mình tôi
-            $userExists = User::where('id',$id)->exists();
-            if($userExists){
-                $diary = Diarys::with(['User' => function($query) {
-                    $query->select('id', 'name','avatar','address','sex','number_phone');
-                },
-                'Interacts_count',
-                'Comments' => function ($query) {
-                    $query->with('user');
-                    $query->orderBy('id', 'desc');
-                },
+            $status = [2]; // trạng thái chỉ mình tôi
+            $userExists = User::where('id', $id)->exists();
+            if ($userExists) {
+                $diary = Diarys::with([
+                    'User' => function ($query) {
+                        $query->select('id', 'name', 'avatar', 'address', 'sex', 'number_phone');
+                    },
+                    'Interacts_count',
+                    'Comments' => function ($query) {
+                        $query->with('user');
+                        $query->orderBy('id', 'desc');
+                    },
                 ])
-                ->where('title','LIKE', '%' . $request->search . '%')
-                ->where('user_id',$id)->orderBy('id','desc');
-                if(Auth::user()->id != $id){
+                    ->where('title', 'LIKE', '%' . $request->search . '%')
+                    ->where('user_id', $id)->orderBy('id', 'desc');
+                if (Auth::user()->id != $id) {
                     $diary->WhereNotIn('status', $status);
                 }
                 $diary = $diary->paginate(5);
 
-            $user =user::where('id',$id)->select('id','name','avatar')->first();
-            $follow =Follow::where('user1_id',Auth::user()->id)->where('user2_id',$id)->first();
-            // $my_user =
-            // dd($follow);
-            // $user =user::with('follow')->where('id',$id)->select('id','name','avatar')->first();
+                $user = user::where('id', $id)->select('id', 'name', 'avatar')->first();
+                $follow = Follow::where('user1_id', Auth::user()->id)->where('user2_id', $id)->first();
+                // $my_user =
+                // dd($follow);
+                // $user =user::with('follow')->where('id',$id)->select('id','name','avatar')->first();
                 // dd(Auth()->user()->id);
 
-            }
-            else{
+            } else {
                 dd('ko tồn tại');
             }
 
@@ -62,11 +65,10 @@ class DiaryController extends Controller
             // $count_like=ml_interacts::where()
 
             // dd($diary);
-            return view('Admin.pages.MyDiary.My_diary',compact('diary','user','follow'));
+            return view('Admin.pages.MyDiary.My_diary', compact('diary', 'user', 'follow'));
         } catch (\Exception $e) {
             dd($e);
         }
-
     }
 
     public function create()
@@ -89,13 +91,14 @@ class DiaryController extends Controller
             $table->user_id = Auth::id();
             $table->save();
             Toastr::success('Tạo bài viết thành công', 'success');
-            return redirect()->route('my_diaryIndex',Auth::id());
+            return redirect()->route('my_diaryIndex', Auth::id());
         } catch (\Exception $e) {
             dd($e);
         }
     }
     // public function like(Request $request) {
-    public function like(Request $request, $id) {
+    public function like(Request $request, $id)
+    {
         try {
             // dd('nhận');
             $like = new Interacts();
@@ -108,12 +111,13 @@ class DiaryController extends Controller
         }
     }
 
-    public function unlike(Request $request, $id) {
+    public function unlike(Request $request, $id)
+    {
         // dd($id);
         try {
             $like = Interacts::where('user_id', auth()->user()->id)->where('diary_id', $id)->first();
             // dd($like);
-            if($like) {
+            if ($like) {
                 $like->delete();
             }
             return back(); // Hoặc redirect về trang bài viết
@@ -125,18 +129,18 @@ class DiaryController extends Controller
     public function Load_Comments(Request $request)
     {
         try {
-            // dd($request->diary_id);
-            $comment= Comments::where('diary_id',$request->diary_id)->get();
-            // dd($comment);
-            // return response()->json($comment);
-            $html = view('Admin.child.comment', ['comments' => $comment])->render();
+            $comment = Comments::where('diary_id', $request->diary_id)->get();
+            $html = view('Admin.child.comment', [
+                'comments' => $comment,
+                // 'follow'   =>$follow
+                ])->render();
             // dd($html);
             return response()->json([
                 'html' => $html,
-                'comment' =>$comment
+                'comment' => $comment
             ]);
         } catch (\Exception $e) {
-            dd('lỗi',$e);
+            dd('lỗi', $e);
         }
     }
 
@@ -204,8 +208,8 @@ class DiaryController extends Controller
     {
         try {
             $delete_diary      = Diarys::find($request->id);
-            $delete_like       = Interacts::where('diary_id',$request->id)->get();
-            $delete_comment    = Comments::where('diary_id',$request->id)->get();
+            $delete_like       = Interacts::where('diary_id', $request->id)->get();
+            $delete_comment    = Comments::where('diary_id', $request->id)->get();
             // dd($delete_comment);
             foreach ($delete_like as $like) {
                 $like->delete();
@@ -230,8 +234,8 @@ class DiaryController extends Controller
             $follow->user1_id = Auth()->user()->id; // tài khoản người đăng nhập
             $follow->user2_id = $request->user2_id; // tài khoản chọn để theo dõi
             $follow->save();
-            $user = User::select('id','name')->where('id',$request->user2_id)->first();
-            Toastr::success('Bạn đang theo dõi '.$user->name, 'success');
+            $user = User::select('id', 'name')->where('id', $request->user2_id)->first();
+            Toastr::success('Bạn đang theo dõi ' . $user->name, 'success');
             return redirect()->back();
         } catch (\Exception $e) {
             //throw $th;
@@ -243,8 +247,8 @@ class DiaryController extends Controller
         try {
             $unfollow = Follow::find($request->id);
             $unfollow->delete();
-            $user = User::select('id','name')->where('id',$request->user2_id)->first();
-            Toastr::success('Bạn đã hủy theo dõi '.$user->name, 'success');
+            $user = User::select('id', 'name')->where('id', $request->user2_id)->first();
+            Toastr::success('Bạn đã hủy theo dõi ' . $user->name, 'success');
             return redirect()->back();
         } catch (\Exception $e) {
             //throw $th;
