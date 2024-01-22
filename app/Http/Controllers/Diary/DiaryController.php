@@ -18,6 +18,7 @@ class DiaryController extends Controller
 {
     public function index()
     {
+
         // dd('ngừng');
         $status = [2]; // trạng thái chỉ mình tôi
         $diary = Diarys::WhereNotIn('status', $status)->get();
@@ -27,6 +28,7 @@ class DiaryController extends Controller
     //
     public function MyDiary(Request $request, $id)
     {
+
         try {
             $status = [2]; // trạng thái chỉ mình tôi
             $userExists = User::where('id', $id)->exists();
@@ -127,18 +129,7 @@ class DiaryController extends Controller
     public function Load_Comments(Request $request)
     {
         try {
-            // dd($request->all());
             $comment = Comments::where('diary_id', $request->diary_id)->get();
-            // dd($comment);
-            // $user =user::where('id',$id)->select('id','name','avatar')->first();
-            // $follow= Follow::select('*');
-            // foreach ($comment as $cmt) {
-            //     // dd($cmt->user_id);
-            //     $follow = $follow->where('user1_id', Auth::user()->id)->where('user2_id', $cmt->user_id)->first();
-            //     // dd($follow);
-            // }
-            // $follow = $follow->get();
-            // return response()->json($comment);
             $html = view('Admin.child.comment', [
                 'comments' => $comment,
                 // 'follow'   =>$follow

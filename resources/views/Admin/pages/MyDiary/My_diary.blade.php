@@ -215,11 +215,11 @@
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của <a
-                                        href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }} {{$value->id}}</a>
+                                <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của <a href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }} {{$value->id}}</a>
                                 </h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+                                {{-- <button type="button" style="float: right"></button> --}}
+                                <span style="margin-left: 150px"><button class="loadcmt"  data-diary-id="{{ $value->id }}">Load Comments</button></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             {{-- <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
                             </div> --}}
@@ -363,6 +363,12 @@
                 form.find('.form-control').val('');
             });
 
+            $('.loadcmt').on('click', function() {
+                var diary_id = $(this).data('diary-id');
+                console.log('loadcmt',diary_id)
+                ReloadComments(diary_id)
+            });
+
             $('.submitCommentBtn').on('click', function() {
                 // $(document).on('click', '.submitCommentBtn', function() {
                 // var diaryId = $(".diary-id-input").val();
@@ -447,7 +453,7 @@
 
 
 
-
+            // tải comment khi bật comment
             function loadComments() {
                 // Đặt sự kiện click cho nút mở comment
                 $('.openComment').click(function() {
@@ -460,8 +466,7 @@
                             diary_id: clickedDiaryId
                         },
                         success: function(data) {
-                            $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data
-                                .html);
+                            $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data.html);
                             // console.log('data nè', data.html);
                         },
                         error: function(error) {
@@ -471,8 +476,9 @@
                 });
             }
 
+            // xử lý load lại khi có thao tác gọi đến
             function ReloadComments(diary_id) {
-                console.log('Id hàm nhật ký nhận', diary_id);
+                // console.log('Id hàm nhật ký nhận', diary_id);
                 var clickedDiaryId = diary_id;
                 $.ajax({
                     url: '{{ route('commentLoad') }}',
@@ -481,9 +487,6 @@
                         diary_id: clickedDiaryId
                     },
                     success: function(data) {
-                        // Hiển thị danh sách comment
-                        console.log('hehe', data);
-                        // $('#commentList').html(data.comment);
                         $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data.html);
                     },
                     error: function(error) {

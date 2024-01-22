@@ -16,10 +16,9 @@ if (!function_exists('Search_Info_User')) {
 }
 
 if (!function_exists('follow')) {
-    function follow(Request $request)
+    function follow($user_id)
     {
-        // Định nghĩa logic của hàm ở đây
-        $follow = Follow::where('user1_id', Auth::user()->id)->where('user2_id', $request->id)->first();
+        $follow = Follow::where('user1_id', Auth::user()->id)->where('user2_id', $user_id)->first();
         return $follow;
     }
 }
