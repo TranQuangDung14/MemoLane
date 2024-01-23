@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Comments;
 use App\Models\Diarys;
 use App\Models\Follow;
-use App\Models\Hastags;
+use App\Models\Hashtags;
 use App\Models\Interacts;
 use App\Models\RLTS_Diary_hastag;
 use App\Models\User;
@@ -20,7 +20,6 @@ class DiaryController extends Controller
 {
     public function index()
     {
-
         // dd('ngừng');
         $status = [2]; // trạng thái chỉ mình tôi
         $diary = Diarys::orderBy('created_at')->inRandomOrder()->WhereNotIn('status', $status)->get();
@@ -34,6 +33,8 @@ class DiaryController extends Controller
     {
         try {
             $status = [2]; // trạng thái chỉ mình tôi
+            $hashtag = Hashtags::where('name', 'LIKE', '%' . $request->search . '%')->first();
+            // dd($hashtag);
             $userExists = User::where('id', $id)->exists();
             if ($userExists) {
                 $diary = Diarys::with([
@@ -45,8 +46,12 @@ class DiaryController extends Controller
                         $query->with('user');
                         $query->orderBy('id', 'desc');
                     },
+                    'relationship_hastag'                    
                 ])
-                    ->where('title', 'LIKE', '%' . $request->search . '%')
+                // if($hashtag->id != ''){
+
+                // }
+                    ->where('relationship_hastag.hashtag_id', $hashtag)
                     ->where('user_id', $id)->orderBy('id', 'desc');
                 if (Auth::user()->id != $id) {
                     $diary->WhereNotIn('status', $status);
@@ -114,12 +119,12 @@ class DiaryController extends Controller
 
             $hashtags = $matches[1];
             foreach ($hashtags as $tag) {
-                $hashtagExists = Hastags::where('name', $tag)->exists();
+                $hashtagExists = Hashtags::where('name', $tag)->exists();
                 if($hashtagExists){
-                    $hashtag = Hastags::where('name',$tag)->first();
+                    $hashtag = Hashtags::where('name',$tag)->first();
                 }
                 else{
-                    $hashtag = new Hastags();
+                    $hashtag = new Hashtags();
                     $hashtag->name = $tag;
                     $hashtag->save();
                 }

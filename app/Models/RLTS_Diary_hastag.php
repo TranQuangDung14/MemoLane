@@ -14,7 +14,7 @@ class RLTS_Diary_hastag extends Model
         return $this->belongsTo(Diarys::class,'diary_id');
     }
     public function hastag() {
-        return $this->belongsTo(Hastags::class,'hashtag_id');
+        return $this->belongsTo(Hashtags::class,'hashtag_id');
     }
 
 }
