@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMlHastagsTable extends Migration
+class CreateDiaryHashtagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateMlHastagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('ml_hastags', function (Blueprint $table) {
+        Schema::create('diary_hashtags', function (Blueprint $table) {
             $table->id();
-            $table->string('name',100)->nullable()->unique();
+            $table->integer('diary_id')->nullable();
+            $table->integer('hashtag_id')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ class CreateMlHastagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ml_hastags');
+        Schema::dropIfExists('diary_hashtags');
     }
 }
