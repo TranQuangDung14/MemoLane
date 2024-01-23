@@ -41,13 +41,13 @@
                     <div class="row">
 
                         <div class="col-8">
-                            <label>Tìm kiếm theo hastag</label>
+                            <label>Tìm kiếm theo hashtag</label>
                             <form action="{{ route('my_diaryIndex', Auth::id()) }}" method="get"
                                 enctype="multipart/form-data">
                                 <div class="input-group">
 
                                     <input class="form-control" type="text" name="search" value=""
-                                        placeholder="Tìm kiếm theo hastag">
+                                        placeholder="Tìm kiếm theo hashtag">
                                     <button class="btn btn-primary" type="submit"><i class="ti ti-search"></i></button>
                                 </div>
                             </form>
@@ -81,8 +81,18 @@
                                     <div class="ms-2">
                                         <p>
                                             <a href="{{ route('my_diaryIndex', $value->User->id) }}">
-                                                 <strong>{{ $value->User->name }}</strong>
-                                                </a>
+                                                <strong>{{ $value->User->name }}</strong>
+                                            </a>
+                                            @if (Auth::user()->id != $value->User->id)
+                                                @if (follow($value->User->id) != null)
+                                                    @if (Auth::user()->id === follow($value->User->id)->user1_id && $value->User->id === follow($value->User->id)->user2_id)
+                                                    <span style="color: #FF9966">&nbsp;&nbsp;&nbsp;<i
+                                                        class="ti ti-check"></i>Đang theo dõi</span>
+                                                    @endif
+                                                @endif
+                                                @else
+                                                {{-- Đây là tôi --}}
+                                            @endif
                                             <br>
 
                                             <span class="text-muted fs-2">
@@ -114,11 +124,13 @@
 
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#ModalStatus_{{ $value->id }}">Chỉnh trạng thái nhật ký</a></li>
-                                                <li><a class="dropdown-item" href="#" >Chỉnh sửa nội dung bài viết</a>
+                                                        data-bs-target="#ModalStatus_{{ $value->id }}">Chỉnh trạng thái
+                                                        nhật ký</a></li>
+                                                <li><a class="dropdown-item" href="#">Chỉnh sửa nội dung bài viết</a>
                                                 </li>
                                                 <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
-                                                        data-bs-target="#ModalDelete_{{ $value->id }}">Xóa bài nhật ký</a>
+                                                        data-bs-target="#ModalDelete_{{ $value->id }}">Xóa bài nhật
+                                                        ký</a>
                                                 </li>
                                                 {{-- <li><a class="dropdown-item" href="#">Something else here</a></li> --}}
                                             </ul>

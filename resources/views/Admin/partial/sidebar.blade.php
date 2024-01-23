@@ -11,7 +11,6 @@
 
     <!-- Sidebar navigation-->
     <nav class="sidebar-nav scroll-sidebar mt-4" data-simplebar="">
-        {{-- <label>Tìm kiếm theo hastag</label> --}}
         <form action="{{ route('SearchIndex') }}" method="get" enctype="multipart/form-data">
             <div class="input-group">
 

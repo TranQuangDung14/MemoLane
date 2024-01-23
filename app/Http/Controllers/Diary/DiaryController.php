@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Comments;
 use App\Models\Diarys;
 use App\Models\Follow;
+use App\Models\Hastags;
 use App\Models\Interacts;
+use App\Models\RLTS_Diary_hastag;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -21,14 +23,15 @@ class DiaryController extends Controller
 
         // dd('ngừng');
         $status = [2]; // trạng thái chỉ mình tôi
-        $diary = Diarys::WhereNotIn('status', $status)->get();
+        $diary = Diarys::orderBy('created_at')->inRandomOrder()->WhereNotIn('status', $status)->get();
+        // $user = user::where('id', $id)->select('id', 'name', 'avatar')->first();
+        // $follow = Follow::where('user1_id', Auth::user()->id)->where('user2_id', $id)->first();
         // dd($diary);
         return view('Admin.pages.Diary.index', compact('diary'));
     }
     //
     public function MyDiary(Request $request, $id)
     {
-
         try {
             $status = [2]; // trạng thái chỉ mình tôi
             $userExists = User::where('id', $id)->exists();
@@ -56,14 +59,11 @@ class DiaryController extends Controller
                 // dd($follow);
                 // $user =user::with('follow')->where('id',$id)->select('id','name','avatar')->first();
                 // dd(Auth()->user()->id);
-
             } else {
                 dd('ko tồn tại');
             }
-
             // // đếm lượt like
             // $count_like=ml_interacts::where()
-
             // dd($diary);
             return view('Admin.pages.MyDiary.My_diary', compact('diary', 'user', 'follow'));
         } catch (\Exception $e) {
@@ -84,12 +84,51 @@ class DiaryController extends Controller
     public function store(Request $request)
     {
         try {
+            $input = $request->all();
+
+            $rules = array(
+                'title'                             => 'required',
+                'description'                       => 'required',
+            );
+            $messages = array(
+                'title.required'                    => '--Tiêu đề không được để trống!--',
+                'description.required'              => '--Nội dung không được để trống!--',
+            );
+            $validator = Validator::make($input, $rules, $messages);
+
+            if ($validator->fails()) {
+                Toastr::error('Tạo bài viết nhật ký thất bại', 'error');
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
             $table  = new Diarys();
             $table->title = $request->title;
             $table->description = $request->description;
             // $table->hashtags = $request->hashtags;
             $table->user_id = Auth::id();
             $table->save();
+
+            preg_match_all('/#(\w+)/', $request->description, $matches);
+
+            $hashtags = $matches[1];
+            foreach ($hashtags as $tag) {
+                $hashtagExists = Hastags::where('name', $tag)->exists();
+                if($hashtagExists){
+                    $hashtag = Hastags::where('name',$tag)->first();
+                }
+                else{
+                    $hashtag = new Hastags();
+                    $hashtag->name = $tag;
+                    $hashtag->save();
+                }
+
+                $rlt_hashtag_diary = new RLTS_Diary_hastag();
+                $rlt_hashtag_diary->diary_id = $table->id;
+                $rlt_hashtag_diary->hashtag_id = $hashtag->id;
+                $rlt_hashtag_diary->save();
+            }
             Toastr::success('Tạo bài viết thành công', 'success');
             return redirect()->route('my_diaryIndex', Auth::id());
         } catch (\Exception $e) {
@@ -133,7 +172,7 @@ class DiaryController extends Controller
             $html = view('Admin.child.comment', [
                 'comments' => $comment,
                 // 'follow'   =>$follow
-                ])->render();
+            ])->render();
             // dd($html);
             return response()->json([
                 'html' => $html,

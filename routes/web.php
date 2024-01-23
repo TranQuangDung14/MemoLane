@@ -13,6 +13,9 @@ include __DIR__.'/admin.php';
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('1', function () {
+    return view('welcome');
+});
+Route::get('/test_select2', function () {
+    return view('Admin.pages.test.testselect2');
+});

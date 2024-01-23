@@ -35,4 +35,7 @@ class Diarys extends Model
 
     }
 
+    public function relationship_hastag() {
+        return $this->hasMany(RLTS_Diary_hastag::class,'diary_id','id');
+    }
 }

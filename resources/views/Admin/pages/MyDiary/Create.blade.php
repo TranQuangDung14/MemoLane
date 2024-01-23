@@ -18,14 +18,14 @@
             </div>
         </div>
         @if (session('error'))
-        <div class="alert alert-danger" id="error-alert">
-            {{ session('error') }}
+            <div class="alert alert-danger" id="error-alert">
+                {{ session('error') }}
                 {{-- <span type="button" class="X-close float-end" data-dismiss="alert" aria-label="Close"> --}}
                 <span type="button" class="X-close float-end" data-dismiss="alert" aria-label="Close">
-                <i class="ti ti-x"></i>
-            </span>
-        </div>
-    @endif
+                    <i class="ti ti-x"></i>
+                </span>
+            </div>
+        @endif
 
         <div class="row d-flex align-items-stretch">
             <div class="card">
@@ -33,35 +33,42 @@
                     {{-- @if (isset($editData))
                         <form action="{{ route('categoryUpdate', @$editData->id) }}" method="PUT" enctype="multipart/form-data">
                         @else --}}
-                            <form action="{{ route('my_diaryStore') }}" method="POST" enctype="multipart/form-data">
-                    {{-- @endif --}}
-                    @csrf
-                    <div class="row">
-                        <div class="mb-3 col-5">
-                            <label for="exampleInputEmail1" class="form-label">Tên tiêu đề bài viết</label>
-                            <input type="text" class="form-control" name="title" id="title"
-                                value="{{ isset($editData) ? $editData->title : old('title') }}">
+                    <form action="{{ route('my_diaryStore') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="row">
+                            <div class="mb-3 col-5">
+                                <label for="title" class="form-label">Tên tiêu đề bài viết <span
+                                        style="color: red">*</span></label>
+                                <input type="text" class="form-control" name="title" id="title"
+                                    value="{{ isset($editData) ? $editData->title : old('title') }}">
+                                @if ($errors->has('title'))
+                                    <span class="text-danger" role="alert">{{ $errors->first('title') }}</span>
+                                @endif
+                            </div>
                         </div>
-                        @if ($errors->has('title'))
-                            <span class="text-danger" role="alert">{{ $errors->first('title') }}</span>
-                        @endif
-                    </div>
-                    <div class="row mt-3">
-                        <div class="input-effect sm2_mb_20 md_mb_20">
-                            <label for="exampleInputEmail1" class="form-label">Nội dung</label>
-                            <textarea name="description" id="description">
+                        <div class="row mt-3">
+                            <div class="input-effect sm2_mb_20 md_mb_20">
+                                <label for="description" class="form-label">Nội dung <span
+                                        style="color: red">*</span></label>
+                                @if ($errors->has('description'))
+                                    <br>
+                                    <span class="text-danger" role="alert">{{ $errors->first('description') }}</span>
+                                @endif
+                                <textarea name="description" id="description">
                                 {{ isset($editData) ? $editData->description : '' }}
                             </textarea>
+                            </div>
+
                         </div>
-                    </div>
-                    <div class="text-center mt-5">
-                        <a class="btn btn-outline-primary mr-20 btn-back" href="{{ route('my_diaryIndex',Auth::id()) }}">Quay lại</a>
-                        @if (isset($editData))
-                            <button type="submit" class="btn btn-primary">Cập nhật</button>
-                        @else
-                            <button type="submit" class="btn btn-primary">Đăng</button>
-                        @endif
-                    </div>
+                        <div class="text-center mt-5">
+                            <a class="btn btn-outline-primary mr-20 btn-back"
+                                href="{{ route('my_diaryIndex', Auth::id()) }}">Quay lại</a>
+                            @if (isset($editData))
+                                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                            @else
+                                <button type="submit" class="btn btn-primary">Đăng</button>
+                            @endif
+                        </div>
                     </form>
 
                 </div>

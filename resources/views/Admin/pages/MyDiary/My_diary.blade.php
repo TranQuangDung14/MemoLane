@@ -67,13 +67,13 @@
                     <div class="row">
 
                         <div class="col-8">
-                            <label>Tìm kiếm theo hastag</label>
+                            <label>Tìm kiếm theo hashtag</label>
                             <form action="{{ route('my_diaryIndex', Auth::id()) }}" method="get"
                                 enctype="multipart/form-data">
                                 <div class="input-group">
 
                                     <input class="form-control" type="text" name="search" value=""
-                                        placeholder="Tìm kiếm theo hastag">
+                                        placeholder="Tìm kiếm theo hashtag">
                                     <button class="btn btn-primary" type="submit"><i class="ti ti-search"></i></button>
                                 </div>
                             </form>
@@ -218,7 +218,7 @@
                                 <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của <a href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }} {{$value->id}}</a>
                                 </h5>
                                 {{-- <button type="button" style="float: right"></button> --}}
-                                <span style="margin-left: 150px"><button class="loadcmt"  data-diary-id="{{ $value->id }}">Load Comments</button></span>
+                                <span class="ms-5"><button class="loadcmt btn btn-outline-secondary"  data-diary-id="{{ $value->id }}">Tải lại bình luận</button></span>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             {{-- <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
@@ -232,7 +232,6 @@
                                     <hr>
                                     <div class="row">
                                         <div class="col-md-12 d-flex align-items-center">
-
                                             @if (Auth::user()->avatar != '')
                                                 <img src="{{ asset('storage/') }}/image/avatar/{{ Auth::user()->avatar }}"
                                                     alt="" width="40" height="40" class="rounded-circle">
@@ -254,7 +253,6 @@
                                                     <input class="form-control" id="focus{{ $value->id }}"
                                                         type="text" name="content" value=""
                                                         placeholder="Hãy nói gì đó về đoạn nhật ký này">
-
                                                     <button class="btn btn-primary submitCommentBtn" type="button"><i
                                                             class="ti ti-send"></i></button>
                                                     <br />
@@ -269,7 +267,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
