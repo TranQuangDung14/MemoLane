@@ -42,7 +42,7 @@
 
                         <div class="col-8">
                             <label>Tìm kiếm theo hashtag</label>
-                            <form action="{{ route('my_diaryIndex', Auth::id()) }}" method="get"
+                            <form action="{{ route('diaryIndex') }}" method="get"
                                 enctype="multipart/form-data">
                                 <div class="input-group">
 
@@ -143,7 +143,21 @@
                             </div>
                             <div class="row mt-2">
                                 <h3>{{ $value->title }}</h3>
-                                <p class="description">{!! $value->description !!}</p>
+                                @php
+                                $description = $value->description;
+                                preg_match_all('/#(\w+)/', $description, $matches);
+
+
+                                foreach ($matches[1] as $hashtag) {
+                                    $url = route('diaryIndex',['search' => $hashtag]); // Replace 'hashtag.show' with your actual route name
+                                    $description = str_replace("#$hashtag", "<a href=\"$url\">#$hashtag</a>", $description);
+                                }
+
+                                $value->formattedDescription = $description;
+                            @endphp
+                            {{-- <p class="description">{!! $value->description !!}</p> --}}
+                            <p class="description">{!! $value->formattedDescription !!}</p>
+                                {{-- <p class="description">{!! $value->description !!}</p> --}}
                             </div>
                             {{-- @php
                     dd($value);
