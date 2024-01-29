@@ -18,14 +18,29 @@ use Illuminate\Support\Facades\Validator;
 
 class DiaryController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // dd('ngừng');
         $status = [2]; // trạng thái chỉ mình tôi
-        $diary = Diarys::orderBy('created_at')->inRandomOrder()->WhereNotIn('status', $status)->get();
-        // $user = user::where('id', $id)->select('id', 'name', 'avatar')->first();
-        // $follow = Follow::where('user1_id', Auth::user()->id)->where('user2_id', $id)->first();
-        // dd($diary);
+        $hashtag = null;
+        if ($request->has('search') && $request->search !== null) {
+            // $hashtag = Hashtags::where('name', 'LIKE', '%' . $request->search . '%')->first()->id;
+            $hashtag = Hashtags::where('name', '=', $request->search)->first();
+            // dd($hashtag);
+            if ($hashtag == null) {
+                // dd('k có');
+                $diary = Diarys::where('id', 0)->get();
+                return view('Admin.pages.Diary.index', compact('diary'));
+            }
+        }
+        $diary = Diarys::orderBy('created_at')->inRandomOrder()->WhereNotIn('status', $status);
+        if ($hashtag != null) {
+            $diary->whereHas('relationship_hastag', function ($query) use ($hashtag) {
+                $query->where('hashtag_id', $hashtag->id);
+            });
+        }
+        $diary = $diary->get();
+
         return view('Admin.pages.Diary.index', compact('diary'));
     }
     //
@@ -33,8 +48,21 @@ class DiaryController extends Controller
     {
         try {
             $status = [2]; // trạng thái chỉ mình tôi
-            $hashtag = Hashtags::where('name', 'LIKE', '%' . $request->search . '%')->first();
-            // dd($hashtag);
+            $hashtag = null;
+            $user = user::where('id', $id)->select('id', 'name', 'avatar')->first();
+            $follow = Follow::where('user1_id', Auth::user()->id)->where('user2_id', $id)->first();
+            // $relationship = null;
+
+            if ($request->has('search') && $request->search !== null) {
+                // $hashtag = Hashtags::where('name', 'LIKE', '%' . $request->search . '%')->first()->id;
+                $hashtag = Hashtags::where('name', '=', $request->search)->first();
+                // dd($hashtag);
+                if ($hashtag == null) {
+                    // dd('k có');
+                    $diary = Diarys::where('id', 0)->get();
+                    return view('Admin.pages.MyDiary.My_diary', compact('diary', 'user', 'follow'));
+                }
+            }
             $userExists = User::where('id', $id)->exists();
             if ($userExists) {
                 $diary = Diarys::with([
@@ -46,30 +74,27 @@ class DiaryController extends Controller
                         $query->with('user');
                         $query->orderBy('id', 'desc');
                     },
-                    'relationship_hastag'                    
-                ])
-                // if($hashtag->id != ''){
+                    'relationship_hastag'
 
-                // }
-                    ->where('relationship_hastag.hashtag_id', $hashtag)
+                ])
                     ->where('user_id', $id)->orderBy('id', 'desc');
+
+                // ->where('diary_hashtags.hashtag_id',$hashtag)
+                if ($hashtag != null) {
+                    $diary->whereHas('relationship_hastag', function ($query) use ($hashtag) {
+                        $query->where('hashtag_id', $hashtag->id);
+                    });
+                }
+
                 if (Auth::user()->id != $id) {
                     $diary->WhereNotIn('status', $status);
                 }
                 $diary = $diary->paginate(5);
+                // dd($diary);
 
-                $user = user::where('id', $id)->select('id', 'name', 'avatar')->first();
-                $follow = Follow::where('user1_id', Auth::user()->id)->where('user2_id', $id)->first();
-                // $my_user =
-                // dd($follow);
-                // $user =user::with('follow')->where('id',$id)->select('id','name','avatar')->first();
-                // dd(Auth()->user()->id);
             } else {
                 dd('ko tồn tại');
             }
-            // // đếm lượt like
-            // $count_like=ml_interacts::where()
-            // dd($diary);
             return view('Admin.pages.MyDiary.My_diary', compact('diary', 'user', 'follow'));
         } catch (\Exception $e) {
             dd($e);
@@ -120,10 +145,9 @@ class DiaryController extends Controller
             $hashtags = $matches[1];
             foreach ($hashtags as $tag) {
                 $hashtagExists = Hashtags::where('name', $tag)->exists();
-                if($hashtagExists){
-                    $hashtag = Hashtags::where('name',$tag)->first();
-                }
-                else{
+                if ($hashtagExists) {
+                    $hashtag = Hashtags::where('name', $tag)->first();
+                } else {
                     $hashtag = new Hashtags();
                     $hashtag->name = $tag;
                     $hashtag->save();

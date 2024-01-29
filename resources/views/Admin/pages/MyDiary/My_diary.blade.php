@@ -78,10 +78,18 @@
                                 </div>
                             </form>
                         </div>
-                        <div class="col-4">
+                        {{-- <div class="col-2">
                             <a href="{{ route('my_diaryCreate') }}"> <button type="button"
                                     class="btn btn-primary mt-4 float-end" title="Tạo bài viết mới"><i
                                         class="ti ti-plus"></i></button></a>
+                        </div> --}}
+                        <div class="col-4">
+                            <a href="{{ route('my_diaryCreate') }}"> <button type="button"
+                                    class="btn btn-primary mt-4  float-end ms-2" title="Tạo bài viết mới"><i
+                                        class="ti ti-plus"></i></button></a>
+                            <a href="{{ route('my_diaryIndex', Auth::id()) }}"> <button type="button"
+                                    class="btn btn-success mt-4 float-end" title="tải lại trang"><i
+                                        class="ti ti-reload"></i></button></a>
                         </div>
                     </div>
                     {{-- <p class="mb-0">This is a sample page </p> --}}
@@ -160,7 +168,20 @@
                             </div>
                             <div class="row mt-2">
                                 <h3>{{ $value->title }}</h3>
-                                <p class="description">{!! $value->description !!}</p>
+                                @php
+                                    $description = $value->description;
+                                    preg_match_all('/#(\w+)/', $description, $matches);
+
+                                  
+                                    foreach ($matches[1] as $hashtag) {
+                                        $url = route('diaryIndex',['search' => $hashtag]); // Replace 'hashtag.show' with your actual route name
+                                        $description = str_replace("#$hashtag", "<a href=\"$url\">#$hashtag</a>", $description);
+                                    }
+
+                                    $value->formattedDescription = $description;
+                                @endphp
+                                {{-- <p class="description">{!! $value->description !!}</p> --}}
+                                <p class="description">{!! $value->formattedDescription !!}</p>
                             </div>
                             {{-- @php
                     dd($value);
@@ -215,11 +236,15 @@
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của <a href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }} {{$value->id}}</a>
+                                <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của <a
+                                        href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }}
+                                        {{ $value->id }}</a>
                                 </h5>
                                 {{-- <button type="button" style="float: right"></button> --}}
-                                <span class="ms-5"><button class="loadcmt btn btn-outline-secondary"  data-diary-id="{{ $value->id }}">Tải lại bình luận</button></span>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <span class="ms-5"><button class="loadcmt btn btn-outline-secondary"
+                                        data-diary-id="{{ $value->id }}">Tải lại bình luận</button></span>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             {{-- <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
                             </div> --}}
@@ -362,7 +387,7 @@
 
             $('.loadcmt').on('click', function() {
                 var diary_id = $(this).data('diary-id');
-                console.log('loadcmt',diary_id)
+                console.log('loadcmt', diary_id)
                 ReloadComments(diary_id)
             });
 
@@ -463,7 +488,8 @@
                             diary_id: clickedDiaryId
                         },
                         success: function(data) {
-                            $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data.html);
+                            $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data
+                                .html);
                             // console.log('data nè', data.html);
                         },
                         error: function(error) {
