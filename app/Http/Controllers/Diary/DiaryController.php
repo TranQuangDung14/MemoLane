@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DiaryController extends Controller
 {
+    // trang chủ
     public function index(Request $request)
     {
         // dd('ngừng');
@@ -43,7 +44,8 @@ class DiaryController extends Controller
 
         return view('Admin.pages.Diary.index', compact('diary'));
     }
-    //
+
+    // trang cá nhân
     public function MyDiary(Request $request, $id)
     {
         try {
@@ -101,6 +103,7 @@ class DiaryController extends Controller
         }
     }
 
+    // mở trang tạo mới
     public function create()
     {
         try {
@@ -110,7 +113,7 @@ class DiaryController extends Controller
             dd($e);
         }
     }
-
+    // xử lý tạo mới
     public function store(Request $request)
     {
         try {
@@ -164,7 +167,7 @@ class DiaryController extends Controller
             dd($e);
         }
     }
-    // public function like(Request $request) {
+    //thích bài viết
     public function like(Request $request, $id)
     {
         try {
@@ -178,7 +181,7 @@ class DiaryController extends Controller
             dd('sai lè');
         }
     }
-
+    // bỏ thích bài viết
     public function unlike(Request $request, $id)
     {
         // dd($id);
@@ -194,6 +197,7 @@ class DiaryController extends Controller
         }
     }
 
+    // tải bình luận theo bài viết
     public function Load_Comments(Request $request)
     {
         try {
@@ -211,7 +215,7 @@ class DiaryController extends Controller
             dd('lỗi', $e);
         }
     }
-
+    // Tạo bình luận
     public function comment(Request $request)
     {
         // dd($request->all());
@@ -254,7 +258,7 @@ class DiaryController extends Controller
             return redirect()->back();
         }
     }
-
+    //  kích hoạt trạng thái nhật ký
     public function status_diary(Request $request)
     {
         // dd('vào');
@@ -272,6 +276,7 @@ class DiaryController extends Controller
             return redirect()->back();
         }
     }
+    //  xóa nhật ký
     public function delete(Request $request)
     {
         try {
@@ -293,7 +298,7 @@ class DiaryController extends Controller
             //throw $th;
         }
     }
-
+    // Theo dõi người dùng
     public function follow(Request $request)
     {
         // dd($request->all());
@@ -309,7 +314,7 @@ class DiaryController extends Controller
             //throw $th;
         }
     }
-
+    // hủy theo dõi người dùng
     public function unfollow(Request $request)
     {
         try {
