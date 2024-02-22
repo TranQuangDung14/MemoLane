@@ -327,4 +327,6 @@ class DiaryController extends Controller
             //throw $th;
         }
     }
+
+    
 }

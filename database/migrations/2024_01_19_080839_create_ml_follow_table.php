@@ -15,8 +15,8 @@ class CreateMlFollowTable extends Migration
     {
         Schema::create('ml_follow', function (Blueprint $table) {
             $table->id();
-            $table->integer('user1_id')->unsigned()->nullable();
-            $table->integer('user2_id')->unsigned()->nullable();
+            $table->integer('user1_id')->unsigned()->nullable(); //user follow
+            $table->integer('user2_id')->unsigned()->nullable(); //user được follow
             $table->timestamps();
         });
     }
