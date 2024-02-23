@@ -6,10 +6,29 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link nav-icon-hover" href="#">
+        {{-- <a class="nav-link nav-icon-hover" href="#"> --}}
+        <a  class="nav-link nav-icon-hover" href="javascript:void(0)" id="drop2" data-bs-toggle="dropdown"
+        aria-expanded="false">
           <i class="ti ti-bell-ringing"></i>
           <div class="notification bg-primary rounded-circle"></div>
         </a>
+        <div class="dropdown-menu dropdown-menu-start dropdown-menu-animate-up" aria-labelledby="drop2" id="message_body" >
+            {{-- <div class="message-body" > --}}
+              {{-- <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                <i class="ti ti-user fs-6"></i>
+                <p class="mb-0 fs-3">My Profil111eProfil111eProfil111eProfil111e Profil111eProfil111eProfil111eProfil111e</p>
+              </a>
+              <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                <i class="ti ti-mail fs-6"></i>
+                <p class="mb-0 fs-3">My Account</p>
+              </a>
+              <a href="javascript:void(0)" class="d-flex align-items-center gap-2 dropdown-item">
+                <i class="ti ti-list-check fs-6"></i>
+                <p class="mb-0 fs-3">My Task</p>
+              </a>
+              <a href="./authentication-login.html" class="btn btn-outline-primary mx-3 mt-2 d-block">Logout</a> --}}
+            {{-- </div> --}}
+          </div>
       </li>
 
     </ul>

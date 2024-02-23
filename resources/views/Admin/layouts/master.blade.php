@@ -95,6 +95,7 @@
         <script src="{{ asset('Admin/') }}/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
         <script src="{{ asset('Admin/') }}/js/sidebarmenu.js"></script>
         <script src="{{ asset('Admin/') }}/js/app.min.js"></script>
+        <script src="{{ asset('Admin/') }}/js/custom.js"></script>
 
 
 
