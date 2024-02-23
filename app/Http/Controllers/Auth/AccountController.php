@@ -26,7 +26,7 @@ class AccountController extends Controller
             $user = User::where('name','LIKE', '%' . $request->search . '%');
             $role = $request->input('role');
             if($role){
-                // dd($role);
+                // dd($role );
                 $user->where('role',$role);
             }
 
