@@ -71,4 +71,9 @@ Route::prefix('')->group(function () {
     Route::prefix('search')->middleware('auth')->group(function () {
         Route::get('key', [SearchUserController::class, 'index'])->name('SearchIndex');
     });
+
+    Route::prefix('notification')->middleware('auth')->group(function () {
+        Route::get('', [DiaryController::class, 'notification'])->name('notification');
+    });
+
 });

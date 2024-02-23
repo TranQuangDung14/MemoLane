@@ -8,6 +8,7 @@ use App\Models\Diarys;
 use App\Models\Follow;
 use App\Models\Hashtags;
 use App\Models\Interacts;
+use App\Models\Notifications;
 use App\Models\RLTS_Diary_hastag;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
@@ -176,6 +177,11 @@ class DiaryController extends Controller
             $like->user_id = auth()->user()->id; // Lấy ID của người dùng đã đăng nhập
             $like->diary_id = $id;
             $like->save();
+
+            $diary = Diarys::first($id);
+            // dd($diary);
+            $notification = new Notifications();
+            $notification->user1_id =auth()->user()->id;
             return back(); // Hoặc redirect về trang bài viết
         } catch (\Throwable $th) {
             dd('sai lè');
@@ -328,5 +334,18 @@ class DiaryController extends Controller
         }
     }
 
-    
+    public function notification()
+    {
+        try {
+            $noti = Notifications::with('user1','user2')->get();
+            return response()->json([
+                'notification'=> $noti,
+            ]);
+            //code...
+        } catch (\Exception $e) {
+            //throw $th;
+            dd($e);
+        }
+        # code...
+    }
 }

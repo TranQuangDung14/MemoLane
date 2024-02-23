@@ -172,9 +172,8 @@
                                     $description = $value->description;
                                     preg_match_all('/#(\w+)/', $description, $matches);
 
-                                  
                                     foreach ($matches[1] as $hashtag) {
-                                        $url = route('diaryIndex',['search' => $hashtag]); // Replace 'hashtag.show' with your actual route name
+                                        $url = route('diaryIndex', ['search' => $hashtag]); // Replace 'hashtag.show' with your actual route name
                                         $description = str_replace("#$hashtag", "<a href=\"$url\">#$hashtag</a>", $description);
                                     }
 
@@ -192,8 +191,7 @@
                         {{-- tương tác --}}
                         <div class="row align-items-center" style="background-color: #EEEEEE">
 
-                            @if (auth()->check() &&
-                                    auth()->user()->hasLiked($value))
+                            @if (auth()->check() && auth()->user()->hasLiked($value))
                                 <div class="col-4 btn btn-primary like-btn" style="border: 1px solid white"
                                     data-post-id="{{ $value->id }}">
                                     {{-- <i class="ti ti-thumb-up fs-8 icon-liked"></i> --}}
@@ -370,6 +368,7 @@
 
 
     </div>
+    {{-- <script src=""></script> --}}
     <script>
         $(document).ready(function() {
             loadComments();
