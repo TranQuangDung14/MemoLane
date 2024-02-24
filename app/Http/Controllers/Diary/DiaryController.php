@@ -178,13 +178,19 @@ class DiaryController extends Controller
             $like->diary_id = $id;
             $like->save();
 
-            $diary = Diarys::first($id);
+            $diary = Diarys::where('id', $id)->first();
+            // $diary = Diarys::first($id);
             // dd($diary);
-            $notification = new Notifications();
-            $notification->user1_id =auth()->user()->id;
+            if ($diary->user_id != auth()->user()->id) {
+                $notification = new Notifications();
+                $notification->user1_id = auth()->user()->id;
+                $notification->user2_id = $diary->user_id;
+                $notification->diary_id = $diary->id;
+                $notification->save();
+            }
             return back(); // Hoặc redirect về trang bài viết
-        } catch (\Throwable $th) {
-            dd('sai lè');
+        } catch (\Exception $e) {
+            dd($e);
         }
     }
     // bỏ thích bài viết
@@ -337,9 +343,18 @@ class DiaryController extends Controller
     public function notification()
     {
         try {
-            $noti = Notifications::with('user1','user2')->get();
+            $noti = Notifications::where('user2_id', Auth::user()->id)->get();
+            // return response()->json([
+            //     'notification'=> $noti,
+            // ]);
+            $html = view('Admin.child.notification', [
+                'notification' => $noti,
+                // 'follow'   =>$follow
+            ])->render();
+            // dd($html);
             return response()->json([
-                'notification'=> $noti,
+                'html' => $html,
+                'notification' => $noti
             ]);
             //code...
         } catch (\Exception $e) {
