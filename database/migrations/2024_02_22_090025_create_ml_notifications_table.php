@@ -17,7 +17,7 @@ class CreateMlNotificationsTable extends Migration
             $table->id();
             $table->integer('user1_id')->unsigned()->nullable()->comment('user tạo tương tác'); //user tạo tương tác
             $table->integer('user2_id')->unsigned()->nullable()->comment('user được tương tác'); //user được tương tác
-            $table->integer('diary_id')->unsigned()->nullable();//check lại
+            $table->integer('diary_id')->unsigned()->nullable();//check lại.
             $table->integer('event_id')->unsigned()->nullable();// sẽ ăn theo type
             $table->tinyInteger('type')->nullable()->comment('0. thông báo like - 1. thông báo follow - 2. thông báo comment');
             $table->tinyInteger('read')->default(0)->comment('0. chưa đọc - 1. đã đọc');
