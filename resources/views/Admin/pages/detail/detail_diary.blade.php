@@ -61,45 +61,8 @@
                 </div>
             </div>
         </div>
-        {{-- lọc --}}
-        <div class="row">
-            <div class="card border">
-                <div class="card-body">
-                    <div class="row">
-
-                        <div class="col-8">
-                            <label>Tìm kiếm theo hashtag</label>
-                            <form action="{{ route('my_diaryIndex', Auth::id()) }}" method="get"
-                                enctype="multipart/form-data">
-                                <div class="input-group">
-
-                                    <input class="form-control" type="text" name="search" value=""
-                                        placeholder="Tìm kiếm theo hashtag">
-                                    <button class="btn btn-primary" type="submit"><i class="ti ti-search"></i></button>
-                                </div>
-                            </form>
-                        </div>
-                        {{-- <div class="col-2">
-                            <a href="{{ route('my_diaryCreate') }}"> <button type="button"
-                                    class="btn btn-primary mt-4 float-end" title="Tạo bài viết mới"><i
-                                        class="ti ti-plus"></i></button></a>
-                        </div> --}}
-                        <div class="col-4">
-                            <a href="{{ route('my_diaryCreate') }}"> <button type="button"
-                                    class="btn btn-primary mt-4  float-end ms-2" title="Tạo bài viết mới"><i
-                                        class="ti ti-plus"></i></button></a>
-                            <a href="{{ route('my_diaryIndex', Auth::id()) }}"> <button type="button"
-                                    class="btn btn-success mt-4 float-end" title="tải lại trang"><i
-                                        class="ti ti-reload"></i></button></a>
-                        </div>
-                    </div>
-                    {{-- <p class="mb-0">This is a sample page </p> --}}
-                </div>
-            </div>
-        </div>
-
-        @if ($diary->count() > 0)
-            @foreach ($diary as $key => $value)
+        {{-- @if ($diary->count() > 0) --}}
+            {{-- @foreach ($diary as $key => $value) --}}
                 <div class="row d-flex align-items-stretch">
                     <div class="card border">
                         <div class="card-body">
@@ -146,7 +109,7 @@
                                 </div>
                                 <div class="col-md-8">
                                     {{-- phần này thêm các chức năng sau  --}}
-                                    @if (Auth::user()->id === $value->user->id)
+                                    {{-- @if (Auth::user()->id === $value->user->id)
                                         <div class="dropdown">
 
                                             <i id="dropdownMenuButton" data-bs-toggle="dropdown"
@@ -164,11 +127,11 @@
                                             </ul>
                                         </div>
                                     @else
-                                    @endif
+                                    @endif --}}
                                 </div>
                             </div>
                             <div class="row mt-2">
-                                <h3>{{ $value->title }}</h3>
+                                {{-- <h3>{{ $value->title }}</h3>
                                 @php
                                     $description = $value->description;
                                     preg_match_all('/#(\w+)/', $description, $matches);
@@ -180,37 +143,35 @@
 
                                     $value->formattedDescription = $description;
                                 @endphp
-                                {{-- <p class="description">{!! $value->description !!}</p> --}}
-                                <p class="description">{!! $value->formattedDescription !!}</p>
+                                <p class="description">{!! $value->formattedDescription !!}</p> --}}
                             </div>
-                            {{-- @php
-                    dd($value);
-                @endphp --}}
+
 
                         </div>
                         <hr>
                         {{-- tương tác --}}
                         <div class="row align-items-center" style="background-color: #EEEEEE">
 
-                            @if (auth()->check() && auth()->user()->hasLiked($value))
+                            {{-- @if (auth()->check() && auth()->user()->hasLiked($value))
                                 <div class="col-4 btn btn-primary like-btn" style="border: 1px solid white"
                                     data-post-id="{{ $value->id }}">
-                                    {{-- <i class="ti ti-thumb-up fs-8 icon-liked"></i> --}}
+
                                     <i class="ti ti-thumb-up fs-8 icon-liked"></i>
 
                                     <span class="text-liked">Bỏ thích</span>
                                 </div>
-                            @else
+                            @else --}}
                                 <div class="col-4 btn btn-outline-primary like-btn" style="border: 1px solid white"
                                     data-post-id="{{ $value->id }}">
                                     <i class="ti ti-thumb-up fs-8"></i><span class="text-liked"> Thích</span>
                                 </div>
-                            @endif
+                            {{-- @endif --}}
 
                             {{-- btn comment --}}
                             <div class="col-4 btn btn-outline-primary openComment" style="border: 1px solid white"
                                 {{-- onclick="focusInput({{ $value->id }})"> --}} data-bs-toggle="modal"
-                                data-bs-target="#exampleModal_{{ $value->id }}" data-diary-id="{{ $value->id }}">
+                                {{-- data-bs-target="#exampleModal_{{ $value->id }}" data-diary-id="{{ $value->id }} --}}
+                                ">
                                 <i class="ti ti-message fs-8"></i>
                             </div>
                             <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
@@ -218,19 +179,19 @@
                             </div>
                         </div>
                         <div class="row mt-1" id="interact-section">
-                            @if (isset($value->Interacts_count) &&
+                            {{-- @if (isset($value->Interacts_count) &&
                                     count($value->Interacts_count) > 0 &&
                                     isset($value->Interacts_count[0]->interact_count) &&
                                     $value->Interacts_count[0]->interact_count > 0)
                                 <p>có {{ $value->Interacts_count[0]->interact_count }} người thích đoạn nhật ký này</p>
                             @else
-                            @endif
+                            @endif --}}
 
                         </div>
                     </div>
                 </div>
                 <!-- Modal comment-->
-                <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"
+                {{-- <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
@@ -239,16 +200,14 @@
                                         href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }}
                                         {{ $value->id }}</a>
                                 </h5>
-                                {{-- <button type="button" style="float: right"></button> --}}
                                 <span class="ms-5"><button class="loadcmt btn btn-outline-secondary"
                                         data-diary-id="{{ $value->id }}">Tải lại bình luận</button></span>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            {{-- <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
-                            </div> --}}
+
                             <div class="modal-body commentsContainer" style="max-height: 60vh; overflow-y: auto;">
-                                {{-- content comment --}}
+
                             </div>
 
                             <div class="modal-footer">
@@ -270,7 +229,6 @@
                                         <div class="col-sm-12">
                                             <form class="addCommentForm" enctype="multipart/form-data">
                                                 {{ csrf_field() }}
-                                                {{-- <input class="form-control diary-id-input" id="focus{{ $value->id }}" type="text" name="content" value="" placeholder="Hãy nói gì đó về đoạn nhật ký này"> --}}
                                                 <div class="input-group">
                                                     <input type="hidden" class="diary-id-input" name="diary_id"
                                                         value="{{ $value->id }}">
@@ -294,9 +252,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Modal status -->
-                <div class="modal fade" id="ModalStatus_{{ $value->id }}" tabindex="-1"
+                {{-- <div class="modal fade" id="ModalStatus_{{ $value->id }}" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -321,18 +279,15 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-
-                                    {{-- @method('DELETE') --}}
-
                                     <button type="submit" class="btn btn-primary">Xác nhận</button>
                                 </div>
                             </form>
 
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <!-- Modal delete -->
-                <div class="modal fade" id="ModalDelete_{{ $value->id }}" tabindex="-1"
+                {{-- <div class="modal fade" id="ModalDelete_{{ $value->id }}" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -356,198 +311,18 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            @endforeach
-            {{ $diary->links() }}
-        @else
+                </div> --}}
+            {{-- @endforeach --}}
+            {{-- {{ $diary->links() }} --}}
+        {{-- @else
             @if (Auth::user()->id == $user->id)
                 <center>Bạn chưa có chia sẻ nhật kí! hãy chia sẻ đi</center>
             @else
                 <center> {{ $user->name }} chưa có bài viết nào cả!</center>
             @endif
-        @endif
+        @endif --}}
 
 
     </div>
-    {{-- <script src=""></script> --}}
-    <script>
-        $(document).ready(function() {
-            loadComments();
-            // ReloadComments();
-            // addComment();
-            $('.addCommentForm').on('submit', function(e) {
-                e.preventDefault(); // Ngăn chặn hành vi mặc định của form
-                var form = $(this);
-                var diaryId = form.find(".diary-id-input").val();
-                addComment(diaryId, form);
 
-                // Xóa nội dung trong input sau khi gửi
-                form.find('.form-control').val('');
-            });
-
-            $('.loadcmt').on('click', function() {
-                var diary_id = $(this).data('diary-id');
-                console.log('loadcmt', diary_id)
-                ReloadComments(diary_id)
-            });
-
-            $('.submitCommentBtn').on('click', function() {
-                // $(document).on('click', '.submitCommentBtn', function() {
-                // var diaryId = $(".diary-id-input").val();
-                // var form = $(this).closest('form');
-
-                var form = $(this).closest('form');
-                console.log('vào rồi', form);
-                var diaryId = form.find(".diary-id-input").val();
-                console.log('vào rồi id', diaryId);
-                // addComment(diaryId);
-                addComment(diaryId, form);
-
-                // Xóa nội dung trong input sau khi gửi
-                form.find('.form-control').val('');
-            });
-
-            function addComment(diary_id, form) {
-                // console.log('ssss', diary_id);
-                $.ajax({
-                    url: '{{ route('commentStore') }}',
-                    type: 'POST',
-                    // data: form.serialize(),
-                    data: form.serialize(),
-                    // data: $('#addCommentForm').serialize(),
-                    success: function(response) {
-
-                        console.log('id nhật ký', response);
-                        ReloadComments(diary_id)
-                        setTimeout(function() {
-                            toastr.success(
-                                response.message,
-                                // "Success Alert", {
-                                //     iconClass: "customer-info",
-                                // }, {
-                                //     timeOut: 2000,
-                                // }
-                            );
-                        }, 500);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-                // });
-
-            }
-            $('.like-btn').on('click', function(e) {
-                e.preventDefault();
-                var postId = $(this).data('post-id');
-                var token = "{{ csrf_token() }}";
-                var isLiked = $(this).find('.text-liked').text().trim() === 'Bỏ thích';
-                if (isLiked) {
-                    $(this).removeClass('btn-primary').addClass('btn-outline-primary');
-                } else {
-                    $(this).removeClass('btn-outline-primary').addClass('btn-primary');
-                }
-                $.ajax({
-                    type: 'POST',
-                    url: isLiked ? '{{ route('diaryUnlike', '') }}/' + postId :
-                        '{{ route('diaryLike', '') }}/' + postId,
-                    data: {
-                        '_token': token,
-                    },
-                    success: function(data) {
-                        console.log('data', data);
-
-                        var likeBtn = $('.like-btn[data-post-id=' + postId + ']');
-                        if (isLiked) {
-                            likeBtn.find('i').removeClass('icon-liked');
-                            likeBtn.find('.text-liked').text('Thích');
-                        } else {
-                            likeBtn.find('i').addClass('icon-liked');
-                            likeBtn.find('.text-liked').text('Bỏ thích');
-                        }
-                        location.reload(); // tạm thời để như vầy sau tìm cách khắc phục :))
-                    },
-                    error: function(err) {
-                        console.error('lỗi', err);
-                    }
-                });
-            });
-
-
-
-            // tải comment khi bật comment
-            function loadComments() {
-                // Đặt sự kiện click cho nút mở comment
-                $('.openComment').click(function() {
-                    var clickedDiaryId = $(this).data('diary-id');
-                    console.log('ádad', clickedDiaryId);
-                    $.ajax({
-                        url: '{{ route('commentLoad') }}',
-                        type: 'GET',
-                        data: {
-                            diary_id: clickedDiaryId
-                        },
-                        success: function(data) {
-                            $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data
-                                .html);
-                            // console.log('data nè', data.html);
-                        },
-                        error: function(error) {
-                            console.log(error);
-                        }
-                    });
-                });
-            }
-
-            // xử lý load lại khi có thao tác gọi đến
-            function ReloadComments(diary_id) {
-                // console.log('Id hàm nhật ký nhận', diary_id);
-                var clickedDiaryId = diary_id;
-                $.ajax({
-                    url: '{{ route('commentLoad') }}',
-                    type: 'GET',
-                    data: {
-                        diary_id: clickedDiaryId
-                    },
-                    success: function(data) {
-                        $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data.html);
-                    },
-                    error: function(error) {
-                        console.log(error);
-                    }
-                });
-            }
-
-
-        });
-
-        // $(document).ready(function() {
-        //     $('.openComment').click(function() {
-        //         // var diary_id = $diary_id;
-        //         var diary_id = $(this).data('diary-id');
-        //         console.log('ádad', diary_id);
-        //         $.ajax({
-        //             url: '{{ route('commentLoad') }}',
-        //             type: 'GET',
-        //             data: {diary_id: diary_id},
-        //             success: function(data) {
-        //                 // console.log($('#exampleModal_' + diary_id + ' .modal-body').html(data.html));
-        //                 $('#exampleModal_' + diary_id + ' .modal-body').html(data.html);
-        //                 console.log('data nè',data.html);
-        //                 // $('#result').html(data);
-        //             },
-        //             error: function(error) {
-        //                 console.log(error);
-        //             }
-        //         });
-        //     });
-
-        // });
-
-        // focus
-        //    function focusInput($id) {
-        //         console.log('sss',$id);
-        //        document.getElementById("focus" + $id).focus();
-        //     }
-    </script>
 @endsection

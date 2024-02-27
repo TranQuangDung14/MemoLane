@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Diary;
 
+use App\Events\NotificationPusher;
 use App\Http\Controllers\Controller;
 use App\Models\Comments;
 use App\Models\Diarys;
@@ -50,12 +51,30 @@ class DiaryController extends Controller
     public function MyDiary(Request $request, $id)
     {
         try {
+            // dd($id);
             $status = [2]; // trạng thái chỉ mình tôi
             $hashtag = null;
             $user = user::where('id', $id)->select('id', 'name', 'avatar')->first();
-            $follow = Follow::where('user1_id', Auth::user()->id)->where('user2_id', $id)->first();
-            // $relationship = null;
+            $follow = Follow::query();
+            $count_followers_query = clone $follow;
+            $count_followeing_query = clone $follow;
 
+            if (Auth::user()->id ===  $id) {
+                //  người theo dõi
+                $count_followers = $count_followers_query->where('user2_id', Auth::user()->id)->count();
+                // đang theo dõi
+                $count_following = $count_followeing_query->where('user1_id', Auth::user()->id)->count();
+            }else{
+                $count_followers = $count_followers_query->where('user2_id',$id)->count();
+                // đang theo dõi
+                $count_following = $count_followeing_query->where('user1_id',$id)->count();
+            }
+
+            // dd($count_follow);
+            $follow = $follow->where('user1_id', Auth::user()->id)->where('user2_id', $id)->first();
+
+            // $relationship = null;
+            // dd($follow);
             if ($request->has('search') && $request->search !== null) {
                 // $hashtag = Hashtags::where('name', 'LIKE', '%' . $request->search . '%')->first()->id;
                 $hashtag = Hashtags::where('name', '=', $request->search)->first();
@@ -63,7 +82,7 @@ class DiaryController extends Controller
                 if ($hashtag == null) {
                     // dd('k có');
                     $diary = Diarys::where('id', 0)->get();
-                    return view('Admin.pages.MyDiary.My_diary', compact('diary', 'user', 'follow'));
+                    return view('Admin.pages.MyDiary.My_diary', compact('diary', 'user', 'follow', 'count_followers', 'count_following'));
                 }
             }
             $userExists = User::where('id', $id)->exists();
@@ -98,7 +117,7 @@ class DiaryController extends Controller
             } else {
                 dd('ko tồn tại');
             }
-            return view('Admin.pages.MyDiary.My_diary', compact('diary', 'user', 'follow'));
+            return view('Admin.pages.MyDiary.My_diary', compact('diary', 'user', 'follow', 'count_followers', 'count_following'));
         } catch (\Exception $e) {
             dd($e);
         }
@@ -189,6 +208,7 @@ class DiaryController extends Controller
                 $notification->event_id = $like->id;
                 $notification->type = 0;
                 $notification->save();
+                event(new NotificationPusher('notification'));
             }
             return back(); // Hoặc redirect về trang bài viết
         } catch (\Exception $e) {
@@ -202,14 +222,15 @@ class DiaryController extends Controller
         try {
 
             $like = Interacts::where('user_id', auth()->user()->id)->where('diary_id', $id)->first();
-            $notification = Notifications::where('event_id',$like->id)->where('user1_id',Auth()->user()->id)->first();
+            $notification = Notifications::where('event_id', $like->id)->where('user1_id', Auth()->user()->id)->first();
             // dd($notification);
             if ($like) {
                 $like->delete();
-                if($notification != null){
+                if ($notification != null) {
                     $notification->delete();
                 }
             }
+            event(new NotificationPusher('notification'));
             return back(); // Hoặc redirect về trang bài viết
         } catch (\Exception $e) {
             //throw $th;
@@ -275,6 +296,7 @@ class DiaryController extends Controller
                 $notification->event_id = $comment->id;
                 $notification->type = 2;
                 $notification->save();
+                event(new NotificationPusher('notification'));
             }
 
             DB::commit();
@@ -348,14 +370,15 @@ class DiaryController extends Controller
             // $diary = Diarys::first($id);
             // dd($diary);
             // if ($diary->user_id != auth()->user()->id) {
-                $notification = new Notifications();
-                $notification->user1_id = auth()->user()->id;
-                $notification->user2_id = $request->user2_id;
-                // $notification->diary_id = $id;
-                $notification->event_id = $follow->id;
-                $notification->type = 1;
-                $notification->save();
+            $notification = new Notifications();
+            $notification->user1_id = auth()->user()->id;
+            $notification->user2_id = $request->user2_id;
+            // $notification->diary_id = $id;
+            $notification->event_id = $follow->id;
+            $notification->type = 1;
+            $notification->save();
             // }
+            event(new NotificationPusher('notification'));
             $user = User::select('id', 'name')->where('id', $request->user2_id)->first();
             Toastr::success('Bạn đang theo dõi ' . $user->name, 'success');
             return redirect()->back();
@@ -368,11 +391,12 @@ class DiaryController extends Controller
     {
         try {
             $unfollow = Follow::find($request->id);
-            $notification = Notifications::where('event_id',$unfollow->id)->where('user1_id',Auth()->user()->id)->first();
-            if($notification != null){
+            $notification = Notifications::where('event_id', $unfollow->id)->where('user1_id', Auth()->user()->id)->first();
+            if ($notification != null) {
                 $notification->delete();
             }
             $unfollow->delete();
+            event(new NotificationPusher('notification'));
             $user = User::select('id', 'name')->where('id', $request->user2_id)->first();
             Toastr::success('Bạn đã hủy theo dõi ' . $user->name, 'success');
             return redirect()->back();
