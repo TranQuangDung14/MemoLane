@@ -1,35 +1,29 @@
 {!! Toastr::message() !!}
+<script src="https://js.pusher.com/8.2.0/pusher.min.js"></script>
 <script>
     notification();
+    Pusher.logToConsole = false;
+
+    var pusher = new Pusher('6d1034ea2dd1ce215057', {
+        cluster: 'ap1'
+    });
+
+    var channel = pusher.subscribe('my-notification');
+    // channel.bind('my-event', function(data) {
+    channel.bind('notification', function(data) {
+        //   alert(JSON.stringify(data));
+        // var data = "Dữ liệu mới";
+        // document.getElementById("targetElement").innerHTML = data.post.author;
+        console.log('test', data)
+        notification();
+    });
 
     function notification() {
-        // console.log('Id hàm nhật ký nhận', diary_id);
-        // var clickedDiaryId = diary_id;
         $.ajax({
             url: '{{ route('notification') }}',
             type: 'GET',
-            // data: {
-            //     diary_id: clickedDiaryId
-            // },
             success: function(data) {
-                // Hiển thị danh sách comment
-                // console.log('hehe111', data);
-                // // $('#commentList').html(data.comment);
-                // // $('#targetElement' + ' .modal-body').html(data.data);
-                // var table = '<div class="message-body" >';
-                // $.each(data.notification, function(index, item) {
-                //     table +='<a href="#" class="d-flex align-items-center gap-2 dropdown-item"><p class="mb-0 fs-3">' +
-                //        '<span style="color: #5D87FF">'+ item.user1.name+'</span>' +' thích bài viết của bạn'+ ' </p></a>';
-                // });
-                // // html.html(data.html);
-                // table += '</div>';
-                // $('#message_body').html(table)
-                // console.log('thứ 2',table);
-                // $('#targetElement').html(table);
-
                 $('#message_body').html(data.html);
-                // console.log('data',data.html);
-                // console.log('html', $('#message_body').html(data.html));
             },
             error: function(error) {
                 console.log('lỗi', error);

@@ -16,6 +16,9 @@ include __DIR__.'/admin.php';
 Route::get('1', function () {
     return view('welcome');
 });
+Route::get('pusher', function () {
+    return view('Admin.pages.test.test_pusher');
+});
 Route::get('/test_select2', function () {
     return view('Admin.pages.test.testselect2');
 });
