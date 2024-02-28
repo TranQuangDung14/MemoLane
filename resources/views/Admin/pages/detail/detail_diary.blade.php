@@ -34,29 +34,7 @@
                                 height="100" class="rounded-circle">
                         @endif
                         <h5 class=" card-title fw-semibold mt-2">{{ $user->name }}</h5>
-                        <p><span style="color: #FF9966">{{$count_followers}}</span> người theo dõi&emsp;-&emsp; Đang theo dõi <span style="color: #FF9966">{{$count_following}}</span> người</p>
-                        @if ($user->id != Auth::user()->id)
 
-                            @if (isset($follow) && Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id)
-                                {{-- @else --}}
-                                <form action="{{ route('unfollow') }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    @method('DELETE')
-                                    <input type="hidden" name="id" value="{{ $follow->id }}">
-                                    <input type="hidden" name="user2_id" value="{{ $user->id }}">
-                                    <button type="submit" class="btn btn-success mt-2" title="Đang theo dõi"><i
-                                            class="ti ti-check"></i>Đang theo dõi</button>
-                                </form>
-                            @else
-                                <form action="{{ route('follow') }}" method="post" enctype="multipart/form-data">
-                                    @csrf
-                                    {{-- <input type="hidden" name="user1_id" value="{{Auth::id()}}"> --}}
-                                    <input type="hidden" name="user2_id" value="{{ $user->id }}">
-                                    <button type="submit" class="btn btn-primary mt-2" title="Theo dõi"><i
-                                            class="ti ti-plus"></i>Theo dõi</button>
-                                </form>
-                            @endif
-                        @endif
                     </center>
                 </div>
             </div>
@@ -69,8 +47,8 @@
                             <div class="row">
                                 <div class="col-md-4 d-flex align-items-center">
 
-                                    @if ($value->User->avatar != '')
-                                        <img src="{{ asset('storage/') }}/image/avatar/{{ $value->User->avatar }}"
+                                    @if ($user->avatar != '')
+                                        <img src="{{ asset('storage/') }}/image/avatar/{{ $user->avatar }}"
                                             alt="" width="50" height="50" class="rounded-circle">
                                     @else
                                         <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
@@ -79,7 +57,7 @@
 
 
                                     {{-- @endif --}}
-                                    <div class="ms-2 mt-3">
+                                    {{-- <div class="ms-2 mt-3">
                                         <p><strong>{{ $value->User->name }}</strong>
                                             @if ($user->id != Auth::user()->id)
                                                 @if (isset($follow) && Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id)
@@ -105,7 +83,7 @@
                                             @endif
 
                                         </p>
-                                    </div>
+                                    </div> --}}
                                 </div>
                                 <div class="col-md-8">
                                     {{-- phần này thêm các chức năng sau  --}}
@@ -130,10 +108,10 @@
                                     @endif --}}
                                 </div>
                             </div>
-                            <div class="row mt-2">
-                                {{-- <h3>{{ $value->title }}</h3>
+                            <div class="row mt-2 ">
+                                <h3>{{ $detail->title }}</h3>
                                 @php
-                                    $description = $value->description;
+                                    $description = $detail->description;
                                     preg_match_all('/#(\w+)/', $description, $matches);
 
                                     foreach ($matches[1] as $hashtag) {
@@ -141,9 +119,9 @@
                                         $description = str_replace("#$hashtag", "<a href=\"$url\">#$hashtag</a>", $description);
                                     }
 
-                                    $value->formattedDescription = $description;
+                                    $detail->formattedDescription = $description;
                                 @endphp
-                                <p class="description">{!! $value->formattedDescription !!}</p> --}}
+                                <p class="description">{!! $detail->formattedDescription !!}</p>
                             </div>
 
 
@@ -162,7 +140,8 @@
                                 </div>
                             @else --}}
                                 <div class="col-4 btn btn-outline-primary like-btn" style="border: 1px solid white"
-                                    data-post-id="{{ $value->id }}">
+                                    {{-- data-post-id="{{ $value->id }}" --}}
+                                    >
                                     <i class="ti ti-thumb-up fs-8"></i><span class="text-liked"> Thích</span>
                                 </div>
                             {{-- @endif --}}
@@ -170,8 +149,8 @@
                             {{-- btn comment --}}
                             <div class="col-4 btn btn-outline-primary openComment" style="border: 1px solid white"
                                 {{-- onclick="focusInput({{ $value->id }})"> --}} data-bs-toggle="modal"
-                                {{-- data-bs-target="#exampleModal_{{ $value->id }}" data-diary-id="{{ $value->id }} --}}
-                                ">
+                                {{-- data-bs-target="#exampleModal_{{ $value->id }}" data-diary-id="{{ $value->id }} "--}}
+                                >
                                 <i class="ti ti-message fs-8"></i>
                             </div>
                             <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
@@ -188,8 +167,91 @@
                             @endif --}}
 
                         </div>
+                        <div class="row mt-1" id="interact-section">
+                            @foreach ($detail->Comments as $cmt)
+                            <div class="row">
+                                <div class="col-md-1 d-flex align-items-center">
+                                    {{-- @if ($cmt->User->avatar != '')
+                                        <img src="{{ asset('storage/') }}/image/avatar/{{ $cmt->User->avatar }}" alt="" width="60"
+                                            height="60" class="rounded-circle">
+                                    @else --}}
+                                        <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="60" height="60"
+                                            class="rounded-circle">
+                                    {{-- @endif --}}
+
+
+                                </div>
+                                <div class="col-md-11">
+                                    <div class="mt-3 ms-2">
+                                        <p>
+                                            @if ($cmt->User->id === $cmt->diary->user_id)
+                                                <a href="{{ route('my_diaryIndex', $cmt->User->id) }}"><span
+                                                        style="color:red ">{{ $cmt->User->name }} &ensp;<span style="color: #009900">(tác
+                                                            giả)</span> </span></a>
+                                                @if ($cmt->User->id != Auth::user()->id)
+                                                    @if (follow($cmt->user_id) != '')
+                                                        @if (Auth::user()->id === follow($cmt->user_id)->user1_id && $cmt->user_id === follow($cmt->user_id)->user2_id)
+                                                            <span style="color: #FF9966">&nbsp;&nbsp;&nbsp;<i class="ti ti-check"></i>Đang
+                                                                theo dõi</span>
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                            @else
+                                                <a href="{{ route('my_diaryIndex', $cmt->User->id) }}"><span
+                                                        style="color:blue ">{{ $cmt->User->name }} </span></a>
+                                                @if ($cmt->User->id != Auth::user()->id)
+                                                    @if (follow($cmt->user_id) != '')
+                                                        @if (Auth::user()->id === follow($cmt->user_id)->user1_id && $cmt->user_id === follow($cmt->user_id)->user2_id)
+                                                            <span style="color: #FF9966">&nbsp;&nbsp;&nbsp;<i class="ti ti-check"></i>Đang
+                                                                theo dõi</span>
+                                                        @endif
+                                                    @endif
+                                                @endif
+                                            @endif
+
+                                            &ensp;{{ \Carbon\Carbon::parse($cmt->created_at)->timezone('Asia/Ho_Chi_Minh')->format('H:i') }}&ensp;&nbsp;{{ \Carbon\Carbon::parse($cmt->created_at)->timezone('Asia/Ho_Chi_Minh')->format('d/m/Y') }}
+                                        </p>
+                                        <div class="alert alert-secondary">
+                                            <p>{{ $cmt->content }}</p>
+                                            {{-- <p>cmt->content </p> --}}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        @endforeach
+
+                        </div>
+                        <div class="row mb-3 mt-2">
+                            <div class="col-sm-12">
+                                <form class="addCommentForm" enctype="multipart/form-data">
+                                    {{ csrf_field() }}
+                                    {{-- <input class="form-control diary-id-input" id="focus{{ $value->id }}" type="text" name="content" value="" placeholder="Hãy nói gì đó về đoạn nhật ký này"> --}}
+                                    <div class="input-group">
+                                        <input type="hidden" class="diary-id-input" name="diary_id"
+                                            {{-- value="{{ $value->id }}" --}}
+                                            >
+                                        <input class="form-control"
+                                        {{-- id="focus{{ $value->id }}" --}}
+                                            type="text" name="content" value=""
+                                            placeholder="Hãy nói gì đó về đoạn nhật ký này">
+                                        <button class="btn btn-primary submitCommentBtn" type="submit"><i
+                                                class="ti ti-send"></i></button>
+                                        <br />
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-12">
+                                @if ($errors->has('content'))
+                                    <span class="text-danger" role="alert">{{ $errors->first('content') }}</span>
+                                @endif
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+
                 <!-- Modal comment-->
                 {{-- <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"
                     aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -324,5 +386,157 @@
 
 
     </div>
+<script>
+            $(document).ready(function() {
+            loadComments();
+            // ReloadComments();
+            // addComment();
 
+            //  submit khi nhấn enter
+            $('.addCommentForm').on('submit', function(e) {
+                e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+                var form = $(this);
+                var diaryId = form.find(".diary-id-input").val();
+                addComment(diaryId, form);
+                // Xóa nội dung trong input sau khi gửi
+                form.find('.form-control').val('');
+            });
+
+            $('.loadcmt').on('click', function() {
+                var diary_id = $(this).data('diary-id');
+                console.log('loadcmt', diary_id)
+                ReloadComments(diary_id)
+            });
+
+            // submit khi click nút gửi
+            $('.submitCommentBtn').on('click', function() {
+                // $(document).on('click', '.submitCommentBtn', function() {
+                // var diaryId = $(".diary-id-input").val();
+                // var form = $(this).closest('form');
+
+                var form = $(this).closest('form');
+                // console.log('vào rồi', form);
+                var diaryId = form.find(".diary-id-input").val();
+                // console.log('vào rồi id', diaryId);
+                // addComment(diaryId);
+                addComment(diaryId, form);
+
+                // Xóa nội dung trong input sau khi gửi
+                form.find('.form-control').val('');
+            });
+
+            function addComment(diary_id, form) {
+                // console.log('ssss', diary_id);
+                $.ajax({
+                    url: '{{ route('commentStore') }}',
+                    type: 'POST',
+                    // data: form.serialize(),
+                    data: form.serialize(),
+                    // data: $('#addCommentForm').serialize(),
+                    success: function(response) {
+
+                        console.log('id nhật ký', response);
+                        ReloadComments(diary_id)
+                        setTimeout(function() {
+                            toastr.success(
+                                response.message,
+                                // "Success Alert", {
+                                //     iconClass: "customer-info",
+                                // }, {
+                                //     timeOut: 2000,
+                                // }
+                            );
+                        }, 500);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+                // });
+
+            }
+            $('.like-btn').on('click', function(e) {
+                e.preventDefault();
+                var postId = $(this).data('post-id');
+                var token = "{{ csrf_token() }}";
+                var isLiked = $(this).find('.text-liked').text().trim() === 'Bỏ thích';
+                if (isLiked) {
+                    $(this).removeClass('btn-primary').addClass('btn-outline-primary');
+                } else {
+                    $(this).removeClass('btn-outline-primary').addClass('btn-primary');
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: isLiked ? '{{ route('diaryUnlike', '') }}/' + postId :
+                        '{{ route('diaryLike', '') }}/' + postId,
+                    data: {
+                        '_token': token,
+                    },
+                    success: function(data) {
+                        console.log('data', data);
+
+                        var likeBtn = $('.like-btn[data-post-id=' + postId + ']');
+                        if (isLiked) {
+                            likeBtn.find('i').removeClass('icon-liked');
+                            likeBtn.find('.text-liked').text('Thích');
+                        } else {
+                            likeBtn.find('i').addClass('icon-liked');
+                            likeBtn.find('.text-liked').text('Bỏ thích');
+                        }
+                        location.reload(); // tạm thời để như vầy sau tìm cách khắc phục :))
+                    },
+                    error: function(err) {
+                        console.error('lỗi', err);
+                    }
+                });
+            });
+
+
+
+            // tải comment khi bật comment
+            function loadComments() {
+                // Đặt sự kiện click cho nút mở comment
+                $('.openComment').click(function() {
+                    var clickedDiaryId = $(this).data('diary-id');
+                    console.log('ádad', clickedDiaryId);
+                    $.ajax({
+                        url: '{{ route('commentLoad') }}',
+                        type: 'GET',
+                        data: {
+                            diary_id: clickedDiaryId
+                        },
+                        success: function(data) {
+                            $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data
+                                .html);
+                            // console.log('data nè', data.html);
+                        },
+                        error: function(error) {
+                            console.log(error);
+                        }
+                    });
+                });
+            }
+
+            // xử lý load lại khi có thao tác gọi đến
+            function ReloadComments(diary_id) {
+                // console.log('Id hàm nhật ký nhận', diary_id);
+                var clickedDiaryId = diary_id;
+                $.ajax({
+                    url: '{{ route('commentLoad') }}',
+                    type: 'GET',
+                    data: {
+                        diary_id: clickedDiaryId
+                    },
+                    success: function(data) {
+                        $('#exampleModal_' + clickedDiaryId + ' .modal-body').html(data.html);
+                    },
+                    error: function(error) {
+                        console.log(error);
+                    }
+                });
+            }
+
+
+        });
+</script>
 @endsection

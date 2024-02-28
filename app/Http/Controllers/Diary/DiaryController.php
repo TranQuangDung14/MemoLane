@@ -408,10 +408,11 @@ class DiaryController extends Controller
     public function notification()
     {
         try {
-            $noti = Notifications::where('user2_id', Auth::user()->id)->get();
+            $noti = Notifications::with('diary')->where('user2_id', Auth::user()->id)->get();
             // return response()->json([
             //     'notification'=> $noti,
             // ]);
+            // dd($noti);
             $html = view('Admin.child.notification', [
                 'notification' => $noti,
                 // 'follow'   =>$follow
@@ -424,8 +425,24 @@ class DiaryController extends Controller
             //code...
         } catch (\Exception $e) {
             //throw $th;
-            dd($e);
+
+            dd('lỗi',$e);
         }
         # code...
+    }
+
+    public function detail_diary($user_id,$id)
+    {
+        // dd($user_id,$id);
+        try {
+            $detail = Diarys::findOrFail($id);
+            // dd($detail->Comments);
+            $user = User::findOrFail($user_id);
+            // dd($user->avatar);
+            return view('Admin.pages.detail.detail_diary',compact('detail','user'));
+        } catch (\Exception $e) {
+            dd($e);
+            //throw $th;
+        }
     }
 }

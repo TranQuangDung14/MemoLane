@@ -22,3 +22,7 @@ Route::get('pusher', function () {
 Route::get('/test_select2', function () {
     return view('Admin.pages.test.testselect2');
 });
+
+Route::get('detail', function () {
+    return view('Admin.pages.detail.detail_diary');
+});

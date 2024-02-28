@@ -76,4 +76,8 @@ Route::prefix('')->group(function () {
         Route::get('', [DiaryController::class, 'notification'])->name('notification');
     });
 
+    Route::prefix('diary')->middleware('auth')->group(function () {
+        Route::get('/{user_id}/detail_diary/{id}', [DiaryController::class, 'detail_diary'])->name('detail_diary');
+    });
+
 });
