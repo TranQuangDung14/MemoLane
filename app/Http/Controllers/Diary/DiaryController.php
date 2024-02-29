@@ -256,7 +256,61 @@ class DiaryController extends Controller
             dd('lỗi', $e);
         }
     }
-    // Tạo bình luận
+    // Tạo bình luận thuần
+    public function comment_pure(Request $request)
+    {
+        // dd($request->all());
+        $input = $request->all();
+
+        $rules = array(
+            'content'                      => 'required',
+        );
+        $messages = array(
+            'content.required'             => '--Bình luận không được để trống!--',
+        );
+        $validator = Validator::make($input, $rules, $messages);
+
+        if ($validator->fails()) {
+            Toastr::error('Gửi bình luận thất bại', 'error');
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        // dd($request->all());
+        DB::beginTransaction();
+        try {
+            // dd($request->all());
+            // dd('nhận');
+            $comment = new Comments();
+            $comment->user_id = auth()->user()->id; // Lấy ID của người dùng đã đăng nhập
+            $comment->diary_id = $request->diary_id;
+            $comment->content = $request->content;
+            $comment->save();
+
+            $diary = Diarys::where('id', $request->diary_id)->first();
+
+            if ($diary->user_id != auth()->user()->id) {
+                $notification = new Notifications();
+                $notification->user1_id = auth()->user()->id;
+                $notification->user2_id = $diary->user_id;
+                $notification->diary_id = $request->diary_id;
+                $notification->event_id = $comment->id;
+                $notification->type = 2;
+                $notification->save();
+                event(new NotificationPusher('notification'));
+            }
+
+            DB::commit();
+            // session()->flash('success', 'Cập nhật thành công!');
+            Toastr::success('Gửi bình luận thành công', 'success');
+            return redirect()->back();
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e);
+            return redirect()->back();
+        }
+    }
+    // Tạo bình luận cho ajax
     public function comment(Request $request)
     {
         // dd($request->all());
@@ -279,6 +333,7 @@ class DiaryController extends Controller
         // dd($request->all());
         DB::beginTransaction();
         try {
+            // dd($request->all());
             // dd('nhận');
             $comment = new Comments();
             $comment->user_id = auth()->user()->id; // Lấy ID của người dùng đã đăng nhập
@@ -436,7 +491,7 @@ class DiaryController extends Controller
         // dd($user_id,$id);
         try {
             $detail = Diarys::findOrFail($id);
-            // dd($detail->Comments);
+            // dd($detail);
             $user = User::findOrFail($user_id);
             // dd($user->avatar);
             return view('Admin.pages.detail.detail_diary',compact('detail','user'));

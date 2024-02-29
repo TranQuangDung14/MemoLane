@@ -57,9 +57,12 @@ Route::prefix('')->group(function () {
         Route::post('status', [DiaryController::class, 'status_diary'])->name('diaryStatus');
         // Route::post('/diary/{id}/like', 'LikeController@likePost')->name('post.like');
         Route::delete('delete', [DiaryController::class, 'delete'])->name('My_diaryDelete');
+
         Route::post('comment', [DiaryController::class, 'comment'])->name('commentStore');
         Route::get('load_Comments', [DiaryController::class, 'Load_Comments'])->name('commentLoad');
 
+        // comment không dùng ajax
+        Route::post('commentpure', [DiaryController::class, 'comment_pure'])->name('commentPureStore');
         // theo dõi
         Route::post('follow', [DiaryController::class, 'follow'])->name('follow');
 
