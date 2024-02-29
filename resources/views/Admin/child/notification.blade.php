@@ -2,8 +2,11 @@
     <div class="message-body">
         {{-- vào --}}
         @foreach ($notification as $value)
+        {{-- <?php
+        dd($value);
+        ?> --}}
             @if ($value->type == 0)
-                <a href="#" class="d-flex align-items-center gap-2 dropdown-item">
+                <a href="{{ route('detail_diary', ['user_id' => $value->diary->user_id, 'id' => $value->diary_id]) }}" class="d-flex align-items-center gap-2 dropdown-item">
                     <p class="mb-0 fs-3"><span style="color: #5D87FF">{{ $value->user1->name }}</span> thích bài viết của
                         bạn
                     </p>

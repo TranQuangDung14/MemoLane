@@ -375,12 +375,13 @@
             loadComments();
             // ReloadComments();
             // addComment();
+
+            //  submit khi nhấn enter
             $('.addCommentForm').on('submit', function(e) {
                 e.preventDefault(); // Ngăn chặn hành vi mặc định của form
                 var form = $(this);
                 var diaryId = form.find(".diary-id-input").val();
                 addComment(diaryId, form);
-
                 // Xóa nội dung trong input sau khi gửi
                 form.find('.form-control').val('');
             });
@@ -391,15 +392,16 @@
                 ReloadComments(diary_id)
             });
 
+            // submit khi click nút gửi
             $('.submitCommentBtn').on('click', function() {
                 // $(document).on('click', '.submitCommentBtn', function() {
                 // var diaryId = $(".diary-id-input").val();
                 // var form = $(this).closest('form');
 
                 var form = $(this).closest('form');
-                console.log('vào rồi', form);
+                // console.log('vào rồi', form);
                 var diaryId = form.find(".diary-id-input").val();
-                console.log('vào rồi id', diaryId);
+                // console.log('vào rồi id', diaryId);
                 // addComment(diaryId);
                 addComment(diaryId, form);
 
