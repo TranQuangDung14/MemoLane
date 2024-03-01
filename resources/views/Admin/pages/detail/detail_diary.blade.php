@@ -199,7 +199,7 @@
                         @endif
                     </div>
                 </div>
-                <hr>
+                {{-- <hr> --}}
                 <div class="row" id="interact-section">
                     @foreach ($detail->Comments as $cmt)
                         <div class="row">
@@ -263,6 +263,14 @@
 
             </div>
         </div>
+        <form action="">
+            <label for="1">1</label>
+            <input type="radio" name="a" id="1"> <br>
+            <label for="2">2</label>
+            <input type="radio" name="a" id="2"> <br>
+            <label for="3">3</label>
+            <input type="radio" name="a" id="3">
+        </form>
 
         <!-- Modal status -->
         {{-- <div class="modal fade" id="ModalStatus_{{ $value->id }}" tabindex="-1"

@@ -64,10 +64,10 @@ class DiaryController extends Controller
                 $count_followers = $count_followers_query->where('user2_id', Auth::user()->id)->count();
                 // đang theo dõi
                 $count_following = $count_followeing_query->where('user1_id', Auth::user()->id)->count();
-            }else{
-                $count_followers = $count_followers_query->where('user2_id',$id)->count();
+            } else {
+                $count_followers = $count_followers_query->where('user2_id', $id)->count();
                 // đang theo dõi
-                $count_following = $count_followeing_query->where('user1_id',$id)->count();
+                $count_following = $count_followeing_query->where('user1_id', $id)->count();
             }
 
             // dd($count_follow);
@@ -481,20 +481,25 @@ class DiaryController extends Controller
         } catch (\Exception $e) {
             //throw $th;
 
-            dd('lỗi',$e);
+            dd('lỗi', $e);
         }
         # code...
     }
 
-    public function detail_diary($user_id,$id)
+    public function detail_diary($user_id, $id)
     {
         // dd($user_id,$id);
         try {
-            $detail = Diarys::findOrFail($id);
+            $detail = Diarys::with([
+
+                'Comments'=> function ($query) {
+                    $query->orderBy('id','DESC');
+                },
+                ])->findOrFail($id);
             // dd($detail);
             $user = User::findOrFail($user_id);
             // dd($user->avatar);
-            return view('Admin.pages.detail.detail_diary',compact('detail','user'));
+            return view('Admin.pages.detail.detail_diary', compact('detail', 'user'));
         } catch (\Exception $e) {
             dd($e);
             //throw $th;
