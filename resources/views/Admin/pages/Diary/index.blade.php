@@ -319,7 +319,7 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                Bạn có chắc muốn xóa sản phẩm này không ?
+                                Bạn có chắc muốn xóa nhật ký này không ?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>

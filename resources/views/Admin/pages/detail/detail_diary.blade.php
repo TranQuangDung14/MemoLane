@@ -1,6 +1,6 @@
 @extends('Admin.layouts.master')
 
-@section('title', "chi tiết nhật ký")
+@section('title', 'chi tiết nhật ký')
 
 @section('content')
     <style>
@@ -15,6 +15,12 @@
         .text-liked {
             position: relative;
             top: -2px;
+        }
+
+        .comment.highlight {
+            /* Định dạng nền hoặc màu sắc sáng lên ở đây */
+            background-color: #f5f5f5;
+            /* hoặc bất kỳ hiệu ứng nào bạn muốn áp dụng */
         }
     </style>
 
@@ -169,18 +175,19 @@
                     <div class="col-md-12 d-flex align-items-center">
 
                         @if (Auth::user()->avatar != '')
-                            <img src="{{ asset('storage/') }}/image/avatar/{{ Auth::user()->avatar }}"
-                                alt="" width="40" height="40" class="rounded-circle">
-                        @else
-                            <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
+                            <img src="{{ asset('storage/') }}/image/avatar/{{ Auth::user()->avatar }}" alt=""
                                 width="40" height="40" class="rounded-circle">
+                        @else
+                            <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="40"
+                                height="40" class="rounded-circle">
                         @endif
                         <p class="m-2"><strong>{{ Auth::user()->name }}</strong>
                     </div>
                 </div>
                 <div class="row mb-3 mt-2">
                     <div class="col-sm-12">
-                        <form action="{{ route('commentPureStore') }}" method="POST"  class="addCommentForm" enctype="multipart/form-data">
+                        <form action="{{ route('commentPureStore') }}" method="POST" class="addCommentForm"
+                            enctype="multipart/form-data">
                             {{ csrf_field() }}
                             {{-- <input class="form-control diary-id-input" id="focus{{ $value->id }}" type="text" name="content" value="" placeholder="Hãy nói gì đó về đoạn nhật ký này"> --}}
                             <div class="input-group">
@@ -199,22 +206,37 @@
                         @endif
                     </div>
                 </div>
+
                 {{-- <hr> --}}
                 <div class="row" id="interact-section">
                     @foreach ($detail->Comments as $cmt)
-                        <div class="row">
+                        {{-- <p>{{ $cmt->id }}</p> --}}
+                        <div class="row comment" id="section{{ $cmt->id }}">
+
                             <div class="col-md-1 d-flex align-items-center">
                                 @if ($cmt->User->avatar != '')
-                                        <img src="{{ asset('storage/') }}/image/avatar/{{ $cmt->User->avatar }}" alt="" width="60"
-                                            height="60" class="rounded-circle">
-                                    @else
-                                <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt="" width="60"
-                                    height="60" class="rounded-circle">
+                                    <img src="{{ asset('storage/') }}/image/avatar/{{ $cmt->User->avatar }}"
+                                        alt="" width="60" height="60" class="rounded-circle">
+                                @else
+                                    <img src="{{ asset('Admin/') }}/images/profile/user-1.jpg" alt=""
+                                        width="60" height="60" class="rounded-circle">
                                 @endif
-
-
                             </div>
                             <div class="col-md-11">
+                                @if ( $cmt->user_id === auth()->user()->id || $cmt->diary->user_id === auth()->user()->id )
+                                <div class="dropdown">
+
+                                    <i id="dropdownMenuButton" data-bs-toggle="dropdown" class="ti ti-dots float-end fs-6"
+                                        style="cursor: pointer;"></i>
+
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                        <li><a class="dropdown-item" href="#" data-bs-toggle="modal"
+                                                data-bs-target="#ModalDelete_{{ $cmt->id }}">Xóa bình luận</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                @endif
                                 <div class="mt-3 ms-2">
                                     <p>
                                         @if ($cmt->User->id === $cmt->diary->user_id)
@@ -253,9 +275,38 @@
                                     </div>
 
                                 </div>
+
+                            </div>
+
+                        </div>
+                        <!-- Modal delete -->
+                        <div class="modal fade" id="ModalDelete_{{ $cmt->id }}" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Xóa</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Bạn có chắc muốn xóa bình luận này không ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Hủy</button>
+                                        <form action="{{ route('Deletcomment') }}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="id" value="{{ $cmt->id }}">
+                                            <input type="hidden" name="diary_id" value="{{ $cmt->diary_id }}">
+                                            <button type="submit" class="btn btn-primary">Xóa</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-
                     @endforeach
 
                 </div>
@@ -263,14 +314,14 @@
 
             </div>
         </div>
-        <form action="">
+        {{-- <form action="">
             <label for="1">1</label>
             <input type="radio" name="a" id="1"> <br>
             <label for="2">2</label>
             <input type="radio" name="a" id="2"> <br>
             <label for="3">3</label>
             <input type="radio" name="a" id="3">
-        </form>
+        </form> --}}
 
         <!-- Modal status -->
         {{-- <div class="modal fade" id="ModalStatus_{{ $value->id }}" tabindex="-1"
@@ -339,6 +390,20 @@
 
     </div>
     <script>
+        // Trong tệp JavaScript của bạn, sau khi trang đã tải
+        document.addEventListener('DOMContentLoaded', function() {
+            // Kiểm tra URL hiện tại
+            var currentURL = window.location.href;
+            // console.log('currentURL', currentURL);
+            var sectionNumber = currentURL.match(/#section(\d+)/);
+            // Kiểm tra xem URL có chứa phần định danh cụ thể không
+            if (currentURL.indexOf('#section' + sectionNumber[1]) !== -1) {
+                // Nếu có, thêm class 'highlight' cho phần bình luận
+                var comment = document.getElementById('section' + sectionNumber[1]);
+                comment.classList.add('highlight');
+            }
+        });
+
         $(document).ready(function() {
             // loadComments();
 

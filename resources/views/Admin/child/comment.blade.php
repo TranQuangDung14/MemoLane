@@ -10,9 +10,6 @@
                     class="rounded-circle">
             @endif
 
-            {{-- <?php
-            dd($follow);
-            ?> --}}
         </div>
         <div class="col-md-11">
             <div class="mt-3 ms-2">
@@ -51,7 +48,6 @@
             </div>
         </div>
     </div>
-
 @endforeach
 {{-- @else
          <center>Chưa có bình luận nào</center>
