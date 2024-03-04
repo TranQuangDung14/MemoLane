@@ -156,7 +156,9 @@
                         onclick="focusInput()">
                         <i class="ti ti-message fs-8"></i>
                     </div>
-                    <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
+
+                    <div class="col-4 btn btn-outline-primary" style="border: 1px solid white" onclick="copyLink()">
+                        <input type="hidden" id="linkInput" value="{{ route('detail_diary', ['user_id' => $detail->user_id, 'id' => $detail->id]) }}">
                         <i class="ti ti-share fs-8"></i>
                     </div>
                 </div>
@@ -403,6 +405,19 @@
                 comment.classList.add('highlight');
             }
         });
+
+        function copyLink() {
+            var copyText = document.getElementById("linkInput").value;
+            navigator.clipboard.writeText(copyText)
+                .then(function() {
+                    console.log('Đã sao chép thành công: ' + copyText);
+                    alert('Đã sao chép thành công!');
+                })
+                .catch(function(err) {
+                    console.error('Lỗi khi sao chép: ', err);
+                    alert('Không thể sao chép!');
+                });
+        }
 
         $(document).ready(function() {
             // loadComments();

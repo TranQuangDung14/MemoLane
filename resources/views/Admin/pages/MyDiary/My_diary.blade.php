@@ -41,9 +41,8 @@
                         <h5 class=" card-title fw-semibold mt-2">{{ $user->name }}</h5>
                         <a href="{{ route('follower', $user->id) }}">
 
-                            <p><span style="color: #FF9966">{{ $count_followers }}</span> người theo dõi&emsp;-&emsp; Đang
-                                theo
-                                dõi <span style="color: #FF9966">{{ $count_following }}</span> người</p>
+                            <p><span style="color: #FF9966">{{ $count_followers }}</span>
+                                người theo dõi&emsp;-&emsp; Đang theo dõi <span style="color: #FF9966">{{ $count_following }}</span> người</p>
                         </a>
                         @if ($user->id != Auth::user()->id)
 
@@ -211,7 +210,6 @@
                                     data-post-id="{{ $value->id }}">
                                     {{-- <i class="ti ti-thumb-up fs-8 icon-liked"></i> --}}
                                     <i class="ti ti-thumb-up fs-8 icon-liked"></i>
-
                                     <span class="text-liked">Bỏ thích</span>
                                 </div>
                             @else

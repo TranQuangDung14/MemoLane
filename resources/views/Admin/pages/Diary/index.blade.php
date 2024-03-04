@@ -42,8 +42,7 @@
 
                         <div class="col-8">
                             <label>Tìm kiếm theo hashtag</label>
-                            <form action="{{ route('diaryIndex') }}" method="get"
-                                enctype="multipart/form-data">
+                            <form action="{{ route('diaryIndex') }}" method="get" enctype="multipart/form-data">
                                 <div class="input-group">
 
                                     <input class="form-control" type="text" name="search" value=""
@@ -86,11 +85,11 @@
                                             @if (Auth::user()->id != $value->User->id)
                                                 @if (follow($value->User->id) != null)
                                                     @if (Auth::user()->id === follow($value->User->id)->user1_id && $value->User->id === follow($value->User->id)->user2_id)
-                                                    <span style="color: #FF9966">&nbsp;&nbsp;&nbsp;<i
-                                                        class="ti ti-check"></i>Đang theo dõi</span>
+                                                        <span style="color: #FF9966">&nbsp;&nbsp;&nbsp;<i
+                                                                class="ti ti-check"></i>Đang theo dõi</span>
                                                     @endif
                                                 @endif
-                                                @else
+                                            @else
                                                 {{-- Đây là tôi --}}
                                             @endif
                                             <br>
@@ -144,19 +143,22 @@
                             <div class="row mt-2">
                                 <h3>{{ $value->title }}</h3>
                                 @php
-                                $description = $value->description;
-                                preg_match_all('/#(\w+)/', $description, $matches);
+                                    $description = $value->description;
+                                    preg_match_all('/#(\w+)/', $description, $matches);
 
+                                    foreach ($matches[1] as $hashtag) {
+                                        $url = route('diaryIndex', ['search' => $hashtag]); // Replace 'hashtag.show' with your actual route name
+                                        $description = str_replace(
+                                            "#$hashtag",
+                                            "<a href=\"$url\">#$hashtag</a>",
+                                            $description,
+                                        );
+                                    }
 
-                                foreach ($matches[1] as $hashtag) {
-                                    $url = route('diaryIndex',['search' => $hashtag]); // Replace 'hashtag.show' with your actual route name
-                                    $description = str_replace("#$hashtag", "<a href=\"$url\">#$hashtag</a>", $description);
-                                }
-
-                                $value->formattedDescription = $description;
-                            @endphp
-                            {{-- <p class="description">{!! $value->description !!}</p> --}}
-                            <p class="description">{!! $value->formattedDescription !!}</p>
+                                    $value->formattedDescription = $description;
+                                @endphp
+                                {{-- <p class="description">{!! $value->description !!}</p> --}}
+                                <p class="description">{!! $value->formattedDescription !!}</p>
                                 {{-- <p class="description">{!! $value->description !!}</p> --}}
                             </div>
                             {{-- @php
@@ -168,8 +170,7 @@
                         {{-- tương tác --}}
                         <div class="row align-items-center" style="background-color: #EEEEEE">
 
-                            @if (auth()->check() &&
-                                    auth()->user()->hasLiked($value))
+                            @if (auth()->check() && auth()->user()->hasLiked($value))
                                 <div class="col-4 btn btn-primary like-btn" style="border: 1px solid white"
                                     data-post-id="{{ $value->id }}">
                                     {{-- <i class="ti ti-thumb-up fs-8 icon-liked"></i> --}}
@@ -190,7 +191,9 @@
                                 data-bs-target="#exampleModal_{{ $value->id }}" data-diary-id="{{ $value->id }}">
                                 <i class="ti ti-message fs-8"></i>
                             </div>
-                            <div class="col-4 btn btn-outline-primary" style="border: 1px solid white">
+                            <div class="col-4 btn btn-outline-primary" style="border: 1px solid white" onclick="copyLink()">
+                                <input type="hidden" id="linkInput" value="{{ route('detail_diary', ['user_id' => $value->user_id, 'id' => $value->id]) }}">
+
                                 <i class="ti ti-share fs-8"></i>
                             </div>
                         </div>
@@ -212,8 +215,11 @@
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của <a
-                                        href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }}</a>
+                                <h5 class="modal-title" id="exampleModalLabel"><a
+                                        href="{{ route('detail_diary', ['user_id' => $value->user_id, 'id' => $value->id]) }}">Xem
+                                        chi tiết bài viết </a> của: <a
+                                        href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }}
+                                    </a>
                                 </h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
@@ -347,6 +353,18 @@
 
     </div>
     <script>
+        function copyLink() {
+            var copyText = document.getElementById("linkInput").value;
+            navigator.clipboard.writeText(copyText)
+                .then(function() {
+                    console.log('Đã sao chép thành công: ' + copyText);
+                    alert('Đã sao chép thành công!');
+                })
+                .catch(function(err) {
+                    console.error('Lỗi khi sao chép: ', err);
+                    alert('Không thể sao chép!');
+                });
+        }
         $(document).ready(function() {
             loadComments();
             // ReloadComments();

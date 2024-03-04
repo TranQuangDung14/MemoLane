@@ -386,8 +386,9 @@ class DiaryController extends Controller
                    $notification->delete();
                }
            }
-           event(new NotificationPusher('notification'));
-           return back(); // Hoặc redirect về trang bài viết
+           Toastr::success('Xóa bình luận thành công!', 'success');
+        //    event(new NotificationPusher('notification'));
+           return redirect()->back(); // Hoặc redirect về trang bài viết
        } catch (\Exception $e) {
            //throw $th;
            dd($e);
