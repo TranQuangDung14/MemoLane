@@ -66,6 +66,11 @@ Route::prefix('')->group(function () {
         // theo dõi
         Route::post('follow', [DiaryController::class, 'follow'])->name('follow');
 
+        // xóa bình luận
+        Route::delete('delete_comment', [DiaryController::class, 'delete_comment'])->name('Deletcomment');
+
+        Route::get('user/{id}/follow', [DiaryController::class, 'Showfollow'])->name('follower');
+
         // bỏ theo dõi
         Route::delete('unfollow', [DiaryController::class, 'unfollow'])->name('unfollow');
 

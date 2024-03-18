@@ -16,6 +16,11 @@
             position: relative;
             top: -2px;
         }
+
+       a {
+            color: black;
+        }
+
     </style>
 
     <div class="container-fluid ">
@@ -34,7 +39,11 @@
                                 height="100" class="rounded-circle">
                         @endif
                         <h5 class=" card-title fw-semibold mt-2">{{ $user->name }}</h5>
-                        <p><span style="color: #FF9966">{{$count_followers}}</span> người theo dõi&emsp;-&emsp; Đang theo dõi <span style="color: #FF9966">{{$count_following}}</span> người</p>
+                        <a href="{{ route('follower', $user->id) }}">
+
+                            <p><span style="color: #FF9966">{{ $count_followers }}</span>
+                                người theo dõi&emsp;-&emsp; Đang theo dõi <span style="color: #FF9966">{{ $count_following }}</span> người</p>
+                        </a>
                         @if ($user->id != Auth::user()->id)
 
                             @if (isset($follow) && Auth::user()->id === $follow->user1_id && $user->id === $follow->user2_id)
@@ -175,7 +184,11 @@
 
                                     foreach ($matches[1] as $hashtag) {
                                         $url = route('diaryIndex', ['search' => $hashtag]); // Replace 'hashtag.show' with your actual route name
-                                        $description = str_replace("#$hashtag", "<a href=\"$url\">#$hashtag</a>", $description);
+                                        $description = str_replace(
+                                            "#$hashtag",
+                                            "<a href=\"$url\">#$hashtag</a>",
+                                            $description,
+                                        );
                                     }
 
                                     $value->formattedDescription = $description;
@@ -197,7 +210,6 @@
                                     data-post-id="{{ $value->id }}">
                                     {{-- <i class="ti ti-thumb-up fs-8 icon-liked"></i> --}}
                                     <i class="ti ti-thumb-up fs-8 icon-liked"></i>
-
                                     <span class="text-liked">Bỏ thích</span>
                                 </div>
                             @else
@@ -230,23 +242,22 @@
                     </div>
                 </div>
                 <!-- Modal comment-->
-                <div class="modal fade" id="exampleModal_{{ $value->id }}" tabindex="-1"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="exampleModal_{{ $value->id }}" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Danh sách bình luận nhật ký của <a
-                                        href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }}
-                                        {{ $value->id }}</a>
+                                <h5 class="modal-title" id="exampleModalLabel"><a href="{{ route('detail_diary', ['user_id' => $value->user_id, 'id' => $value->id]) }}">Xem chi tiết bài viết </a> của: <a
+                                        href="{{ route('my_diaryIndex', $value->User->id) }}">{{ $value->User->name }} </a>
                                 </h5>
                                 {{-- <button type="button" style="float: right"></button> --}}
+                                {{-- <span><button class="loadcmt btn btn-outline-secondary"
+                                        data-diary-id="{{ $value->id }}">xem chi tiết bài viết</button></span> --}}
                                 <span class="ms-5"><button class="loadcmt btn btn-outline-secondary"
                                         data-diary-id="{{ $value->id }}">Tải lại bình luận</button></span>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
-                            {{-- <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
-                            </div> --}}
+
                             <div class="modal-body commentsContainer" style="max-height: 60vh; overflow-y: auto;">
                                 {{-- content comment --}}
                             </div>
@@ -342,7 +353,7 @@
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                Bạn có chắc muốn xóa sản phẩm này không ?
+                                Bạn có chắc muốn xóa nhật ký này không ?
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>

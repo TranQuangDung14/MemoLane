@@ -59,16 +59,17 @@ class DiaryController extends Controller
             $count_followers_query = clone $follow;
             $count_followeing_query = clone $follow;
 
-            if (Auth::user()->id ===  $id) {
-                //  người theo dõi
-                $count_followers = $count_followers_query->where('user2_id', Auth::user()->id)->count();
-                // đang theo dõi
-                $count_following = $count_followeing_query->where('user1_id', Auth::user()->id)->count();
-            } else {
-                $count_followers = $count_followers_query->where('user2_id', $id)->count();
-                // đang theo dõi
-                $count_following = $count_followeing_query->where('user1_id', $id)->count();
-            }
+            // if (Auth::user()->id ===  $id) {
+            //     //  người theo dõi
+            //     $count_followers = $count_followers_query->where('user2_id', Auth::user()->id)->count();
+            //     // đang theo dõi
+            //     $count_following = $count_followeing_query->where('user1_id', Auth::user()->id)->count();
+            // } else {
+            //  người theo dõi
+            $count_followers = $count_followers_query->where('user2_id', $id)->count();
+            // đang theo dõi
+            $count_following = $count_followeing_query->where('user1_id', $id)->count();
+            // }
 
             // dd($count_follow);
             $follow = $follow->where('user1_id', Auth::user()->id)->where('user2_id', $id)->first();
@@ -222,9 +223,11 @@ class DiaryController extends Controller
         try {
 
             $like = Interacts::where('user_id', auth()->user()->id)->where('diary_id', $id)->first();
-            $notification = Notifications::where('event_id', $like->id)->where('user1_id', Auth()->user()->id)->first();
+            // $like = Interacts::where('user_id', auth()->user()->id)->where('diary_id', $id)->get();
             // dd($notification);
             if ($like) {
+                // dd($like);
+                $notification = Notifications::where('event_id', $like->id)->where('user1_id', Auth()->user()->id)->first();
                 $like->delete();
                 if ($notification != null) {
                     $notification->delete();
@@ -368,6 +371,30 @@ class DiaryController extends Controller
             return redirect()->back();
         }
     }
+
+   // xóa bình luận
+   public function delete_comment(Request $request)
+   {
+       try {
+           $delete_comment = Comments::where('id', $request->id)->first();
+        //    dd($delete_comment);
+           $notification = Notifications::where('event_id',  $request->id)->first();
+        //    dd($notification);
+           if ($delete_comment) {
+               $delete_comment->delete();
+               if ($notification != null) {
+                   $notification->delete();
+               }
+           }
+           Toastr::success('Xóa bình luận thành công!', 'success');
+        //    event(new NotificationPusher('notification'));
+           return redirect()->back(); // Hoặc redirect về trang bài viết
+       } catch (\Exception $e) {
+           //throw $th;
+           dd($e);
+       }
+   }
+
     //  kích hoạt trạng thái nhật ký
     public function status_diary(Request $request)
     {
@@ -463,27 +490,17 @@ class DiaryController extends Controller
     public function notification()
     {
         try {
-            $noti = Notifications::with('diary')->where('user2_id', Auth::user()->id)->get();
-            // return response()->json([
-            //     'notification'=> $noti,
-            // ]);
-            // dd($noti);
+            $noti = Notifications::with('diary')->where('user2_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
             $html = view('Admin.child.notification', [
                 'notification' => $noti,
-                // 'follow'   =>$follow
             ])->render();
-            // dd($html);
             return response()->json([
                 'html' => $html,
                 'notification' => $noti
             ]);
-            //code...
         } catch (\Exception $e) {
-            //throw $th;
-
             dd('lỗi', $e);
         }
-        # code...
     }
 
     public function detail_diary($user_id, $id)
@@ -492,10 +509,10 @@ class DiaryController extends Controller
         try {
             $detail = Diarys::with([
 
-                'Comments'=> function ($query) {
-                    $query->orderBy('id','DESC');
+                'Comments' => function ($query) {
+                    $query->orderBy('id', 'DESC');
                 },
-                ])->findOrFail($id);
+            ])->findOrFail($id);
             // dd($detail);
             $user = User::findOrFail($user_id);
             // dd($user->avatar);
@@ -503,6 +520,24 @@ class DiaryController extends Controller
         } catch (\Exception $e) {
             dd($e);
             //throw $th;
+        }
+    }
+
+    public function Showfollow($id)
+    {
+        try {
+            $follow = Follow::query();
+
+            $count_followers_query = clone $follow;
+            $count_followeing_query = clone $follow;
+            //  người theo dõi
+            $count_followers = $count_followers_query->where('user2_id', $id)->get();
+            // đang theo dõi
+            $count_following = $count_followeing_query->where('user1_id', $id)->get();
+
+            $user = User::find($id);
+            return view('Admin.follow.follow', compact('count_followers', 'count_following', 'user'));
+        } catch (\Exception $e) {
         }
     }
 }
